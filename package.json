@@ -9,7 +9,27 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^5.4.3"
+    "@astrojs/sitemap": "^3.2.1",
+    "@astrojs/vercel": "^8.1.2",
+    "@tailwindcss/vite": "^4.0.13",
+    "astro": "^5.4.3",
+    "astro-capo": "^0.0.1",
+    "astro-compressor": "^1.0.0",
+    "astro-embed": "^0.9.0",
+    "astro-icon": "^1.1.5",
+    "astro-loading-indicator": "^0.7.0",
+    "astro-mail-obfuscation": "^2.3.4",
+    "astro-meta-tags": "^0.3.1",
+    "astro-robots-txt": "^1.0.0",
+    "astro-seo": "^0.8.4",
+    "autoprefixer": "^10.4.21",
+    "postcss-utopia": "^1.1.0",
+    "sharp": "^0.33.5",
+    "tailwindcss": "^4.0.13"
   },
-  "packageManager": "pnpm@10.4.0+sha512.6b849d0787d97f8f4e1f03a9b8ff8f038e79e153d6f11ae539ae7c435ff9e796df6a862c991502695c7f9e8fac8aeafc1ac5a8dab47e36148d183832d886dd52"
+  "packageManager": "pnpm@10.4.0+sha512.6b849d0787d97f8f4e1f03a9b8ff8f038e79e153d6f11ae539ae7c435ff9e796df6a862c991502695c7f9e8fac8aeafc1ac5a8dab47e36148d183832d886dd52",
+  "devDependencies": {
+    "cssnano": "^7.0.6",
+    "postcss-nested": "^7.0.2"
+  }
 }
