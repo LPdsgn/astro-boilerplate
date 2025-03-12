@@ -1,5 +1,6 @@
-<h1 align="center">Locomotive Astro Boilerplate</h1>
-<p align="center">Astro boilerplate for projects by <a href="https://locomotive.ca/">Locomotive</a>.</p>
+![Build the web you want](https://raw.githubusercontent.com/withastro/astro/refs/heads/main/.github/assets/banner.jpg 'Build the web you want')
+<h1 align="center">🚀 Astro Boilerplate</h1>
+<p align="center">Boilerplate for Astro projects</p>
 
 ## Features
 - [PostCSS](https://docs.astro.build/en/guides/styling/#postcss) for a feature rich superset of CSS.
@@ -13,17 +14,27 @@
   - [Lenis](https://github.com/darkroomengineering/lenis#readme) is included as a subdependency, so you can initialize a Lenis instance instead if you prefer.
 
 ### Additional features
+
 #### SEO
+
 - [astro-seo](https://github.com/jonasmerlin/astro-seo#readme): SEO optimization for Astro projects
 - [@astrojs/sitemap](https://docs.astro.build/en/guides/integrations-guide/sitemap): Sitemap generation for Astro projects
 - [astro-robots-txt](https://github.com/alextim/astro-lib/tree/main/packages/astro-robots-txt#readme): Generation of robots.txt file
+
 #### Utility
+
 - [astro-capo](https://github.com/natemoo-re/astro-capo#readme): Plugin to optimize head tag loading
 - [astro-compressor](https://github.com/sondr3/astro-compressor#readme): Asset compression for Astro projects
 - [astro-mail-obfuscation](https://github.com/andreas-brunner/astro-mail-obfuscation#readme): Protection of email addresses against bots
 - [astro-meta-tags](https://github.com/patrick91/astro-meta-tags#readme): DevToolbar extension for meta tags checking
+
+#### Deployment
 - [@astrojs/vercel](https://docs.astro.build/en/guides/integrations-guide/vercel): Integration for deployment on Vercel
+  - [@vercel/analytics@1.4.0](https://vercel.com/docs/analytics/quickstart): Vercel Web Analytics component
+  - [@vercel/speed-insights](https://vercel.com/docs/speed-insights/quickstart): Vercel SpeedInsights component
+
 #### Components
+
 - [astro-embed](https://astro-embed.netlify.app/getting-started): Components for embedding external content
 - [astro-icon](https://www.astroicon.dev/getting-started): Icon management for Astro
 - [astro-loading-indicator](https://github.com/florian-lefebvre/astro-loading-indicator/blob/main/package/README.md): Loading indicator for navigation
