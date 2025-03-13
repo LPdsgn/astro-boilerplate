@@ -1,17 +1,75 @@
 ---
+// Styles
 import '@/styles/global.css'
+// Other
+import { type SEOProps } from 'astro-seo'
+import BaseHead from '@/components/global/BaseHead.astro'
+import { GoogleTagmanagerNoscript } from '@/components/global/analytics'
+import { CookieConsent } from '@/components/global/cookieConsent'
+import SpeedInsights from '@vercel/speed-insights/astro'
+import { Head } from 'astro-capo'
+import { ClientRouter, fade } from 'astro:transitions'
+
+// Background options
+type Background = 'dot' | 'lines' | 'grid'
+
+interface Props {
+	seo?: SEOProps
+	bg?: Background
+	bodyClass?: string
+	noise?: boolean
+	footer?: boolean
+}
+
+const { seo = {}, bg = '', bodyClass = '', noise = false, footer = true } = Astro.props
+
+const FONTS: string[] = [
+	'Hubot-Sans.woff2',
+	'JetBrainsMono.woff2',
+	'InstrumentSerif-Regular.woff2',
+	'InstrumentSerif-Italic.woff2'
+]
 ---
+
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
-	</head>
+	<Head>
+		<BaseHead seo={seo} />
+
+		{
+			/* FONTS */
+			FONTS.map((font) => (
+				<link
+					rel="preload"
+					href={`/_assets/fonts/${font}`}
+					as="font"
+					type="font/woff2"
+					crossorigin
+				/>
+			))
+		}
+		<script>
+			import type { TransitionBeforeSwapEvent } from 'astro:transitions/client'
+			document.addEventListener('astro:before-swap', (e) =>
+				[
+					...(e as TransitionBeforeSwapEvent).newDocument.head.querySelectorAll(
+						'link[as="font"]'
+					)
+				].forEach((link) => link.remove())
+			)
+		</script>
+
+		{/* ViewTransitions */}
+		<ClientRouter />
+	</Head>
 	<body>
-		<slot />
+		<GoogleTagmanagerNoscript />
+		<main id="content" transition:animate={fade({ duration: '0.4s' })}>
+			<slot />
+		</main>
+		<!-- {footer && <Footer transition:persist />} -->
+		<!-- <CookieConsent /> -->
+		<SpeedInsights />
 	</body>
 </html>
 

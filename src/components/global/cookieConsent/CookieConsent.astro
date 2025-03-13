@@ -1,0 +1,41 @@
+---
+import 'vanilla-cookieconsent/dist/cookieconsent.css'
+import './cookie-consent.css'
+// import { Button } from '../ui/button'
+// import { Cookie } from 'lucide-react'
+---
+
+<div transition:persist id="cc-container" class="h-0" data-lenis-prevent>
+	<!-- <Button
+		variant="outline"
+		size="icon"
+		className={`fixed bottom-4 left-4 z-50`}
+		data-cc="show-preferencesModal"
+		type="button"
+	>
+		<Cookie />
+	</Button> -->
+
+	<script>
+		import { run } from 'vanilla-cookieconsent'
+		import { config } from './CookieConsentConfig'
+
+		declare global {
+			interface Window {
+				_htmlClassName: string
+			}
+		}
+
+		run(config)
+
+		// Important, the plugin adds classes to the html tag,
+		// so we need keep track of the className attribute.
+		document.addEventListener('astro:before-preparation', (event) => {
+			window._htmlClassName = window.document.documentElement.className
+		})
+
+		document.addEventListener('astro:before-swap', (event) => {
+			event.newDocument.documentElement.className = window._htmlClassName
+		})
+	</script>
+</div>

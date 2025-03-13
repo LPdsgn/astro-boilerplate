@@ -1,0 +1,79 @@
+---
+import { SITE } from '@/consts'
+import { SEO, type Props as SEOProps, type TwitterCardType } from 'astro-seo'
+import {
+	GoogleTagmanager,
+	GoogleTagmanagerNoscript,
+	Clarity,
+	Posthog
+} from '@/components/global/analytics'
+import Favicon from '@/components/global/Favicon.astro'
+import Analytics from '@vercel/analytics/astro'
+
+interface Props {
+	seo?: SEOProps
+}
+
+const { seo = {} } = Astro.props
+
+// Calcola fallback per il titolo: (1) seo.title -> (2) nome file
+const fileName = Astro.url.pathname.split('/').pop() ?? ''
+const fallbackTitle = fileName
+	? fileName.charAt(0).toUpperCase() + fileName.slice(1).toLowerCase()
+	: ''
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="generator" content={Astro.generator} />
+
+<SEO
+	{...seo}
+	title={`${seo?.title || fallbackTitle} | ${SITE.default.title}`}
+	description={seo?.description || SITE.default.description}
+	openGraph={seo?.openGraph ?? {
+		basic: {
+			title: `${seo?.title || fallbackTitle} | ${SITE.default.title}`,
+			type: 'website',
+			image: seo?.openGraph?.basic?.image ?? SITE.default.image,
+			url: Astro.url.href
+		},
+		optional: {
+			description: seo?.description || SITE.default.description,
+			siteName: SITE.default.title
+		}
+	}}
+	twitter={seo?.twitter ?? {
+		title: `${seo?.title || fallbackTitle} | ${SITE.default.title}`,
+		description: seo?.description || SITE.default.description,
+
+		card: (seo?.twitter?.card ?? 'summary_large_image') as TwitterCardType,
+		image: seo?.openGraph?.basic?.image ?? SITE.default.image,
+		creator: seo?.twitter?.creator ?? SITE.default.author
+	}}
+	canonical={Astro.url.href}
+	extend={{
+		meta: [
+			{
+				name: 'title',
+				content: `${seo?.title || fallbackTitle} | ${SITE.default.title}`
+			},
+			{
+				name: 'robots',
+				content: `${seo?.noindex ? 'noindex' : 'index'}, ${seo?.nofollow ? 'nofollow' : 'follow'}`
+			}
+		]
+	}}
+/>
+
+{/* Favicon */}
+<Favicon />
+
+{/* Sitemap */}
+<link rel="sitemap" href="/sitemap-index.xml" />
+
+<GoogleTagmanager />
+<Clarity />
+<Posthog />
+<Analytics />

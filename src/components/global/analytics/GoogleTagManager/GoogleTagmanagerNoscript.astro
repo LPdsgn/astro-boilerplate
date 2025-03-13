@@ -1,0 +1,19 @@
+---
+import { SITE } from '@/consts'
+---
+
+{
+	SITE.gtmID && (
+		<noscript
+			id="gtm-body"
+			data-category="analytics"
+			data-service="Google Analytics">
+			<iframe
+				src={`https://www.googletagmanager.com/ns.html?id=${SITE.gtmID}`}
+				height="0"
+				width="0"
+				style="display:none;visibility:hidden"
+			/>
+		</noscript>
+	)
+}

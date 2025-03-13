@@ -1,0 +1,73 @@
+#cc-main {
+   --cc-font-family: theme('fontFamily.sans');
+
+   --cc-bg: theme('colors.background');
+   --cc-primary-color: theme('colors.foreground');
+   --cc-secondary-color: theme('colors.foreground');
+
+   --cc-btn-primary-bg: theme('colors.primary.DEFAULT');
+   --cc-btn-primary-color: theme('colors.primary.foreground');
+   --cc-btn-primary-border-color: theme('colors.primary.DEFAULT');
+   --cc-btn-primary-hover-bg: theme('colors.primary.DEFAULT');
+   --cc-btn-primary-hover-color: theme('colors.primary.foreground');
+   --cc-btn-primary-hover-border-color: theme('colors.primary.DEFAULT');
+
+   --cc-btn-secondary-bg: theme('colors.secondary.DEFAULT');
+   --cc-btn-secondary-color: theme('colors.secondary.foreground');
+   --cc-btn-secondary-border-color: theme('colors.secondary.DEFAULT');
+   --cc-btn-secondary-hover-bg: theme('colors.secondary.DEFAULT');
+   --cc-btn-secondary-hover-color: theme('colors.secondary.foreground');
+   --cc-btn-secondary-hover-border-color: theme('colors.secondary.DEFAULT');
+
+   --cc-separator-border-color: theme('colors.border');
+
+   --cc-toggle-on-bg: var(--cc-btn-primary-bg);
+   --cc-toggle-off-bg: theme('colors.muted.DEFAULT');
+   --cc-toggle-on-knob-bg: theme('colors.primary.foreground');
+   --cc-toggle-off-knob-bg: theme('colors.muted.foreground');
+
+   --cc-toggle-enabled-icon-color: var(--cc-bg);
+   --cc-toggle-disabled-icon-color: var(--cc-bg);
+
+   --cc-toggle-readonly-bg: theme('colors.muted.DEFAULT');
+   --cc-toggle-readonly-knob-bg: theme('colors.muted.foreground');
+   --cc-toggle-readonly-knob-icon-color: var(--cc-toggle-readonly-bg);
+
+   --cc-section-category-border: var(--cc-cookie-category-block-bg);
+
+   --cc-cookie-category-block-bg: theme('colors.secondary.DEFAULT');
+   --cc-cookie-category-block-border: theme('colors.secondary.DEFAULT');
+   --cc-cookie-category-block-hover-bg: theme('colors.secondary.DEFAULT');
+   --cc-cookie-category-block-hover-border: theme('colors.secondary.DEFAULT');
+   --cc-cookie-category-expanded-block-bg: theme('colors.secondary.DEFAULT');
+   --cc-cookie-category-expanded-block-hover-bg: theme('colors.muted.DEFAULT');
+
+   --cc-overlay-bg: rgba(0, 0, 0, 0.75);
+   --cc-webkit-scrollbar-bg: var(--cc-section-category-border);
+   --cc-webkit-scrollbar-hover-bg: var(--cc-btn-primary-hover-bg);
+
+   --cc-footer-bg: var(--cc-btn-secondary-bg);
+   --cc-footer-color: var(--cc-secondary-color);
+   --cc-footer-border-color: transparent;
+}
+#cc-main .pm__service-counter {
+  background: theme('colors.muted.DEFAULT');
+  color: theme('colors.foreground');
+}
+#cc-main .pm__section--toggle .pm__section-title-wrapper,
+#cc-main .pm__section--toggle .pm__section-title,
+#cc-main .pm__section--toggle .pm__section-desc-wrapper {
+	border: none !important;
+}
+#cc-main .pm__btn,
+#cc-main .cm__btn {
+	font-family: theme('fontFamily.mono');
+	text-transform: uppercase;
+}
+#cc-main .cm--box,
+#cc-main .pm--box {
+	border: 1px solid theme('colors.border');
+}
+#cc-main .pm__title {
+	@apply text-2xl lg:text-3xl font-narrow;
+}
