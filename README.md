@@ -3,6 +3,7 @@
 <p align="center">Boilerplate for Astro projects</p>
 
 ## Features
+
 - [PostCSS](https://docs.astro.build/en/guides/styling/#postcss) for a feature rich superset of CSS.
   - [postcss-nested](https://github.com/postcss/postcss-nested#readme): Support for nested CSS in PostCSS
   - [postcss-utopia](https://github.com/trys/postcss-utopia#readme): PostCSS plugin for responsive design
@@ -46,7 +47,7 @@ Make sure you have the following installed:
 - [Node] — at least 20.3, the latest LTS is recommended.
 - [pnpm] — at least 10.4, the latest LTS is recommended.
 
-> 💡 You can use [NVM] to install and use different versions of Node via the command-line.
+> 💡 You can use [NVM](https://github.com/nvm-sh/nvm#readme) to install and use different versions of Node via the command-line.
 
 ```sh
 # Clone the repository.
@@ -88,4 +89,3 @@ All commands are run from the root of the project, from a terminal:
 | `pnpm preview`         | Preview your build locally, before deploying     |
 | `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
 | `pnpm astro -- --help` | Get help using the Astro CLI                     |
-| `pnpm format`          | Format files using prettier                      |

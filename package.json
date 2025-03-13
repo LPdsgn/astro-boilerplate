@@ -14,6 +14,7 @@
 		"@astrojs/sitemap": "^3.2.1",
 		"@astrojs/vercel": "^8.1.2",
 		"@vercel/analytics": "^1.5.0",
+		"@vercel/speed-insights": "^1.2.0",
 		"astro": "^5.4.3",
 		"astro-capo": "^0.0.1",
 		"astro-compressor": "^1.0.0",
@@ -24,9 +25,13 @@
 		"astro-meta-tags": "^0.3.1",
 		"astro-robots-txt": "^1.0.0",
 		"astro-seo": "^0.8.4",
+		"clsx": "^2.1.1",
+		"gsap": "^3.12.7",
 		"locomotive-scroll": "5.0.0-beta.21",
 		"sharp": "^0.33.5",
-		"tailwindcss": "^4.0.13"
+		"tailwind-merge": "^3.0.2",
+		"tailwindcss": "^4.0.13",
+		"vanilla-cookieconsent": "^3.1.0"
 	},
 	"packageManager": "pnpm@10.4.0+sha512.6b849d0787d97f8f4e1f03a9b8ff8f038e79e153d6f11ae539ae7c435ff9e796df6a862c991502695c7f9e8fac8aeafc1ac5a8dab47e36148d183832d886dd52",
 	"devDependencies": {
