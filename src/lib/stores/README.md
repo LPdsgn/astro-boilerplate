@@ -25,7 +25,7 @@ It uses **many atomic stores** and direct manipulation.
 import { $screen, type IScreenValues } from './stores/screen';
 
 $screen.listen(({ width, height }: IScreenDebounceValues) => {
-    console.log('Screen:', { width, height });
+	console.log('Screen:', { width, height });
 });
 ```
 
@@ -42,7 +42,7 @@ This one use a debounce of 200ms by default
 import { $screenDebounce, type IScreenDebounceValues } from './stores/screen';
 
 $screenDebounce.listen(({ width, height }: IScreenDebounceValues) => {
-    console.log('Screen Debounce:', { width, height });
+	console.log('Screen Debounce:', { width, height });
 });
 ```
 
@@ -61,7 +61,7 @@ $screenDebounce.listen(({ width, height }: IScreenDebounceValues) => {
 import { $mouse, type IMouseState } from './stores/mouse';
 
 $mouse.listen(({ x, y, normalizedX, normalizedY }: IMouseState) => {
-    console.log('Mouse:', { x, y, normalizedX, normalizedY });
+	console.log('Mouse:', { x, y, normalizedX, normalizedY });
 });
 ```
 
@@ -81,9 +81,9 @@ This script utilizes a default lerp value of 0.8. Notably, the RAF (RequestAnima
 import { $smoothMouse, type ISmoothMouseState } from './stores/mouse';
 
 $smoothMouse.listen(
-    ({ smoothX, smoothY, smoothNormalizedX, smoothNormalizedY }: ISmoothMouseState) => {
-        console.log('SmoothMouse:', { smoothX, smoothY, smoothNormalizedX, smoothNormalizedY });
-    }
+	({ smoothX, smoothY, smoothNormalizedX, smoothNormalizedY }: ISmoothMouseState) => {
+		console.log('SmoothMouse:', { smoothX, smoothY, smoothNormalizedX, smoothNormalizedY });
+	}
 );
 ```
 
@@ -105,7 +105,7 @@ To access scroll values from the Locomotive Scroll instance.
 import { $scroll, type IScrollValues } from './stores/scroll';
 
 $scroll.listen(({ scroll, limit, velocity, direction, progress }: IScrollValues) => {
-    console.log('Scroll:', { scroll, limit, velocity, direction, progress });
+	console.log('Scroll:', { scroll, limit, velocity, direction, progress });
 });
 ```
 
@@ -121,10 +121,10 @@ $scroll.listen(({ scroll, limit, velocity, direction, progress }: IScrollValues)
 
 ```ts
 import { subscribeKeys } from 'nanostores';
-import { $mediaStatus, type MediaStatus } from '@scripts/stores/deviceStatus';
+import { $mediaStatus, type MediaStatus } from '@lib/stores/deviceStatus';
 
 subscribeKeys($mediaStatus, ['isTouchOrSmall'], (value: MediaStatus) => {
-    console.log(value);
+	console.log(value);
 });
 ```
 
@@ -145,7 +145,7 @@ console.log('Local storage:', $localStorage.get());
 
 /* Listen changes */
 $localStorage.listen((values) => {
-    console.log('Local storage:', values);
+	console.log('Local storage:', values);
 });
 ```
 

@@ -1,11 +1,11 @@
 @layer components {
-    .c-wysiwyg {
-        > *:first-child {
-            margin-top: 0;
-        }
+	.c-wysiwyg {
+		> *:first-child {
+			margin-top: 0;
+		}
 
-        > *:last-child {
-            margin-bottom: 0;
-        }
-    }
+		> *:last-child {
+			margin-bottom: 0;
+		}
+	}
 }

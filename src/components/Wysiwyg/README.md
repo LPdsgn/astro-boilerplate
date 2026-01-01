@@ -21,11 +21,11 @@ const rawHTMLString = 'Hello <strong>World</strong>';
 ---
 
 <Wysiwyg tag="article" class="c-custom-class">
-    <Fragment set:html={rawHTMLString} />
-    <Wysiwyg /></Wysiwyg
+	<Fragment set:html={rawHTMLString} />
+	<Wysiwyg /></Wysiwyg
 >
 ```
 
 ## To Do
 
--   [ ] Add default styles
+- [ ] Add default styles

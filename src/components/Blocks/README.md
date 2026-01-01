@@ -12,8 +12,8 @@ This component renders a series of content blocks. The component uses a switch s
 
 Each block object in the `blocks` array should have the following structure:
 
--   `type`: A string that specifies the type of block (e.g., `'text'` or `'image'`).
--   `data`: An object containing the data needed to render the block. The structure of this object varies depending on the block type.
+- `type`: A string that specifies the type of block (e.g., `'text'` or `'image'`).
+- `data`: An object containing the data needed to render the block. The structure of this object varies depending on the block type.
 
 ## Example Usage
 
@@ -23,12 +23,9 @@ To use the Blocks component, include it in your Astro project and pass the desir
 
 ```astro
 ---
-import BlockText from './BlockText.astro';
-import BlockImage from './BlockImage.astro';
-
 const blocks = [
-    { type: 'text', data: { content: 'This is a text block' } },
-    { type: 'image', data: { src: '/path/to/image.jpg', alt: 'Image description' } }
+	{ type: 'text', data: { content: 'This is a text block' } },
+	{ type: 'image', data: { src: '/path/to/image.jpg', alt: 'Image description' } },
 ];
 ---
 

@@ -33,10 +33,10 @@ Wraps the image in a `<figure>` tag and includes a caption(`<figcaption>`) below
 
 ```astro
 <Image
-    src={import('@images/printer.jpg')}
-    alt="A beautiful scenery"
-    tag="figure"
-    caption="This is a beautiful scenery"
+	src={import('@images/printer.jpg')}
+	alt="A beautiful scenery"
+	tag="figure"
+	caption="This is a beautiful scenery"
 />
 ```
 
@@ -46,10 +46,10 @@ Specifies custom [sizes and widths](https://docs.astro.build/en/guides/images/#w
 
 ```astro
 <Image
-    src={import('@images/printer.jpg')}
-    alt="A beautiful scenery"
-    sizes="(max-width: 800px) 100vw, 800px"
-    widths={[400, 800, 1200]}
+	src={import('@images/printer.jpg')}
+	alt="A beautiful scenery"
+	sizes="(max-width: 800px) 100vw, 800px"
+	widths={[400, 800, 1200]}
 />
 ```
 
@@ -59,9 +59,9 @@ Adds custom CSS classes to the image component for additional styling, concatena
 
 ```astro
 <Image
-    src={import('@images/printer.jpg')}
-    alt="A beautiful scenery"
-    class="c-custom-class -a-modifier"
+	src={import('@images/printer.jpg')}
+	alt="A beautiful scenery"
+	class="c-custom-class -a-modifier"
 />
 ```
 
@@ -95,11 +95,11 @@ Use this approach to include static images in your project. Images are imported 
 
 ```astro
 <Image
-    src={import('@images/printer.jpg')}
-    alt="Placeholder alt"
-    caption="Static image & Loading eager"
-    loading="eager"
-    width={500}
-    height={200}
+	src={import('@images/printer.jpg')}
+	alt="Placeholder alt"
+	caption="Static image & Loading eager"
+	loading="eager"
+	width={500}
+	height={200}
 />
 ```

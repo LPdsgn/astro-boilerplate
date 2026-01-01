@@ -2,16 +2,16 @@
 import Wysiwyg from '@components/Wysiwyg/Wysiwyg.astro';
 
 interface Props {
-    body?: string;
+	body?: string;
 }
 
 const { body } = Astro.props;
 ---
 
 {
-    body && (
-        <Wysiwyg class="mx-auto my-fluid-xl max-w-3xl">
-            <Fragment set:html={body} />
-        </Wysiwyg>
-    )
+	body && (
+		<Wysiwyg class="mx-auto my-fluid-xl max-w-3xl">
+			<Fragment set:html={body} />
+		</Wysiwyg>
+	)
 }

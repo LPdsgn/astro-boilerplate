@@ -40,18 +40,18 @@ The following example demonstrates a technique to provide users with advanced wa
 
 ```astro
 <body>
-    ...
-    <Button href="https://example.com/" target="_blank" aria-describedby="new-win-desc"
-        >Go to Example</Button
-    >
-    ...
-    <div id="new-win-desc" hidden>opens in a new window</div>
+	...
+	<Button href="https://example.com/" target="_blank" aria-describedby="new-win-desc"
+		>Go to Example</Button
+	>
+	...
+	<div id="new-win-desc" hidden>opens in a new window</div>
 </body>
 ```
 
 ## To Do
 
--   [ ] Integrate icons
--   [ ] Separate logic of "external" VS "\_blank".
+- [ ] Integrate icons
+- [ ] Separate logic of "external" VS "\_blank".
 
 [WCAG 2.2 G201]: https://www.w3.org/WAI/WCAG22/Techniques/general/G201
