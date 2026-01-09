@@ -1,19 +1,22 @@
 ---
-import { defaultSeo } from '@data/seo';
+import { Clarity, GoogleTagmanager, Posthog } from '@components/analytics';
 import { getSeo } from '@lib/utils/seo';
 import '@styles/main.css';
+import { Head } from 'astro-capo';
 import { SEO } from 'astro-seo';
 import { type CssVariable, Font } from 'astro:assets';
 import Icon from '../components/Icon/Icon.astro';
 
 interface Props {
-	title: string;
-	seo?: Seo;
+	title?: string;
+	seo?: Partial<Seo>;
 }
 
 const { title, seo = {} } = Astro.props;
 
-const seoData = getSeo(seo, defaultSeo, title);
+// Merge title prop into seo object if provided
+const seoInput = title ? { ...seo, title: seo.title || title } : seo;
+const seoData = getSeo(seoInput, Astro.url);
 
 // Constants
 const FONTS: CssVariable[] = ['--custom-font-sans'];
@@ -21,7 +24,7 @@ const FONTS: CssVariable[] = ['--custom-font-sans'];
 
 <!doctype html>
 <html lang="en">
-	<head>
+	<Head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -30,9 +33,14 @@ const FONTS: CssVariable[] = ['--custom-font-sans'];
 		<SEO {...seoData} />
 
 		{FONTS.map((font) => <Font cssVariable={font} preload />)}
-	</head>
+
+		<!-- Analytics -->
+		<GoogleTagmanager />
+		<Clarity />
+		<Posthog />
+	</Head>
 	<body>
-		<script src="../scripts/app.ts"></script>
+		<script src="../lib/app.ts"></script>
 
 		<div class="container grid grid-cols-2 py-fluid-md">
 			<div>

@@ -1,11 +1,14 @@
 {
 	"extends": "astro/tsconfigs/strict",
+	"include": [".astro/types.d.ts", "**/*"],
+	"exclude": ["dist", "node_modules"],
 	"compilerOptions": {
-		"baseUrl": ".",
+		"forceConsistentCasingInFileNames": true,
+		"strictNullChecks": true,
 		"moduleResolution": "bundler",
+		"baseUrl": ".",
 		"paths": {
-			"@root/*": ["./*"],
-			"@src/*": ["./src/*"],
+			"@/*": ["./src/*"],
 			"@components/*": ["./src/components/*"],
 			"@layouts/*": ["./src/layouts/*"],
 			"@images/*": ["./src/assets/images/*"],
@@ -16,6 +19,5 @@
 			"@types/*": ["types/*"],
 			"@data/*": ["./src/data/*"]
 		}
-	},
-	"exclude": ["dist", "node_modules"]
+	}
 }

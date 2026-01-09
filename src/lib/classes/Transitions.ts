@@ -129,6 +129,9 @@ export class Transitions {
 	onContentReplace(visit: VisitType) {
 		Scroll?.init();
 		this.updateDocumentAttributes(visit);
+
+		// Dispatch custom event for analytics re-initialization
+		document.dispatchEvent(new Event('page:load'));
 	}
 
 	/**

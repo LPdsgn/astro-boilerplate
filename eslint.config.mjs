@@ -6,10 +6,6 @@ import globals from 'globals';
 import tseslint from 'typescript-eslint';
 import eslintConfigPrettier from 'eslint-config-prettier/flat';
 
-// parsers
-const tsParser = tseslint.parser;
-const astroParser = astro.parser;
-
 export default defineConfig([
 	// Ignore patterns (MUST be first)
 	{
@@ -57,9 +53,9 @@ export default defineConfig([
 	{
 		files: ['**/*.astro'],
 		languageOptions: {
-			parser: astroParser,
+			parser: astro.parser,
 			parserOptions: {
-				parser: tsParser,
+				parser: tseslint.parser,
 				extraFileExtensions: ['.astro'],
 				sourceType: 'module',
 				ecmaVersion: 'latest',
@@ -71,6 +67,7 @@ export default defineConfig([
 			'astro/prefer-class-list-directive': 'warn',
 			'astro/prefer-split-class-list': 'warn',
 			'astro/no-set-html-directive': 'warn',
+			'astro/jsx-a11y/iframe-has-title': 'warn',
 			'@typescript-eslint/no-empty-object-type': 'off',
 			// Disable React rules that don't apply to Astro
 			'react/no-unknown-property': 'off',
@@ -82,7 +79,7 @@ export default defineConfig([
 	{
 		files: ['**/*.{ts,tsx}'],
 		languageOptions: {
-			parser: tsParser,
+			parser: tseslint.parser,
 			parserOptions: {
 				project: './tsconfig.json',
 			},

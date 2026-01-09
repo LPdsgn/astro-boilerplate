@@ -89,7 +89,9 @@ export class Accordion extends HTMLElement {
 		this.animation = null;
 		this.isClosing = false;
 		this.isExpanding = false;
-		this.$details?.style.height = '';
+		if (this.$details) {
+			this.$details.style.height = '';
+		}
 		this.style.overflow = '';
 	}
 
@@ -113,14 +115,16 @@ export class Accordion extends HTMLElement {
 
 	private open(): void {
 		this.isExpanding = true;
-		this.$details?.style.height = `${this.offsetHeight}px`;
-		this.$details?.setAttribute('open', '');
-		this.$details?.classList.add(Accordion.CLASS_ACTIVE);
+		if (this.$details) {
+			this.$details.style.height = `${this.offsetHeight}px`;
+			this.$details.setAttribute('open', '');
+			this.$details.classList.add(Accordion.CLASS_ACTIVE);
+		}
 		this.prepareForAnimation();
 
 		window.requestAnimationFrame(() => {
 			const startHeight = `${this.$details?.offsetHeight}px`;
-			const endHeight = `${this.$summary?.offsetHeight + this.$content?.offsetHeight}px`;
+			const endHeight = `${(this.$summary?.offsetHeight ?? 0) + (this.$content?.offsetHeight ?? 0)}px`;
 
 			this.animation = this.createAnimation(startHeight, endHeight);
 			this.animation.onfinish = () => this.onAnimationFinish(true);

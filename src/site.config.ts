@@ -3,8 +3,10 @@
  *
  * @property {Object} default - Default site metadata
  * @property {string} siteUrl - The base URL of the website
- * @property {string} gtmID - Google Tag Manager ID (empty string if not set)
- * @property {string} clarityID - Microsoft Clarity ID (empty string if not set)
+ * @property {Object} analytics - Analytics integration IDs
+ * @property {string} [analytics.gtmId] - Google Tag Manager ID
+ * @property {string} [analytics.clarityId] - Microsoft Clarity ID
+ * @property {string} [analytics.posthogId] - PostHog ID
  */
 export const SITE: Site = {
 	default: {
@@ -16,18 +18,19 @@ export const SITE: Site = {
 	},
 	siteUrl: 'https://example.xyz',
 	analytics: {
-		gtmID: '',
-		clarityID: '',
-		matomoURL: '',
-		posthogID: '',
-		posthogREG: '',
+		gtmId: '',
+		clarityId: '',
+		posthogId: '',
+		matomo: {
+			url: '',
+			siteId: '',
+		},
 	},
 };
 
 /**
  * Array of navigation links for the application.
  *
- * @typedef {Object} Links - Represents a navigation link
  * @property {string} LABEL - Display text for the navigation link
  * @property {string} HREF - URL path for the navigation link
  * @property {Links[]} [CHILDREN] - Optional array of sub-navigation links
@@ -86,3 +89,7 @@ export const CONFIG: Config = Object.freeze({
 		rootSize: 16,
 	},
 });
+
+// Debug flags
+export const isDebug = import.meta.env.DEV;
+export const isProd = import.meta.env.PROD;

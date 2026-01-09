@@ -1,0 +1,9 @@
+---
+export interface Props {
+   name: string
+   content: string
+}
+const { name, content } = Astro.props
+---
+
+{name && content && <meta name={name} content={content} />}

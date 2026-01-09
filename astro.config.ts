@@ -1,4 +1,5 @@
 import { defineConfig } from 'astro/config';
+import vercel from '@astrojs/vercel';
 import icon from 'astro-icon';
 
 const isProd = import.meta.env.PROD;
@@ -15,6 +16,12 @@ import postcssUtopia from 'postcss-utopia';
 // https://astro.build/config
 export default defineConfig({
 	site: 'https://locomotive-astro-boilerplate.vercel.app',
+	output: 'static',
+	adapter: vercel({
+		webAnalytics: {
+			enabled: true,
+		},
+	}),
 	vite: {
 		css: {
 			postcss: {
@@ -39,11 +46,12 @@ export default defineConfig({
 		}),
 	],
 	devToolbar: {
-		enabled: false,
+		enabled: true,
 	},
 	image: {
-		domains: ['locomotive.ca'],
-		remotePatterns: [{ protocol: 'https' }],
+		responsiveStyles: true,
+		layout: 'constrained',
+		breakpoints: [640, 768, 900, 1024, 1280, 1440, 1920],
 	},
 	experimental: {
 		fonts: [
@@ -68,5 +76,9 @@ export default defineConfig({
 				],
 			},
 		],
+	},
+	server: {
+		port: 8888,
+		host: '0.0.0.0',
 	},
 });
