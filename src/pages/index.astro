@@ -1,7 +1,5 @@
 ---
-import Accordion from '@components/Accordion/Accordion.astro';
-import Button from '@components/Button/Button.astro';
-import Wysiwyg from '@components/Wysiwyg/Wysiwyg.astro';
+import { Button } from '@/components';
 import Layout from '@layouts/Layout.astro';
 ---
 
@@ -13,49 +11,30 @@ import Layout from '@layouts/Layout.astro';
 	<div class="container mt-fluid-xl">
 		<div class="grid grid-cols-12 gap-gutter">
 			<div class="text-body col-span-full md:col-span-4">
-				<Wysiwyg>
-					<Fragment
-						set:html={`<p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Itaque quam, nam omnis sunt laudantium tenetur obcaecati? Inventore eos vitae id repellat cum possimus voluptates nam voluptatum, assumenda, atque nesciunt debitis?</p>`}
-					/>
-				</Wysiwyg>
+				<p>
+					Lorem, ipsum dolor sit amet consectetur adipisicing elit. Itaque quam, nam omnis sunt
+					laudantium tenetur obcaecati? Inventore eos vitae id repellat cum possimus voluptates
+					nam voluptatum, assumenda, atque nesciunt debitis?
+				</p>
 
 				<Button href="/about" class="mt-fluid-sm"> Learn More </Button>
 			</div>
 
 			<div class="col-span-full text-body-sm md:col-span-4">
-				<Wysiwyg tag="article">
-					<Fragment
-						set:html={`<p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Itaque quam, nam omnis sunt laudantium tenetur obcaecati? Inventore eos vitae id repellat cum possimus voluptates nam voluptatum, assumenda, atque nesciunt debitis?</p>`}
-					/>
-					<Button href="https://google.ca" target="_blank" class="mt-fluid-sm">
-						Visit Us
-					</Button>
-				</Wysiwyg>
+				<p>
+					Lorem, ipsum dolor sit amet consectetur adipisicing elit. Itaque quam, nam omnis sunt
+					laudantium tenetur obcaecati? Inventore eos vitae id repellat cum possimus voluptates
+					nam voluptatum, assumenda, atque nesciunt debitis?
+				</p>
+				<Button href="https://google.ca" target="_blank" class="mt-fluid-sm"> Visit Us </Button>
 			</div>
 
 			<div class="col-span-full text-body-sm md:col-span-4">
-				<Wysiwyg>
-					<Fragment
-						set:html={`<p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Itaque quam, nam omnis sunt laudantium tenetur obcaecati? Inventore eos vitae id repellat cum possimus voluptates nam voluptatum, assumenda, atque nesciunt debitis?</p>`}
-					/>
-				</Wysiwyg>
-			</div>
-
-			<div class="col-span-full text-body-sm md:col-span-4">
-				<Accordion label="Accordion summary">
-					<Wysiwyg>
-						<Fragment
-							set:html={`<p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Itaque quam, nam omnis sunt laudantium tenetur obcaecati? Inventore eos vitae id repellat cum possimus voluptates nam voluptatum, assumenda, atque nesciunt debitis?</p>`}
-						/>
-					</Wysiwyg>
-				</Accordion>
-				<Accordion label="Accordion summary">
-					<Wysiwyg>
-						<Fragment
-							set:html={`<p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Itaque quam, nam omnis sunt laudantium tenetur obcaecati? Inventore eos vitae id repellat cum possimus voluptates nam voluptatum, assumenda, atque nesciunt debitis?</p>`}
-						/>
-					</Wysiwyg>
-				</Accordion>
+				<p>
+					Lorem, ipsum dolor sit amet consectetur adipisicing elit. Itaque quam, nam omnis sunt
+					laudantium tenetur obcaecati? Inventore eos vitae id repellat cum possimus voluptates
+					nam voluptatum, assumenda, atque nesciunt debitis?
+				</p>
 			</div>
 		</div>
 

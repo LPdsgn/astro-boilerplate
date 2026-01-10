@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
 import { satoriAstroOG } from 'satori-astro';
 import { html } from 'satori-html';
+import { readFile } from 'node:fs/promises';
 import { SITE } from '@/site.config';
 
 /**
@@ -9,32 +10,26 @@ import { SITE } from '@/site.config';
  * Usage: /api/og.png?title=Title&description=Description
  *
  * NOTE: Satori doesn't support .woff2. Fonts must be in .ttf, .otf, or .woff format.
- * This implementation uses Google Fonts (Inter) for maximum compatibility.
+ * This implementation uses the local Innovator Grotesk variable font.
  */
 
 // Disable prerendering to have access to query params at runtime
 export const prerender = false;
 
 // Font cache (avoids reloading on every request)
-let fontCache: { regular: ArrayBuffer; bold: ArrayBuffer } | null = null;
+let fontCache: ArrayBuffer | null = null;
 
-async function loadFonts() {
+async function loadFont() {
 	if (fontCache) return fontCache;
 
-	// Use Google Fonts (Inter) - .woff format supported by Satori
-	const [regularRes, boldRes] = await Promise.all([
-		fetch(
-			'https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfAZ9hjp-Ek-_EeA.woff'
-		),
-		fetch(
-			'https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuFuYAZ9hjp-Ek-_EeA.woff'
-		),
-	]);
-
-	fontCache = {
-		regular: await regularRes.arrayBuffer(),
-		bold: await boldRes.arrayBuffer(),
-	};
+	// Load local variable font - supports all weights
+	const fontPath = new URL('../../assets/fonts/Innovator-Grotesk-VF.woff', import.meta.url)
+		.pathname;
+	const fontBuffer = await readFile(fontPath);
+	fontCache = fontBuffer.buffer.slice(
+		fontBuffer.byteOffset,
+		fontBuffer.byteOffset + fontBuffer.byteLength
+	);
 
 	return fontCache;
 }
@@ -49,7 +44,7 @@ export const GET: APIRoute = async ({ url }) => {
 	console.log('[OG Image] Title:', title);
 	console.log('[OG Image] Description:', description);
 
-	const fonts = await loadFonts();
+	const font = await loadFont();
 
 	// Truncate description if too long
 	const truncatedDescription =
@@ -59,71 +54,59 @@ export const GET: APIRoute = async ({ url }) => {
 		template: html`
 			<div
 				style="
-				display: flex;
-				flex-direction: column;
-				justify-content: space-between;
-				width: 100%;
-				height: 100%;
-				padding: 80px;
-				background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%);
-				font-family: 'Inter', sans-serif;
-			"
+					display: flex;
+					height: 100%;
+					width: 100%;
+					align-items: center;
+					justify-content: center;
+					letter-spacing: -.02em;
+					font-weight: 700;
+					background: white;
+					font-family: 'Innovator Grotesk';
+				"
 			>
-				<!-- Top bar with logo/brand -->
-				<div style="display: flex; align-items: center; gap: 16px;">
-					<div
-						style="
-						width: 48px;
-						height: 48px;
-						background: #fff;
-						border-radius: 12px;
+				<div
+					style="
+						left: 42px;
+						top: 42px;
+						position: absolute;
 						display: flex;
 						align-items: center;
-						justify-content: center;
-						font-weight: 700;
-						font-size: 24px;
-						color: #0a0a0a;
 					"
-					>
-						AB
-					</div>
-					<span style="color: #666; font-size: 24px;">Astro Boilerplate</span>
-				</div>
-
-				<!-- Content -->
-				<div
-					style="display: flex; flex-direction: column; gap: 24px; flex: 1; justify-content: center;"
 				>
-					<h1
+					<span
 						style="
-						color: #ffffff;
-						font-size: 72px;
-						font-weight: 700;
-						margin: 0;
-						line-height: 1.1;
-						max-width: 900px;
-					"
-					>
-						${title}
-					</h1>
-
-					<p
+							width: 24px;
+							height: 24px;
+							background: black;
+						"
+					></span>
+					<span
 						style="
-						color: #999;
-						font-size: 32px;
-						margin: 0;
-						line-height: 1.4;
-						max-width: 800px;
-					"
+							margin-left: 8px;
+							font-size: 20px;
+						"
 					>
-						${truncatedDescription}
-					</p>
+						Astro Boilerplate
+					</span>
 				</div>
-
-				<!-- Footer -->
-				<div style="display: flex; justify-content: space-between; align-items: center;">
-					<span style="color: #444; font-size: 20px;">Powered by Astro</span>
-					<span style="color: #444; font-size: 20px;">astro-boilerplate-new</span>
+				<div
+					style="
+						display: flex;
+						flex-wrap: wrap;
+						justify-content: center;
+						padding: 20px 50px;
+						margin: 0 42px;
+						font-size: 40px;
+						width: auto;
+						max-width: 550px;
+						text-align: center;
+						background-color: black;
+						color: white;
+						line-height: 1.4;
+					"
+				>
+					${title}
 				</div>
 			</div>
 		`,
@@ -133,15 +116,9 @@ export const GET: APIRoute = async ({ url }) => {
 		satori: {
 			fonts: [
 				{
-					name: 'Inter',
-					data: fonts.regular,
+					name: 'Innovator Grotesk',
+					data: font,
 					weight: 400,
-					style: 'normal',
-				},
-				{
-					name: 'Inter',
-					data: fonts.bold,
-					weight: 700,
 					style: 'normal',
 				},
 			],

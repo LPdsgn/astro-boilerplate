@@ -1,6 +1,5 @@
 ---
-import Image from '@components/Image/Image.astro';
-import Wysiwyg from '@components/Wysiwyg/Wysiwyg.astro';
+import { Image } from '@/components';
 import Layout from '@layouts/Layout.astro';
 ---
 
@@ -48,19 +47,19 @@ import Layout from '@layouts/Layout.astro';
 		</div>
 		<div class="grid grid-cols-12 gap-gutter">
 			<div class="col-span-full text-body-sm md:col-span-6">
-				<Wysiwyg>
-					<Fragment
-						set:html={`<p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Itaque quam, nam omnis sunt laudantium tenetur obcaecati? Inventore eos vitae id repellat cum possimus voluptates nam voluptatum, assumenda, atque nesciunt debitis?</p>`}
-					/>
-				</Wysiwyg>
+				<p>
+					Lorem, ipsum dolor sit amet consectetur adipisicing elit. Itaque quam, nam omnis sunt
+					laudantium tenetur obcaecati? Inventore eos vitae id repellat cum possimus voluptates
+					nam voluptatum, assumenda, atque nesciunt debitis?
+				</p>
 			</div>
 
 			<div class="col-span-full text-body-sm md:col-span-6">
-				<Wysiwyg>
-					<Fragment
-						set:html={`<p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Itaque quam, nam omnis sunt laudantium tenetur obcaecati? Inventore eos vitae id repellat cum possimus voluptates nam voluptatum, assumenda, atque nesciunt debitis?</p>`}
-					/>
-				</Wysiwyg>
+				<p>
+					Lorem, ipsum dolor sit amet consectetur adipisicing elit. Itaque quam, nam omnis sunt
+					laudantium tenetur obcaecati? Inventore eos vitae id repellat cum possimus voluptates
+					nam voluptatum, assumenda, atque nesciunt debitis?
+				</p>
 			</div>
 		</div>
 

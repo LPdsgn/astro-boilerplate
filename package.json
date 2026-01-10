@@ -50,6 +50,7 @@
 		"swup": "^4.8.1",
 		"tailwindcss": "^4.1.17",
 		"ts-debounce": "^4.0.0",
+		"tw-to-css": "^0.0.12",
 		"typescript": "^5.9.3"
 	},
 	"devDependencies": {
