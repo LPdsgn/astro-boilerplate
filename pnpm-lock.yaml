@@ -41,9 +41,15 @@ importers:
       astro-icon:
         specifier: ^1.1.5
         version: 1.1.5
+      astro-meta-tags:
+        specifier: ^0.4.0
+        version: 0.4.0(astro@5.16.6(@types/node@25.0.3)(@vercel/functions@2.2.13)(jiti@2.6.1)(lightningcss@1.30.2)(rollup@4.54.0)(typescript@5.9.3)(yaml@2.8.2))
       astro-seo:
         specifier: ^0.8.4
         version: 0.8.4(prettier-plugin-astro@0.14.1)(prettier@3.7.4)(typescript@5.9.3)
+      gsap:
+        specifier: ^3.14.2
+        version: 3.14.2
       lint-staged:
         specifier: ^16.2.6
         version: 16.2.7
@@ -1239,6 +1245,11 @@ packages:
   astro-icon@1.1.5:
     resolution: {integrity: sha512-CJYS5nWOw9jz4RpGWmzNQY7D0y2ZZacH7atL2K9DeJXJVaz7/5WrxeyIxO8KASk1jCM96Q4LjRx/F3R+InjJrw==}
 
+  astro-meta-tags@0.4.0:
+    resolution: {integrity: sha512-SWUyZbu0sgdkMYpG5J8mBH61oLTco2bZmixYHg6mqAgEFjc4P+urP+IG2TkfQxq4LEYnyyxcXxwnuSLleMIJ2Q==}
+    peerDependencies:
+      astro: ^4.0.0 || ^5.0.0-beta.0
+
   astro-seo@0.8.4:
     resolution: {integrity: sha512-Ou1vzQSXAxa0K8rtNtXNvSpYqOGEgMhh0immMxJeXmbVZac3UKCNWAoXWyOQDFYsZvBugCRSg0N1phBqPMVgCw==}
 
@@ -2009,6 +2020,9 @@ packages:
 
   graceful-fs@4.2.11:
     resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==}
+
+  gsap@3.14.2:
+    resolution: {integrity: sha512-P8/mMxVLU7o4+55+1TCnQrPmgjPKnwkzkXOK1asnR9Jg2lna4tEY5qBJjMmAaOBDDZWtlRjBXjLa0w53G/uBLA==}
 
   h3@1.15.4:
     resolution: {integrity: sha512-z5cFQWDffyOe4vQ9xIqNfCZdV4p//vy6fBnr8Q1AWnVZ0teurKMG66rLj++TKwKPUP3u7iMUvrvKaEUiQw2QWQ==}
@@ -5102,6 +5116,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  astro-meta-tags@0.4.0(astro@5.16.6(@types/node@25.0.3)(@vercel/functions@2.2.13)(jiti@2.6.1)(lightningcss@1.30.2)(rollup@4.54.0)(typescript@5.9.3)(yaml@2.8.2)):
+    dependencies:
+      astro: 5.16.6(@types/node@25.0.3)(@vercel/functions@2.2.13)(jiti@2.6.1)(lightningcss@1.30.2)(rollup@4.54.0)(typescript@5.9.3)(yaml@2.8.2)
+
   astro-seo@0.8.4(prettier-plugin-astro@0.14.1)(prettier@3.7.4)(typescript@5.9.3):
     dependencies:
       '@astrojs/check': 0.5.10(prettier-plugin-astro@0.14.1)(prettier@3.7.4)(typescript@5.9.3)
@@ -6140,6 +6158,8 @@ snapshots:
   gopd@1.2.0: {}
 
   graceful-fs@4.2.11: {}
+
+  gsap@3.14.2: {}
 
   h3@1.15.4:
     dependencies:

@@ -19,14 +19,15 @@ const seoInput = title ? { ...seo, title: seo.title || title } : seo;
 const seoData = getSeo(seoInput, Astro.url);
 
 // Constants
-const FONTS: CssVariable[] = ['--custom-font-sans'];
+const FONTS: CssVariable[] = ['--font-sans', '--font-mono'];
 ---
 
 <!doctype html>
 <html lang="en">
 	<Head>
 		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
+		<meta name="viewport" content="width=device-width,initial-scale=1" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
 

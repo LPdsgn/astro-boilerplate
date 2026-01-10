@@ -4,14 +4,16 @@ import icon from 'astro-icon';
 
 const isProd = import.meta.env.PROD;
 
+// PostCSS Plugins
 import postcssHelpersFunctions from '@locomotivemtl/postcss-helpers-functions';
 import postcssTailwindShortcuts from '@locomotivemtl/postcss-tailwind-shortcuts';
 import tailwindcss from '@tailwindcss/postcss';
 import autoprefixer from 'autoprefixer';
 import cssnanoPlugin from 'cssnano';
-// PostCSS Plugins
 import nested from 'postcss-nested';
 import postcssUtopia from 'postcss-utopia';
+
+import metaTags from 'astro-meta-tags';
 
 // https://astro.build/config
 export default defineConfig({
@@ -44,6 +46,7 @@ export default defineConfig({
 		icon({
 			iconDir: './src/assets/svgs',
 		}),
+		metaTags(),
 	],
 	devToolbar: {
 		enabled: true,
@@ -57,21 +60,30 @@ export default defineConfig({
 		fonts: [
 			{
 				provider: 'local',
-				name: 'Source Sans Pro',
-				cssVariable: '--custom-font-sans',
+				name: 'Innovator Grotesk',
+				cssVariable: '--font-sans',
 				fallbacks: ['sans-serif'],
 				variants: [
 					{
-						weight: 400,
+						weight: '100 900',
 						style: 'normal',
 						display: 'swap',
-						src: ['./src/assets/fonts/SourceSans3-Regular.woff2'],
+						featureSettings: `"liga", "calt", "dlig", "ss01", "cv02", "cv06", "cv10", "cv11", "zero", "tnum";`,
+						src: ['./src/assets/fonts/Innovator-Grotesk-VF.woff2'],
 					},
+				],
+			},
+			{
+				provider: 'local',
+				name: 'JetBrains Mono',
+				cssVariable: '--font-mono',
+				fallbacks: ['sans-serif'],
+				variants: [
 					{
-						weight: 700,
+						weight: '100 900',
 						style: 'normal',
 						display: 'swap',
-						src: ['./src/assets/fonts/SourceSans3-Bold.woff2'],
+						src: ['./src/assets/fonts/JetBrains-Mono-VF.woff2'],
 					},
 				],
 			},
