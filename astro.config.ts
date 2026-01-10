@@ -10,7 +10,6 @@ import postcssTailwindShortcuts from '@locomotivemtl/postcss-tailwind-shortcuts'
 import tailwindcss from '@tailwindcss/postcss';
 import autoprefixer from 'autoprefixer';
 import cssnanoPlugin from 'cssnano';
-import nested from 'postcss-nested';
 import postcssUtopia from 'postcss-utopia';
 
 import metaTags from 'astro-meta-tags';
@@ -28,11 +27,11 @@ export default defineConfig({
 		css: {
 			postcss: {
 				plugins: [
-					nested(),
 					tailwindcss(),
 					postcssUtopia({
 						minWidth: 360, // Default minimum viewport
 						maxWidth: 1536, // Default maximum viewport
+						rootSize: 16, // Default root size
 					}),
 					postcssHelpersFunctions(),
 					postcssTailwindShortcuts(),
