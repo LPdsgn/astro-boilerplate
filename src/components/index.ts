@@ -1,5 +1,5 @@
-import Image from './image/Image.astro';
-import Icon from './icon/Icon.astro';
-import Button from './button/Button.astro';
+import Image from './Image/Image.astro';
+import Icon from './Icon/Icon.astro';
+import Button from './Button/Button.astro';
 
 export { Image, Icon, Button };
