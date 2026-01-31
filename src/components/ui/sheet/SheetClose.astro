@@ -1,0 +1,13 @@
+---
+import type { ComponentProps } from "astro/types";
+
+import { DialogClose } from "@/components/ui/dialog";
+
+type Props = ComponentProps<typeof DialogClose>;
+
+const { class: className, ...rest } = Astro.props;
+---
+
+<DialogClose class:list={["c-sheet-close", className]} {...rest}>
+  <slot />
+</DialogClose>

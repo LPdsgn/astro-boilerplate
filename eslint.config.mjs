@@ -64,7 +64,7 @@ export default defineConfig([
 		},
 		rules: {
 			// Astro rules
-			'astro/prefer-class-list-directive': 'warn',
+			'astro/prefer-class-list-directive': 'off',
 			'astro/prefer-split-class-list': 'warn',
 			'astro/no-set-html-directive': 'warn',
 			'astro/jsx-a11y/iframe-has-title': 'warn',

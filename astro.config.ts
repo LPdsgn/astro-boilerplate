@@ -18,7 +18,7 @@ import astroThemes from '@lpdsgn/astro-themes';
 
 // https://astro.build/config
 export default defineConfig({
-	site: 'https://locomotive-astro-boilerplate.vercel.app',
+	// site: '',
 	output: 'static',
 	adapter: vercel({
 		webAnalytics: {

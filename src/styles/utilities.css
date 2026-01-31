@@ -4,3 +4,18 @@
 	@apply mx-auto w-full px-unit-md;
 	@apply max-w-none;
 }
+
+/* Force zero border radius */
+@layer utilities {
+	[class*='rounded'],
+	.rounded,
+	.rounded-xs,
+	.rounded-sm,
+	.rounded-md,
+	.rounded-lg,
+	.rounded-xl,
+	.rounded-2xl,
+	.rounded-3xl {
+		border-radius: 0 !important;
+	}
+}
