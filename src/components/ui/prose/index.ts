@@ -1,7 +1,7 @@
-import Prose, { prose } from "./Prose.astro";
+import Prose, { prose } from './Prose.astro';
 
 const ProseVariants = {
-  prose,
+	prose,
 };
 
 export { Prose, ProseVariants };

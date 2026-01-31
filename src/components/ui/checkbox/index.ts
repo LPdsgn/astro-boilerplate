@@ -1,4 +1,4 @@
-import Checkbox, { checkbox } from "./Checkbox.astro";
+import Checkbox, { checkbox } from './Checkbox.astro';
 
 const CheckboxVariants = { checkbox };
 

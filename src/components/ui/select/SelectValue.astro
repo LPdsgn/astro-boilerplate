@@ -1,19 +1,19 @@
 ---
-import type { HTMLAttributes } from "astro/types";
-import { tv } from "tailwind-variants";
+import type { HTMLAttributes } from 'astro/types';
+import { tv } from 'tailwind-variants';
 
-type Props = HTMLAttributes<"span"> & {
-  /**
-   * The text to display when no value is selected
-   */
-  placeholder?: string;
+type Props = HTMLAttributes<'span'> & {
+	/**
+	 * The text to display when no value is selected
+	 */
+	placeholder?: string;
 };
 
-export const selectValue = tv({ base: "pointer-events-none" });
+export const selectValue = tv({ base: 'pointer-events-none' });
 
-const { placeholder = "select", class: className, ...rest } = Astro.props;
+const { placeholder = 'select', class: className, ...rest } = Astro.props;
 ---
 
 <span class={selectValue({ class: className })} data-slot="select-value" {...rest}>
-  {placeholder}
+	{placeholder}
 </span>

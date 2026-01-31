@@ -1,21 +1,21 @@
 ---
-import type { ComponentProps } from "astro/types";
-import { tv } from "tailwind-variants";
+import type { ComponentProps } from 'astro/types';
+import { tv } from 'tailwind-variants';
 
-import { Separator } from "@/components/ui/separator";
+import { Separator } from '@/components/ui/separator';
 
 type Props = ComponentProps<typeof Separator>;
 
 export const itemSeparator = tv({
-  base: "my-0",
+	base: 'my-0',
 });
 
-const { class: className, orientation = "horizontal", ...rest } = Astro.props;
+const { class: className, orientation = 'horizontal', ...rest } = Astro.props;
 ---
 
 <Separator
-  orientation={orientation}
-  class={itemSeparator({ class: className })}
-  data-slot="item-separator"
-  {...rest}
+	orientation={orientation}
+	class={itemSeparator({ class: className })}
+	data-slot="item-separator"
+	{...rest}
 />

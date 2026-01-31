@@ -1,4 +1,4 @@
-import ThemeToggle, { themeToggle } from "./ThemeToggle.astro";
+import ThemeToggle, { themeToggle } from './ThemeToggle.astro';
 
 const ThemeToggleVariants = { themeToggle };
 

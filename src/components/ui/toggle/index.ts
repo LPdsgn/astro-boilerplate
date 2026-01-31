@@ -1,5 +1,5 @@
-import Toggle, { toggle } from "./Toggle.astro";
-import type { ToggleChangeEvent, ToggleSyncEvent } from "./ToggleTypes";
+import Toggle, { toggle } from './Toggle.astro';
+import type { ToggleChangeEvent, ToggleSyncEvent } from './ToggleTypes';
 
 const ToggleVariants = { toggle };
 

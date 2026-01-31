@@ -1,4 +1,4 @@
-import Spinner, { spinner } from "./Spinner.astro";
+import Spinner, { spinner } from './Spinner.astro';
 
 const SpinnerVariants = { spinner };
 

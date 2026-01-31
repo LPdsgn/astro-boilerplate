@@ -1,7 +1,7 @@
-import Slider, { slider } from "./Slider.astro";
+import Slider, { slider } from './Slider.astro';
 
 const SliderVariants = {
-  slider,
+	slider,
 };
 
 export { Slider, SliderVariants };

@@ -1,7 +1,7 @@
-import Skeleton, { skeleton } from "./Skeleton.astro";
+import Skeleton, { skeleton } from './Skeleton.astro';
 
 const SkeletonVariants = {
-  skeleton,
+	skeleton,
 };
 
 export { Skeleton, SkeletonVariants };
