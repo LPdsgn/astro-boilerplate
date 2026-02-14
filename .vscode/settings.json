@@ -2,5 +2,8 @@
 	"tailwindCSS.experimental.configFile": "./src/styles/main.css",
 	"files.associations": {
 		"*.css": "tailwindcss"
-	}
+	},
+	"prettier.bracketSameLine": true,
+	"prettier.configPath": ".prettierrc",
+	"css.lint.unknownAtRules": "ignore",
 }
