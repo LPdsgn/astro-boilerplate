@@ -30,4 +30,6 @@ if (import.meta.env.DEV) {
 		.catch((error) => {
 			console.error('Failed to load the grid helper:', error);
 		});
+
+	console.log('🫱🏼‍🫲🏽 App initialized');
 }
