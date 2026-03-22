@@ -30,6 +30,8 @@ const { class: className, size = 'icon-sm', variant = 'ghost', ...rest } = Astro
 </Button>
 
 <script>
+	import { init } from '@/lib/classes';
+
 	class SidebarTriggerHandler {
 		private trigger: HTMLElement;
 		private provider: HTMLElement | null;
@@ -51,7 +53,7 @@ const { class: className, size = 'icon-sm', variant = 'ghost', ...rest } = Astro
 		}
 	}
 
-	const triggerInstances = new WeakMap<HTMLElement, SidebarTriggerHandler>();
+	const triggerInstances: WeakMap<HTMLElement, SidebarTriggerHandler> = new WeakMap();
 
 	const setupSidebarTriggers = () => {
 		document.querySelectorAll<HTMLElement>('.c-sidebar-trigger').forEach((trigger) => {
@@ -60,7 +62,6 @@ const { class: className, size = 'icon-sm', variant = 'ghost', ...rest } = Astro
 		});
 	};
 
-	setupSidebarTriggers();
-	document.addEventListener('astro:after-swap', setupSidebarTriggers);
-	document.addEventListener('starwind:init', setupSidebarTriggers);
+	init('SidebarTriggers', setupSidebarTriggers);
+	// document.addEventListener('starwind:init', setupSidebarTriggers);
 </script>

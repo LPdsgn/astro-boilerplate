@@ -35,6 +35,8 @@ const { class: className, ...rest } = Astro.props;
 	{...rest}></button>
 
 <script>
+	import { init } from '@/lib/classes';
+
 	class SidebarRailHandler {
 		private rail: HTMLElement;
 		private provider: HTMLElement | null;
@@ -56,7 +58,7 @@ const { class: className, ...rest } = Astro.props;
 		}
 	}
 
-	const railInstances = new WeakMap<HTMLElement, SidebarRailHandler>();
+	const railInstances: WeakMap<HTMLElement, SidebarRailHandler> = new WeakMap();
 
 	const setupSidebarRails = () => {
 		document.querySelectorAll<HTMLElement>('.c-sidebar-rail').forEach((rail) => {
@@ -65,7 +67,6 @@ const { class: className, ...rest } = Astro.props;
 		});
 	};
 
-	setupSidebarRails();
-	document.addEventListener('astro:after-swap', setupSidebarRails);
-	document.addEventListener('starwind:init', setupSidebarRails);
+	init('SidebarRails', setupSidebarRails);
+	// document.addEventListener('starwind:init', setupSidebarRails);
 </script>

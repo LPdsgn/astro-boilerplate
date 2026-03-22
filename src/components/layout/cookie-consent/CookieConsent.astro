@@ -1,0 +1,31 @@
+---
+import 'vanilla-cookieconsent/dist/cookieconsent.css';
+import './cookie-consent.css';
+---
+
+<div id="cc-container" class="h-0" data-lenis-prevent>
+	<script>
+		import { run } from 'vanilla-cookieconsent';
+		import { config } from './CookieConsentConfig';
+
+		declare global {
+			interface Window {
+				_htmlClassName: string;
+			}
+		}
+
+		run(config);
+
+		// Preserve cookie consent classes on <html> across Swup page transitions.
+		// Swup doesn't replace <html>, but HeadPlugin may reset classes.
+		document.addEventListener('page:before-preparation', () => {
+			window._htmlClassName = document.documentElement.className;
+		});
+
+		document.addEventListener('page:load', () => {
+			if (window._htmlClassName) {
+				document.documentElement.className = window._htmlClassName;
+			}
+		});
+	</script>
+</div>

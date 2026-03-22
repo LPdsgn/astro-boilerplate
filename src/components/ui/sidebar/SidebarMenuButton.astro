@@ -31,7 +31,7 @@ export const sidebarMenuButton = tv({
 		'disabled:pointer-events-none disabled:opacity-50',
 		'aria-disabled:pointer-events-none aria-disabled:opacity-50',
 		'group-has-data-[sidebar=menu-action]/menu-item:pr-8',
-		'data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground data-[active=true]:font-medium',
+		'data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground',
 		'data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground',
 		'group-data-[collapsible=icon]:size-10! group-data-[collapsible=icon]:p-2.5!',
 		'[&>span:last-child]:truncate [&>svg]:size-4.5 [&>svg]:shrink-0',
@@ -40,7 +40,7 @@ export const sidebarMenuButton = tv({
 		variant: {
 			default: 'hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
 			outline: [
-				'bg-background shadow-sidebar-border shadow-xs',
+				'bg-background shadow-xs shadow-sidebar-border',
 				'hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:shadow-sidebar-accent',
 			],
 		},

@@ -1,0 +1,38 @@
+@reference "#styles";
+
+@layer components {
+	.c-link {
+		@apply text-foreground transition-colors hover:text-primary;
+
+		&--cta {
+			@apply text-foreground transition-colors hover:text-primary;
+			@apply relative inline-flex items-baseline justify-center gap-[.3em] pb-[.1em] text-base font-medium;
+
+			&::after {
+				content: '';
+				position: absolute;
+				bottom: 0;
+				left: 0;
+				width: 100%;
+				height: 0.09em;
+				background-color: currentColor;
+				transform: scaleX(0);
+				transform-origin: left;
+				transition: transform 0.3s ease;
+			}
+			&:hover::after {
+				transform: scaleX(1);
+			}
+			&:not(:hover)::after {
+				transform-origin: right;
+				transition: transform 0.3s ease;
+			}
+		}
+	}
+	.c-link.underline {
+		@apply underline-offset-[3px] hover:decoration-primary;
+	}
+	.c-link.disabled {
+		@apply pointer-events-none text-inherit!;
+	}
+}

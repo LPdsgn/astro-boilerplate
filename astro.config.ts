@@ -1,8 +1,12 @@
 import { defineConfig, fontProviders } from 'astro/config';
 import vercel from '@astrojs/vercel';
 import icon from 'astro-icon';
+import mdx from '@astrojs/mdx';
+import { visualizer } from 'rollup-plugin-visualizer';
+import Sonda from 'sonda/astro';
 
 const isProd = import.meta.env.PROD;
+const isDev = import.meta.env.DEV;
 
 // PostCSS Plugins
 import postcssHelpersFunctions from '@locomotivemtl/postcss-helpers-functions';
@@ -11,9 +15,11 @@ import tailwindcss from '@tailwindcss/postcss';
 import autoprefixer from 'autoprefixer';
 import cssnanoPlugin from 'cssnano';
 import postcssUtopia from 'postcss-utopia';
+import postcssNested from 'postcss-nested';
 
 // Astro Integrations
 import metaTags from 'astro-meta-tags';
+import favicons from 'astro-favicons';
 import astroThemes from '@lpdsgn/astro-themes';
 
 // https://astro.build/config
@@ -29,6 +35,7 @@ export default defineConfig({
 		css: {
 			postcss: {
 				plugins: [
+					postcssNested(), // before tailwindcss so &_suffix nesting resolves before @apply
 					tailwindcss(),
 					postcssUtopia({
 						minWidth: 360, // Default minimum viewport
@@ -38,22 +45,53 @@ export default defineConfig({
 					postcssHelpersFunctions(),
 					postcssTailwindShortcuts(),
 					autoprefixer(),
-					cssnanoPlugin(),
+					...(isProd ? [cssnanoPlugin()] : []),
 				],
 			},
+		},
+		plugins: [
+			...(process.env.ANALYZE // ANALYZE=1 pnpm build per generare stats.html
+				? [
+						visualizer({
+							emitFile: true,
+							filename: 'stats.html',
+							template: 'flamegraph',
+							gzipSize: true,
+							brotliSize: true,
+						}),
+					]
+				: []),
+		],
+		build: {
+			sourcemap: false, // !!process.env.SOURCE_MAP | SOURCE_MAP=1 pnpm build solo quando devi debuggare in produzione
 		},
 	},
 	integrations: [
 		icon({
 			iconDir: './src/assets/svgs',
 		}),
-		metaTags(),
-		astroThemes(),
+		mdx(),
+		favicons({
+			name: 'Astro Boilerplate',
+			short_name: 'Astro Boilerplate',
+		}),
+		...(isDev ? [metaTags()] : []),
+		...(process.env.ANALYZE
+			? [
+					Sonda({
+						server: true,
+						deep: true,
+						gzip: true,
+						brotli: true,
+					}),
+				]
+			: []),
 	],
 	devToolbar: {
 		enabled: true,
 	},
 	image: {
+		domains: ['locomotive.ca'],
 		responsiveStyles: true,
 		layout: 'constrained',
 		breakpoints: [640, 768, 900, 1024, 1280, 1440, 1920],

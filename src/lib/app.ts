@@ -1,6 +1,5 @@
-import { Scroll } from '@lib/classes/Scroll';
-import { Transitions } from '@lib/classes/Transitions';
-import { AM } from '@lib/classes/AnimationManager';
+import { Scroll, Transitions, init } from '@lib/classes';
+import { AM, mm } from '@lib/animations';
 
 // Initialize the Transitions class
 export const transitions = new Transitions();
@@ -33,3 +32,7 @@ if (import.meta.env.DEV) {
 
 	console.log('🫱🏼‍🫲🏽 App initialized');
 }
+
+document.addEventListener('page:before-swap', () => {
+	mm.revert(); // Clear stale matchMedia callbacks before re-registering
+});

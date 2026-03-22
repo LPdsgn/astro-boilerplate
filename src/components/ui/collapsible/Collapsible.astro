@@ -45,6 +45,8 @@ const finalId = (rest as Record<string, unknown>)['id'] as string | undefined;
 </div>
 
 <script>
+	import { init } from '@/lib/classes';
+
 	type CollapsibleState = 'open' | 'closed';
 
 	/**
@@ -141,7 +143,7 @@ const finalId = (rest as Record<string, unknown>)['id'] as string | undefined;
 		}
 	}
 
-	const collapsibleInstances = new WeakMap<HTMLElement, CollapsibleHandler>();
+	const collapsibleInstances: WeakMap<HTMLElement, CollapsibleHandler> = new WeakMap();
 	let collapsibleCounter = 0;
 
 	const setupCollapsibles = () => {
@@ -155,7 +157,6 @@ const finalId = (rest as Record<string, unknown>)['id'] as string | undefined;
 		});
 	};
 
-	setupCollapsibles();
-	document.addEventListener('astro:after-swap', setupCollapsibles);
-	document.addEventListener('starwind:init', setupCollapsibles);
+	init('Collapsibles', setupCollapsibles);
+	// document.addEventListener('starwind:init', setupCollapsibles);
 </script>

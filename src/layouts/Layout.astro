@@ -1,22 +1,43 @@
 ---
-import { Icon } from '@/components';
-import { Clarity, GoogleTagmanager, Posthog } from '@components/analytics';
-import { getSeo } from '@lib/utils/seo';
+import {
+	Clarity,
+	GoogleTagmanager,
+	GoogleTagmanagerNoscript,
+	Posthog,
+} from '@components/analytics';
+import { CookieConsent, Footer, Header } from '@components/layout';
+import { getSeo } from '@lib/seo';
 import { ThemeProvider } from '@lpdsgn/astro-themes/components';
 import '@styles/main.css';
+import SpeedInsights from '@vercel/speed-insights/astro';
 import { Head } from 'astro-capo';
 import { SEO } from 'astro-seo';
 import { type CssVariable, Font } from 'astro:assets';
 
-interface Props {
-	title?: string;
-	seo?: Partial<Seo>;
-}
+// Calcola fallback per il titolo dal pathname se non fornito
+const pathName = Astro.url.pathname.split('/').pop() ?? '';
+const fallbackTitle = pathName.charAt(0).toUpperCase() + pathName.slice(1).toLowerCase();
 
-const { title, seo = {} } = Astro.props;
+const {
+	seo = {},
+	class: className,
+	noise = false,
+	header = true,
+	footer = true,
+	cookieBanner = true,
+	fullscreen = false,
+}: {
+	seo?: Partial<Seo>;
+	class?: string;
+	noise?: boolean;
+	header?: boolean;
+	footer?: boolean;
+	cookieBanner?: boolean;
+	fullscreen?: boolean;
+} = Astro.props;
 
 // Merge title prop into seo object if provided
-const seoInput = title ? { ...seo, title: seo.title || title } : seo;
+const seoInput = { ...seo, title: seo.title || fallbackTitle };
 const seoData = getSeo(seoInput, Astro.url);
 
 // Constants
@@ -26,10 +47,12 @@ const FONTS: CssVariable[] = ['--font-sans', '--font-mono'];
 <!doctype html>
 <html lang="en">
 	<Head>
+		<style is:inline>
+			@layer theme, base, components, utilities;
+		</style>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width,initial-scale=1" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
 		<ThemeProvider />
 
@@ -42,36 +65,22 @@ const FONTS: CssVariable[] = ['--font-sans', '--font-mono'];
 		<Clarity />
 		<Posthog />
 	</Head>
-	<body>
+	<body class:list={[noise && 'noise', className]}>
+		<GoogleTagmanagerNoscript />
+
 		<script src="../lib/app.ts"></script>
 
-		<div class="container grid grid-cols-2 py-fluid-md">
-			<div>
-				<Icon name="logo" />
-			</div>
-			<nav class="flex gap-gutter justify-self-end">
-				<a href="/">Index</a>
-				<a href="/about">About</a>
-				<a href="/post">The post</a>
-			</nav>
-		</div>
+		{header ? <Header /> : <slot name="header" />}
 
-		<main id="swup" class="transition-fade">
-			<div id="content">
+		<main id="swup" class:list={['transition-fade', fullscreen && 'h-screen']}>
+			<div id="content" class:list={[fullscreen && 'h-screen']}>
 				<slot />
 			</div>
 		</main>
 
-		<footer class="container flex justify-between py-fluid-xs">
-			<div>
-				&copy;{new Date().getFullYear()}
-			</div>
+		{footer ? <Footer class="transition-fade" /> : <slot name="footer" />}
 
-			<nav class="flex gap-gutter">
-				<a href="/">Index</a>
-				<a href="/about">About</a>
-			</nav>
-		</footer>
+		{cookieBanner ? <CookieConsent /> : null}
 
 		<script>
 			import { $screenDebounce } from '@lib/stores/screen';
@@ -82,5 +91,7 @@ const FONTS: CssVariable[] = ['--font-sans', '--font-mono'];
 				setViewportSize();
 			});
 		</script>
+
+		<SpeedInsights />
 	</body>
 </html>

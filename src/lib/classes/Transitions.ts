@@ -1,7 +1,12 @@
+import { isDebug, isProd } from '@/site.config';
 import { Scroll } from '@lib/classes/Scroll';
 import { toDash } from '@lib/utils/string';
+import SwupA11yPlugin from '@swup/a11y-plugin'; /* https://swup.js.org/plugins/a11y-plugin/ */
+import SwupBodyClassPlugin from '@swup/body-class-plugin'; /* https://swup.js.org/plugins/body-class-plugin/ */
+import SwupDebugPlugin from '@swup/debug-plugin'; /* https://swup.js.org/plugins/debug-plugin/ */
 import SwupHeadPlugin from '@swup/head-plugin';
 import SwupPreloadPlugin from '@swup/preload-plugin';
+import SwupProgressPlugin from '@swup/progress-plugin'; /* https://swup.js.org/plugins/progress-plugin/ */
 import SwupScriptsPlugin from '@swup/scripts-plugin';
 import Swup from 'swup';
 
@@ -46,16 +51,24 @@ export class Transitions {
 	initSwup() {
 		this.swup = new Swup({
 			animateHistoryBrowsing: true,
+			containers: ['#swup'],
 			plugins: [
+				new SwupA11yPlugin(),
+				new SwupBodyClassPlugin({
+					attributes: [/^data-/],
+				}),
 				new SwupHeadPlugin({
 					persistAssets: true,
 					awaitAssets: true,
+					attributes: [/^data-/],
 				}),
 				new SwupPreloadPlugin({
 					preloadHoveredLinks: true,
-					preloadInitialPage: !import.meta.env.DEV,
+					preloadInitialPage: isProd,
 				}),
+				new SwupProgressPlugin(),
 				new SwupScriptsPlugin(),
+				...(isDebug ? [new SwupDebugPlugin({ globalInstance: true })] : []),
 			],
 		});
 
@@ -106,6 +119,9 @@ export class Transitions {
 	onVisitStart() {
 		document.documentElement.classList.add(Transitions.TRANSITION_CLASS);
 		document.documentElement.classList.remove(Transitions.READY_CLASS);
+
+		// Dispatch custom event for scripts re-initialization
+		document.dispatchEvent(new Event('page:before-preparation'));
 	}
 
 	/**
@@ -117,6 +133,9 @@ export class Transitions {
 	 */
 	beforeContentReplace() {
 		Scroll?.destroy();
+
+		// Dispatch custom event for scripts re-initialization
+		document.dispatchEvent(new Event('page:before-swap'));
 	}
 
 	/**
@@ -130,7 +149,7 @@ export class Transitions {
 		Scroll?.init();
 		this.updateDocumentAttributes(visit);
 
-		// Dispatch custom event for analytics re-initialization
+		// Dispatch custom event for scripts re-initialization
 		document.dispatchEvent(new Event('page:load'));
 	}
 
@@ -154,4 +173,39 @@ export class Transitions {
 		document.documentElement.classList.remove(Transitions.TRANSITION_CLASS);
 		document.documentElement.classList.add(Transitions.READY_CLASS);
 	}
+}
+
+/**
+ * Helper di inizializzazione per script di pagine e componenti.
+ * Esegue `func` al primo caricamento e la ri-esegue dopo ogni navigazione Swup.
+ *
+ * Usa un `AbortController` per evitare l'accumulo di listener: ogni chiamata
+ * con lo stesso `key` annulla la registrazione precedente prima di aggiungerne una nuova.
+ *
+ * @param key - Identificativo univoco per deduplicare le registrazioni
+ * @param func - Callback di inizializzazione
+ *
+ * @example
+ * ```ts
+ * import { init } from '@lib/classes/Transitions';
+ * init('my-feature', () => { ... });
+ * ```
+ */
+const initControllers = new Map<string, AbortController>();
+
+export function init(key: string, func: () => void) {
+	// Annulla eventuali listener precedenti con lo stesso key
+	initControllers.get(key)?.abort();
+	const controller = new AbortController();
+	initControllers.set(key, controller);
+
+	// Esecuzione immediata se DOM già caricato
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', func, { signal: controller.signal });
+	} else {
+		func();
+	}
+
+	// Ri-inizializzazione dopo page transition
+	document.addEventListener('page:load', func, { signal: controller.signal });
 }

@@ -12,17 +12,17 @@ type Props = HTMLAttributes<'dialog'> & {
 export const alertDialogBackdrop = tv({
 	base: [
 		'c-alert-dialog-backdrop fixed inset-0 z-50 hidden bg-black/50',
-		'data-[state=open]:animate-in fade-in',
-		'data-[state=closed]:animate-out data-[state=closed]:fill-mode-forwards fade-out',
+		'fade-in data-[state=open]:animate-in',
+		'fade-out data-[state=closed]:animate-out data-[state=closed]:fill-mode-forwards',
 	],
 });
 
 export const alertDialogContent = tv({
 	base: [
-		'bg-background space-y-4 rounded-lg border p-6 shadow-lg sm:max-w-lg',
+		'space-y-4 rounded-lg border bg-background p-6 shadow-lg sm:max-w-lg',
 		'fixed top-[50%] left-[50%] z-50 w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%]',
-		'data-[state=open]:animate-in fade-in zoom-in-95 will-change-transform',
-		'data-[state=closed]:animate-out data-[state=closed]:fill-mode-forwards fade-out zoom-out-95',
+		'will-change-transform zoom-in-95 fade-in data-[state=open]:animate-in',
+		'zoom-out-95 fade-out data-[state=closed]:animate-out data-[state=closed]:fill-mode-forwards',
 	],
 });
 

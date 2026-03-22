@@ -29,6 +29,8 @@ const { class: className, openOnHover = false, closeDelay = 200, ...rest } = Ast
 </div>
 
 <script>
+	import { init } from '@/lib/classes';
+
 	class DropdownHandler {
 		private dropdown: HTMLElement;
 		private trigger: HTMLButtonElement | null;
@@ -362,7 +364,7 @@ const { class: className, openOnHover = false, closeDelay = 200, ...rest } = Ast
 	}
 
 	// Store instances in a WeakMap to avoid memory leaks
-	const dropdownInstances = new WeakMap<HTMLElement, DropdownHandler>();
+	const dropdownInstances: WeakMap<HTMLElement, DropdownHandler> = new WeakMap();
 	let dropdownCounter = 0;
 
 	// Initialize dropdowns
@@ -374,7 +376,6 @@ const { class: className, openOnHover = false, closeDelay = 200, ...rest } = Ast
 		});
 	};
 
-	initDropdowns();
-	document.addEventListener('astro:after-swap', initDropdowns);
-	document.addEventListener('starwind:init', initDropdowns);
+	init('Dropdowns', initDropdowns);
+	// document.addEventListener('starwind:init', initDropdowns);
 </script>

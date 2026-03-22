@@ -23,6 +23,8 @@ const { defaultValue, syncKey, class: className, ...rest } = Astro.props;
 </div>
 
 <script>
+	import { init } from '@/lib/classes';
+
 	type TabValue = string;
 
 	interface TabsSyncEventDetail {
@@ -253,7 +255,7 @@ const { defaultValue, syncKey, class: className, ...rest } = Astro.props;
 	}
 
 	// Store instances in a WeakMap to avoid memory leaks
-	const tabInstances = new WeakMap<HTMLElement, TabsHandler>();
+	const tabInstances: WeakMap<HTMLElement, TabsHandler> = new WeakMap();
 	let tabCounter = 0;
 
 	const setupTabs = () => {
@@ -267,7 +269,6 @@ const { defaultValue, syncKey, class: className, ...rest } = Astro.props;
 		});
 	};
 
-	setupTabs();
-	document.addEventListener('astro:after-swap', setupTabs);
-	document.addEventListener('starwind:init', setupTabs);
+	init('Tabs', setupTabs);
+	// document.addEventListener('starwind:init', setupTabs);
 </script>

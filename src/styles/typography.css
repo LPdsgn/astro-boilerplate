@@ -17,3 +17,12 @@
 	font-style: normal;
 	line-height: 1.35;
 }
+
+/* Fix vertical text centering by trimming font metric space */
+@utility leading-trim {
+	text-box-trim: both;
+	text-box-edge: cap alphabetic;
+	leading-trim: both;
+	text-edge: cap;
+	user-select: none;
+}

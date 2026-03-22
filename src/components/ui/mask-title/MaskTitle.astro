@@ -1,0 +1,83 @@
+---
+interface Props {
+	tag?: keyof HTMLElementTagNameMap;
+	text?: string;
+	class?: string;
+}
+
+const {
+	tag = 'p',
+	//lines = ['Lorem ipsum dolor', 'sit amet, consectetur', 'adipiscing elit.']
+	text = 'Lorem ipsum dolor sit amet',
+	class: propClass,
+} = Astro.props;
+
+// Crea dinamicamente l'elemento basato sulla prop tag
+const Element = tag;
+
+/**
+ * Divide una stringa mantenendo gli spazi come elementi separati
+ * @param {string} text - Il testo da dividere in parole
+ * @returns {Array<{content: string, type: 'word' | 'space'}>} - Array di oggetti con parole e spazi
+ */
+function splitText(text: string): Array<{ content: string; type: 'word' | 'space' }> {
+	// Rimuove spazi extra all'inizio e alla fine
+	const trimmedText = text.trim();
+
+	// Trova tutte le parole (sequenze di caratteri non-spazio)
+	const matches = trimmedText.match(/\S+|\s+/g) || [];
+
+	// Converte i match in oggetti che distinguono tra parole e spazi
+	return matches.map((match) => ({
+		content: match,
+		type: /^\s+$/.test(match) ? 'space' : 'word',
+	}));
+}
+
+// Dividi il testo in parole e spazi
+const textContent = splitText(text);
+---
+
+<Element class:list={['c-maskTitle', propClass]} aria-label={text}>
+	{
+		textContent.map((part, index) =>
+			part.type === 'word' ? (
+				<span class:list={`word word${index}`} aria-hidden="true">
+					<span class="word-hidden">{part.content}</span>
+					<span class="word-visible">{part.content}</span>
+				</span>
+			) : (
+				part.content
+			)
+		)
+	}
+</Element>
+
+<style is:global lang="postcss">
+	@reference "#styles";
+
+	.c-maskTitle {
+		font-family: var(--font-mono);
+		font-size: utopia.clamp(36,96);
+		line-height: 0.9;
+   	letter-spacing: -0.025em;
+		font-weight: 500;
+		text-transform: uppercase;
+
+		span {
+			display: inline-block;
+		}
+		.word {
+			@apply relative;
+			clip-path: polygon(0 2%, 0 96%, 100% 96%, 100% 2%); /* Depends on the font */
+		}
+		.word-hidden {
+			position: absolute;
+			left: 0;
+			top: 0;
+			transform: translate(0, -100%); /* Translate it -100% of its height on the y-axis */
+		}
+	}
+</style>
+
+<script src="./mask-title.ts"></script>

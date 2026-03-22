@@ -2,8 +2,14 @@
 import type { HTMLAttributes } from 'astro/types';
 import { tv } from 'tailwind-variants';
 
+type Props = HTMLAttributes<'div'> & {
+	overflow?: boolean;
+};
+
+const { class: className = '', overflow = false, ...rest } = Astro.props;
+
 const carouselContent = tv({
-	base: 'overflow-hidden',
+	base: `overflow-${overflow ? 'visible' : 'hidden'}`,
 });
 
 const carouselContainer = tv({
@@ -13,10 +19,6 @@ const carouselContainer = tv({
 		'group-data-[axis=y]/carousel:-mt-4',
 	],
 });
-
-type Props = HTMLAttributes<'div'>;
-
-const { class: className = '', ...rest } = Astro.props;
 ---
 
 <div class={carouselContent()} data-slot="carousel-content" {...rest}>

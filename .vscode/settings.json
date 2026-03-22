@@ -1,9 +1,24 @@
 {
-	"tailwindCSS.experimental.configFile": "./src/styles/main.css",
 	"files.associations": {
 		"*.css": "tailwindcss"
 	},
+	"tailwindCSS.classFunctions": [
+		"clsx",
+		"cn",
+		"cva",
+		"tv",
+		"twMerge"
+	],
+	"tailwindCSS.includeLanguages": { "postcss": "css" },
+	// CAVEAT: tailwindCSS.experimental.configFile resolves paths relative to the
+	// .code-workspace file location, NOT the project root. When opened via
+	// astro-boilerplate.code-workspace (in ~/.vscode/workspaces/LP/), the path
+	// must traverse back to the actual project folder.
+	// For Tailwind v4, point to the CSS file containing `@import 'tailwindcss'`.
+	"tailwindCSS.experimental.configFile": "src/styles/main.css",
+   "emmet.includeLanguages": { "postcss": "css" },
 	"prettier.bracketSameLine": true,
 	"prettier.configPath": ".prettierrc",
 	"css.lint.unknownAtRules": "ignore",
+	 "editor.defaultFormatter": "esbenp.prettier-vscode"
 }

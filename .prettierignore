@@ -1,5 +1,8 @@
 # Ignore files with syntax issues that Prettier can't handle
 src/components/analytics/**
+src/components/ui/marquee/Marquee.astro
+*.md
+*.mdx
 
 # Ignore specific files that should not be formatted
 .claude

@@ -1,0 +1,187 @@
+---
+const {
+	href,
+	class: className,
+}: {
+	href?: string;
+	class?: string;
+} = Astro.props;
+
+const HTMLelement: keyof HTMLElementTagNameMap = Astro.props.href ? 'a' : 'div';
+---
+
+<div class:list={[className]}>
+	<HTMLelement
+		href={href ? `#${href}` : undefined}
+		class="next-section skip-hash stroke-foreground"
+	>
+		<span class="screen-reader-text">Navigate to the next section</span>
+		<svg class="scroll-icon" viewBox="0 0 30 45" enable-background="new 0 0 30 45">
+			<path
+				class="scroll-icon-path"
+				fill="none"
+				stroke="inherit"
+				stroke-width=" 2"
+				stroke-miterlimit="10"
+				d="M15,1.118c12.352,0,13.967,12.88,13.967,12.88v18.76  c0,0-1.514,11.204-13.967,11.204S0.931,32.966,0.931,32.966V14.05C0.931,14.05,2.648,1.118,15,1.118z"
+			></path>
+		</svg>
+		<span class="track-ball"></span>
+	</HTMLelement>
+</div>
+
+<style is:global lang="postcss">
+	@reference "#styles";
+	@layer components {
+		/**
+		* Scroll Down Indicator style
+		**/
+
+		@keyframes nudgeMouse {
+			0% {
+				transform: translateY(0);
+			}
+
+			45% {
+				transform: translateY(8px);
+			}
+
+			100%,
+			65% {
+				transform: translateY(0);
+			}
+		}
+
+		@keyframes trackBallSlide {
+			0% {
+				opacity: 1;
+				transform: scaleY(1) translateY(-10px);
+			}
+
+			45% {
+				opacity: 0;
+				transform: scaleY(0.5) translateY(13px);
+			}
+
+			46% {
+				opacity: 0;
+				transform: scaleY(1) translateY(-10px);
+			}
+
+			100%,
+			65% {
+				opacity: 1;
+				transform: scaleY(1) translateY(-10px);
+			}
+		}
+
+		@keyframes mouse-scroll-btn-roll-over {
+			0% {
+				stroke-dashoffset: 120;
+			}
+
+			100% {
+				stroke-dashoffset: 0;
+			}
+		}
+
+		@keyframes mouse-scroll-btn-roll-out {
+			0% {
+				stroke-dashoffset: 0;
+			}
+
+			100% {
+				stroke-dashoffset: -120;
+			}
+		}
+
+		@media (max-width: 640px) {
+			.next-section {
+				scale: 0.875;
+			}
+		}
+
+		.next-section {
+			display: block;
+			position: relative;
+			width: auto;
+			height: auto;
+			text-align: center;
+			line-height: 1rem;
+			font-size: 0;
+			transition: opacity 0.4s ease;
+			-webkit-animation: nudgeMouse 2.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+			animation: nudgeMouse 2.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+
+			&::before {
+				position: absolute;
+				content: '';
+				display: block;
+				left: 50%;
+				margin-left: -1px;
+				top: 22px;
+				background: var(--border);
+				width: 2px;
+				height: 6px;
+				border-radius: 10px;
+				transition: background-color 0.55s cubic-bezier(0.5, 0.1, 0.07, 1);
+				animation: trackBallSlide 2.4s cubic-bezier(0, 0, 0.725, 1) infinite;
+			}
+
+			&:hover::before {
+				background: var(--foreground);
+			}
+
+			&::after {
+				content: '';
+				position: absolute;
+				top: 0;
+				left: 50%;
+				display: block;
+				width: 30px;
+				height: 45px;
+				margin-left: -15px;
+				border: 2px solid var(--border);
+				border-radius: 30px;
+				-webkit-box-sizing: border-box;
+				box-sizing: border-box;
+				z-index: 62;
+			}
+
+			.scroll-icon {
+				width: 30px;
+				height: 45px;
+				text-align: center;
+				cursor: pointer;
+				position: relative;
+				z-index: 100;
+			}
+
+			.scroll-icon-path {
+				fill: transparent;
+				stroke-width: 2px;
+				stroke-dashoffset: 120;
+				stroke-dasharray: 120;
+				animation: mouse-scroll-btn-roll-out 0.55s cubic-bezier(0.5, 0.1, 0.07, 1);
+			}
+
+			&:hover .scroll-icon-path {
+				stroke-dashoffset: 0;
+				animation: mouse-scroll-btn-roll-over 0.55s cubic-bezier(0.5, 0.1, 0.07, 1);
+			}
+
+			.screen-reader-text {
+				border: 0;
+				clip: rect(1px, 1px, 1px, 1px);
+				clip-path: inset(50%);
+				height: 1px;
+				margin: -1px;
+				overflow: hidden;
+				padding: 0;
+				position: absolute !important;
+				width: 1px;
+				word-wrap: normal !important;
+			}
+		}
+	}
+</style>

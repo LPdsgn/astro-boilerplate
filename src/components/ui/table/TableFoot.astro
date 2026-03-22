@@ -5,7 +5,7 @@ import { tv, type VariantProps } from 'tailwind-variants';
 type Props = HTMLAttributes<'tfoot'> & VariantProps<typeof tableFoot>;
 
 export const tableFoot = tv({
-	base: 'bg-muted/50 border-t font-medium [&>tr]:last:border-b-0',
+	base: 'border-t bg-muted/50 font-medium [&>tr]:last:border-b-0',
 });
 
 const { class: className, ...rest } = Astro.props;

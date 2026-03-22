@@ -72,6 +72,7 @@ const inputMode = isNumericOnly ? 'numeric' : 'text';
 </div>
 
 <script>
+	import { init } from '@/lib/classes';
 	import type { InputOtpChangeEvent } from './InputOtpTypes';
 
 	class InputOtpHandler {
@@ -345,7 +346,7 @@ const inputMode = isNumericOnly ? 'numeric' : 'text';
 		}
 	}
 
-	const inputOtpInstances = new WeakMap<HTMLElement, InputOtpHandler>();
+	const inputOtpInstances: WeakMap<HTMLElement, InputOtpHandler> = new WeakMap();
 	let inputOtpCounter = 0;
 
 	const setupInputOtps = () => {
@@ -356,7 +357,6 @@ const inputMode = isNumericOnly ? 'numeric' : 'text';
 		});
 	};
 
-	setupInputOtps();
-	document.addEventListener('astro:after-swap', setupInputOtps);
-	document.addEventListener('starwind:init', setupInputOtps);
+	init('Input OTPs', setupInputOtps);
+	// document.addEventListener('starwind:init', setupInputOtps);
 </script>

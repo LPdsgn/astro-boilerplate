@@ -1,0 +1,75 @@
+@reference "#styles";
+
+#cc-main {
+	--cc-font-family: var(--font-sans);
+
+	--cc-bg: var(--background);
+	--cc-primary-color: var(--foreground);
+	--cc-secondary-color: var(--foreground);
+
+	--cc-btn-primary-bg: var(--primary);
+	--cc-btn-primary-color: var(--primary-foreground);
+	--cc-btn-primary-border-color: var(--primary);
+	--cc-btn-primary-hover-bg: var(--primary);
+	--cc-btn-primary-hover-color: var(--primary-foreground);
+	--cc-btn-primary-hover-border-color: var(--primary);
+
+	--cc-btn-secondary-bg: var(--secondary);
+	--cc-btn-secondary-color: var(--secondary-foreground);
+	--cc-btn-secondary-border-color: var(--secondary);
+	--cc-btn-secondary-hover-bg: var(--secondary);
+	--cc-btn-secondary-hover-color: var(--secondary-foreground);
+	--cc-btn-secondary-hover-border-color: var(--secondary);
+
+	--cc-separator-border-color: var(--border);
+
+	--cc-toggle-on-bg: var(--cc-btn-primary-bg);
+	--cc-toggle-off-bg: var(--muted);
+	--cc-toggle-on-knob-bg: var(--primary-foreground);
+	--cc-toggle-off-knob-bg: var(--muted-foreground);
+
+	--cc-toggle-enabled-icon-color: var(--cc-bg);
+	--cc-toggle-disabled-icon-color: var(--cc-bg);
+
+	--cc-toggle-readonly-bg: var(--muted);
+	--cc-toggle-readonly-knob-bg: var(--muted-foreground);
+	--cc-toggle-readonly-knob-icon-color: var(--cc-toggle-readonly-bg);
+
+	--cc-section-category-border: var(--cc-cookie-category-block-bg);
+
+	--cc-cookie-category-block-bg: var(--secondary);
+	--cc-cookie-category-block-border: var(--secondary);
+	--cc-cookie-category-block-hover-bg: var(--secondary);
+	--cc-cookie-category-block-hover-border: var(--secondary);
+	--cc-cookie-category-expanded-block-bg: var(--secondary);
+	--cc-cookie-category-expanded-block-hover-bg: var(--muted);
+
+	--cc-overlay-bg: rgba(0, 0, 0, 0.75);
+	--cc-webkit-scrollbar-bg: var(--cc-section-category-border);
+	--cc-webkit-scrollbar-hover-bg: var(--cc-btn-primary-hover-bg);
+
+	--cc-footer-bg: var(--cc-btn-secondary-bg);
+	--cc-footer-color: var(--cc-secondary-color);
+	--cc-footer-border-color: transparent;
+}
+#cc-main .pm__service-counter {
+	background: var(--muted);
+	color: var(--foreground);
+}
+#cc-main .pm__section--toggle .pm__section-title-wrapper,
+#cc-main .pm__section--toggle .pm__section-title,
+#cc-main .pm__section--toggle .pm__section-desc-wrapper {
+	border: none !important;
+}
+#cc-main .pm__btn,
+#cc-main .cm__btn {
+	font-family: var(--font-mono);
+	text-transform: uppercase;
+}
+#cc-main .cm--box,
+#cc-main .pm--box {
+	border: 1px solid var(--border);
+}
+#cc-main .pm__title {
+	@apply text-2xl lg:text-3xl;
+}

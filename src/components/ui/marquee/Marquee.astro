@@ -1,0 +1,105 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends HTMLAttributes<'div'> {
+	as?: 'div' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p';
+	text?: string;
+	placeholder?: string;
+	pauseOnHover?: boolean;
+	repeat?: number;
+	duration?: number;
+	gap?: string;
+	class?: string;
+	scrollSensible?: boolean;
+}
+
+const {
+	as: HTMLelement = 'div',
+	text,
+	placeholder = 'Lorem ipsum dolor sit amet',
+	pauseOnHover = false,
+	repeat = 3,
+	duration = 25,
+	gap = '.25em',
+	class: propClass,
+	scrollSensible = true,
+} = Astro.props;
+---
+
+<HTMLelement
+	class:list={[scrollSensible ? 'c-marquee' : 'c-marquee_row group gap-(--gap)', 'u-alignWide', propClass]}
+	style={!scrollSensible && `--duration: ${duration}s; --gap: ${gap};`}>
+	{scrollSensible ? (
+		<div
+			class:list={['c-marquee_row -first group gap-(--gap)']}
+			style={`--duration: ${duration}s; --gap: ${gap};`}>
+			{
+				Array(repeat)
+					.fill(0)
+					.map((_) => (
+						<span
+							class:list={[
+								'c-marquee_content gap-(--gap)',
+								pauseOnHover && 'group-hover:paused',
+							]}>
+							{text ? `${text}` : <slot />}
+						</span>
+					))
+			}
+		</div>
+		<div
+			class:list={['c-marquee_row -last group gap-(--gap)']}
+			style={`--duration: ${duration}s; --gap: ${gap};`}>
+			{
+				Array(repeat)
+					.fill(0)
+					.map((_) => (
+						<span
+							class:list={[
+								'c-marquee_content gap-(--gap)',
+								pauseOnHover && 'group-hover:paused',
+							]}>
+							{text ? `${placeholder}` : <slot />}
+						</span>
+					))
+			}
+		</div>
+	) : (
+		Array(repeat)
+			.fill(0)
+			.map((_) => (
+				<span
+					class:list={[
+						'c-marquee_content gap-(--gap) direction-reverse',
+						pauseOnHover && 'group-hover:paused',
+					]}>
+					{text ? `${placeholder}` : <slot />}
+				</span>
+			))
+	)}
+</HTMLelement>
+
+<style is:global lang="postcss">
+	@reference "#styles";
+	.c-marquee {
+		@apply relative flex flex-col justify-center overflow-hidden;
+	}
+	.c-marquee_row {
+		@apply relative flex h-[1em] w-max gap-(--gap) overflow-hidden whitespace-nowrap will-change-transform items-center;
+		&.-last {
+			@apply absolute top-0 left-0;
+			transform: translate(0, 100%);
+
+			.c-marquee_content {
+				animation-direction: reverse;
+			}
+		}	
+	}
+	.c-marquee_content {
+		@apply flex animate-marquee;
+		animation-composition: add;
+	}
+</style>
+
+<script src="./marquee.ts"></script>
+

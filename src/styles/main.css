@@ -9,6 +9,113 @@
 @import './typography.css';
 
 /* Global styles */
+*,
+::before,
+::after {
+	@apply box-border border-border bg-center object-center outline-outline/50;
+}
+
+/**
+ * Browsers will display a visible outline around elements focused by this plugin. That's great for orientation of keyboard users, but tends to be annoying for mouse users. We can make both groups of users happy by using a combination of the :focus and :focus-visible pseudo-class to hide any focus outlines while the site is being used with a mouse:
+ */
+:focus:not(:focus-visible) {
+	outline: none;
+}
+
+::selection {
+	@apply bg-primary text-primary-foreground text-shadow-none;
+}
+
+html {
+	@apply bg-background font-sans font-medium text-foreground antialiased scheme-light dark:scheme-dark;
+
+	&.theme-dark {
+		color-scheme: dark;
+	}
+
+	/* Scrollbars styles */
+	scrollbar-color: var(--scrollbar) transparent;
+	scrollbar-width: thin;
+	scrollbar-gutter: stable;
+
+	::-webkit-scrollbar-corner {
+		background-color: transparent;
+	}
+}
+
+body {
+	@apply min-h-dvh max-w-[min(100%,100vw)];
+}
+
+.swup-progress-bar {
+	height: 4px;
+	background-color: var(--primary);
+}
+
+button {
+	cursor: pointer;
+	/* Fix vertical text centering by trimming font metric space */
+	text-box-trim: both;
+	text-box-edge: cap alphabetic;
+	user-select: none;
+}
+button:disabled,
+button[disabled] {
+	cursor: not-allowed;
+}
+
+html,
+body,
+body > header,
+body > footer,
+main,
+.u-container {
+	@apply overflow-x-clip;
+}
+
+/* Base transition per elementi semantici comuni */
+html,
+body,
+section,
+div,
+header,
+footer,
+main,
+nav,
+article,
+aside,
+a,
+button,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+span {
+	transition-property: color, background-color, border-color, text-decoration-color;
+	transition-timing-function: var(--theme-transition-easing);
+	transition-duration: var(--theme-transition-duration);
+}
+
+/* SVG specifico (per icone) */
+svg,
+svg path {
+	transition-property: fill, stroke;
+	transition-timing-function: var(--theme-transition-easing);
+	transition-duration: var(--theme-transition-duration);
+}
+
+/* Esclusioni (elementi che non devono transizionare) */
+.no-theme-transition,
+.disable-transitions,
+.disable-transitions *,
+img,
+video,
+canvas {
+	transition: none !important;
+}
 
 /* Define a transition duration during page visits */
 html.is-changing .transition-fade {

@@ -15,7 +15,7 @@ export const checkbox = tv({
 	slots: {
 		base: 'c-checkbox relative flex items-center space-x-2',
 		input: [
-			'peer border-input bg-background dark:bg-input/30 shrink-0 transform-gpu rounded-sm border',
+			'peer shrink-0 transform-gpu rounded-sm border border-input bg-background dark:bg-input/30',
 			'transition-all focus-visible:ring-3',
 			'outline-0 focus:ring-0 focus:ring-offset-0',
 			'not-disabled:cursor-pointer disabled:cursor-not-allowed disabled:opacity-50',
@@ -35,31 +35,31 @@ export const checkbox = tv({
 		},
 		variant: {
 			default: {
-				input: 'checked:bg-foreground focus-visible:ring-outline/50 focus-visible:border-outline',
+				input: 'checked:bg-foreground focus-visible:border-outline focus-visible:ring-outline/50',
 				icon: 'text-background',
 			},
 			primary: {
-				input: 'checked:bg-primary checked:border-primary focus-visible:ring-primary/50 focus-visible:border-primary',
+				input: 'checked:border-primary checked:bg-primary focus-visible:border-primary focus-visible:ring-primary/50',
 				icon: 'text-primary-foreground',
 			},
 			secondary: {
-				input: 'checked:bg-secondary checked:border-secondary focus-visible:ring-secondary/50 focus-visible:border-secondary',
+				input: 'checked:border-secondary checked:bg-secondary focus-visible:border-secondary focus-visible:ring-secondary/50',
 				icon: 'text-secondary-foreground',
 			},
 			info: {
-				input: 'checked:bg-info checked:border-info focus-visible:ring-info/50 focus-visible:border-info',
+				input: 'checked:border-info checked:bg-info focus-visible:border-info focus-visible:ring-info/50',
 				icon: 'text-info-foreground',
 			},
 			success: {
-				input: 'checked:bg-success checked:border-success focus-visible:ring-success/50 focus-visible:border-success',
+				input: 'checked:border-success checked:bg-success focus-visible:border-success focus-visible:ring-success/50',
 				icon: 'text-success-foreground',
 			},
 			warning: {
-				input: 'checked:bg-warning checked:border-warning focus-visible:ring-warning/50 focus-visible:border-warning',
+				input: 'checked:border-warning checked:bg-warning focus-visible:border-warning focus-visible:ring-warning/50',
 				icon: 'text-warning-foreground',
 			},
 			error: {
-				input: 'checked:bg-error checked:border-error focus-visible:ring-error/50 focus-visible:border-error',
+				input: 'checked:border-error checked:bg-error focus-visible:border-error focus-visible:ring-error/50',
 				icon: 'text-error-foreground',
 			},
 		},

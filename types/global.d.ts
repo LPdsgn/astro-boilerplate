@@ -1,5 +1,3 @@
-/** biome-ignore-all lint/correctness/noUnusedVariables: false positive */
-
 /**
  * Interface representing a site configuration.
  * @property {Page} default - The default page configuration.
@@ -77,4 +75,8 @@ interface Config {
 		maxViewport: number;
 		rootSize: number;
 	};
+}
+
+interface Window {
+	dataLayer?: Array<Record<string, unknown> | ((...args: unknown[]) => void)>;
 }

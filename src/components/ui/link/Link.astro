@@ -1,0 +1,57 @@
+---
+import { Icon } from 'astro-icon/components';
+import './link.css';
+
+type Props = {
+	href: string;
+	external?: boolean;
+	download?: string;
+	alt?: string;
+	class?: string;
+	underline?: boolean;
+	disabled?: boolean;
+	cta?: boolean;
+	icon?: string;
+	[key: string]: any;
+};
+
+const {
+	href,
+	external,
+	download,
+	alt,
+	class: className,
+	underline,
+	disabled,
+	cta,
+	icon,
+	...rest
+} = Astro.props;
+---
+
+<a
+	href={href}
+	target={external ? '_blank' : '_self'}
+	download={download}
+	class:list={[
+		`c-link${cta ? '--cta' : ''}`,
+		underline && 'underline',
+		disabled && 'disabled',
+		icon ? 'group' : '',
+		className,
+	]}
+	aria-disabled={disabled ? 'true' : 'false'}
+	{...rest}
+>
+	{
+		icon && (
+			<Icon
+				name={icon}
+				size=".75em"
+				class:list={[icon ? 'transition-transform group-hover:translate-x-[.125em]' : '']}
+			/>
+		)
+	}
+	<slot />
+	{/* cta ? <HyperText duration={0.3}><slot /></HyperText> : <slot /> */}
+</a>

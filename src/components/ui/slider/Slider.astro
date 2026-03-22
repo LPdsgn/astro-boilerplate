@@ -7,7 +7,7 @@ export const slider = tv({
 		root: 'c-slider relative flex w-full touch-none items-center select-none data-[disabled]:opacity-50 data-[orientation=vertical]:h-full data-[orientation=vertical]:w-auto',
 		control:
 			'c-slider-control relative w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-auto',
-		track: 'c-slider-track bg-muted relative overflow-hidden rounded-full data-[orientation=horizontal]:h-1.5 data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-1.5',
+		track: 'c-slider-track relative overflow-hidden rounded-full bg-muted data-[orientation=horizontal]:h-1.5 data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-1.5',
 		range: 'c-slider-range absolute data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full',
 		thumb: 'c-slider-thumb absolute block size-4 shrink-0 rounded-full border bg-white shadow-sm transition-[color,box-shadow] hover:ring-4 focus-visible:ring-4 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50 data-[orientation=horizontal]:top-1/2 data-[orientation=horizontal]:-translate-x-1/2 data-[orientation=horizontal]:-translate-y-1/2 data-[orientation=vertical]:left-1/2 data-[orientation=vertical]:-translate-x-1/2 data-[orientation=vertical]:translate-y-1/2',
 	},
@@ -161,6 +161,8 @@ const rangeEnd = isRange ? getPercentage(Math.max(...values)) : getPercentage(va
 </div>
 
 <script>
+	import { init } from '@/lib/classes';
+
 	class StarwindSlider {
 		private root: HTMLElement;
 		private track: HTMLElement;
@@ -392,7 +394,7 @@ const rangeEnd = isRange ? getPercentage(Math.max(...values)) : getPercentage(va
 		}
 	}
 
-	const sliderInstances = new WeakMap<HTMLElement, StarwindSlider>();
+	const sliderInstances: WeakMap<HTMLElement, StarwindSlider> = new WeakMap();
 
 	function initSliders(): void {
 		document.querySelectorAll<HTMLElement>('[data-slot="slider"]').forEach((slider) => {
@@ -402,7 +404,6 @@ const rangeEnd = isRange ? getPercentage(Math.max(...values)) : getPercentage(va
 		});
 	}
 
-	initSliders();
-	document.addEventListener('astro:after-swap', initSliders);
-	document.addEventListener('starwind:init', initSliders);
+	init('Sliders', initSliders);
+	// document.addEventListener('starwind:init', initSliders);
 </script>

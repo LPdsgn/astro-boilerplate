@@ -29,6 +29,8 @@ const { type = 'single', defaultValue, class: className, ...rest } = Astro.props
 </div>
 
 <script>
+	import { init } from '@/lib/classes';
+
 	type AccordionType = 'single' | 'multiple';
 	type AccordionState = 'open' | 'closed';
 
@@ -237,7 +239,7 @@ const { type = 'single', defaultValue, class: className, ...rest } = Astro.props
 	}
 
 	// Store instances in a WeakMap to avoid memory leaks
-	const accordionInstances = new WeakMap<HTMLElement, AccordionHandler>();
+	const accordionInstances: WeakMap<HTMLElement, AccordionHandler> = new WeakMap();
 	let accordionCounter = 0;
 
 	const setupAccordions = () => {
@@ -248,7 +250,6 @@ const { type = 'single', defaultValue, class: className, ...rest } = Astro.props
 		});
 	};
 
-	setupAccordions();
-	document.addEventListener('astro:after-swap', setupAccordions);
-	document.addEventListener('starwind:init', setupAccordions);
+	init('Accordions', setupAccordions);
+	// document.addEventListener('starwind:init', setupAccordions);
 </script>

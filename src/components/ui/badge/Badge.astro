@@ -3,45 +3,32 @@ import type { HTMLAttributes } from 'astro/types';
 import { tv, type VariantProps } from 'tailwind-variants';
 
 interface Props
-	extends HTMLAttributes<'div'>, Omit<HTMLAttributes<'a'>, 'type'>, VariantProps<typeof badge> {}
+	extends
+		HTMLAttributes<'div'>,
+		Omit<HTMLAttributes<'a'>, 'type'>,
+		VariantProps<typeof badgeVariants> {}
 
-export const badge = tv({
-	base: [
-		'c-badge inline-flex items-center gap-1.5 rounded-full font-medium whitespace-nowrap',
-		'[&_svg]:pointer-events-none [&_svg]:shrink-0',
-		'transition-all outline-none focus-visible:ring-3',
-		'aria-invalid:border-error aria-invalid:focus-visible:ring-error/40',
-	],
+export const badgeVariants = tv({
+	base: ['c-badge'],
 	variants: {
 		variant: {
-			default: 'bg-foreground text-background focus-visible:ring-outline/50',
-			primary: 'bg-primary text-primary-foreground focus-visible:ring-primary/50',
-			secondary: 'bg-secondary text-secondary-foreground focus-visible:ring-secondary/50',
-			outline: 'border-border focus-visible:border-outline focus-visible:ring-outline/50 border',
-			ghost: 'bg-foreground/10 text-foreground focus-visible:ring-outline/50',
-			info: 'bg-info text-info-foreground focus-visible:ring-info/50',
-			success: 'bg-success text-success-foreground focus-visible:ring-success/50',
-			warning: 'bg-warning text-warning-foreground focus-visible:ring-warning/50',
-			error: 'bg-error text-error-foreground focus-visible:ring-error/50',
+			default: '-default',
+			primary: '-primary',
+			secondary: '-secondary',
+			outline: '-outline',
+			ghost: '-ghost',
+			info: '-info',
+			success: '-success',
+			warning: '-warning',
+			error: '-error',
 		},
 		size: {
-			sm: "px-2.5 py-0.5 text-xs [&_svg:not([class*='size-'])]:size-3",
-			md: "px-3 py-0.5 text-sm [&_svg:not([class*='size-'])]:size-4",
-			lg: "px-4 py-1 text-base [&_svg:not([class*='size-'])]:size-4.5",
+			sm: '-small',
+			md: '-medium',
+			lg: '-large',
 		},
-		isLink: { true: 'cursor-pointer', false: '' },
+		isLink: { true: '-is-link', false: '' },
 	},
-	compoundVariants: [
-		{ isLink: true, variant: 'default', className: 'hover:bg-foreground/80' },
-		{ isLink: true, variant: 'primary', className: 'hover:bg-primary/80' },
-		{ isLink: true, variant: 'secondary', className: 'hover:bg-secondary/80' },
-		{ isLink: true, variant: 'outline', className: 'hover:border-border/80' },
-		{ isLink: true, variant: 'ghost', className: 'hover:bg-foreground/7' },
-		{ isLink: true, variant: 'info', className: 'hover:bg-info/80' },
-		{ isLink: true, variant: 'success', className: 'hover:bg-success/80' },
-		{ isLink: true, variant: 'warning', className: 'hover:bg-warning/80' },
-		{ isLink: true, variant: 'error', className: 'hover:bg-error/80' },
-	],
 	defaultVariants: { variant: 'default', size: 'md', isLink: false },
 });
 
@@ -50,6 +37,86 @@ const isLink = Astro.props.href ? true : false;
 const Tag = Astro.props.href ? 'a' : 'div';
 ---
 
-<Tag class={badge({ variant, size, isLink, class: className })} data-slot="badge" {...rest}>
+<Tag class={badgeVariants({ variant, size, isLink, class: className })} data-slot="badge" {...rest}>
 	<slot />
 </Tag>
+
+<style is:global lang="postcss">
+	@reference "#styles";
+	.c-badge {
+		padding: 6px utopia.clamp(10, 12);
+		@apply inline-flex items-center gap-1.5 rounded-full border transition-colors;
+		@apply [&_svg]:pointer-events-none [&_svg]:shrink-0;
+		@apply leading-1 font-medium whitespace-nowrap;
+		@apply outline-none focus:ring-1 focus:ring-accent;
+		@apply aria-invalid:border-error aria-invalid:focus-visible:ring-error/40;
+
+		&.-is-link {
+			@apply cursor-pointer;
+		}
+
+		&.-small {
+			@apply px-2.5 py-1 text-xs [&_svg:not([class*='size-'])]:size-3;
+		}
+		&.-medium {
+			@apply px-[utopia.clamp(10,12)] py-1.5 text-[utopia.clamp(12,14)] [&_svg:not([class*='size-'])]:size-4;
+		}
+		&.-large {
+			@apply px-[utopia.clamp(12,16)] py-1 text-[utopia.clamp(14,16)] [&_svg:not([class*='size-'])]:size-4.5;
+		}
+	}
+	.c-badge.-default {
+		@apply bg-foreground text-background focus-visible:ring-outline/50;
+		&.-is-link {
+			@apply hover:bg-foreground/80;
+		}
+	}
+	.c-badge.-primary {
+		@apply border-primary bg-primary text-primary-foreground focus-visible:ring-primary/50;
+		&.-is-link {
+			@apply hover:bg-primary/80;
+		}
+	}
+	.c-badge.-secondary {
+		@apply border-secondary bg-secondary text-secondary-foreground focus-visible:ring-secondary/50;
+		&.-is-link {
+			@apply hover:bg-secondary/80;
+		}
+	}
+	.c-badge.-outline {
+		@apply border border-border text-foreground focus-visible:border-outline focus-visible:ring-outline/50;
+		&.-is-link {
+			@apply hover:bg-foreground/7;
+		}
+	}
+	.c-badge.-ghost {
+		@apply bg-foreground/10 text-foreground focus-visible:ring-outline/50;
+		&.-is-link {
+			@apply hover:bg-foreground/7;
+		}
+	}
+	.c-badge.-info {
+		@apply bg-info text-info-foreground focus-visible:ring-info/50;
+		&.-is-link {
+			@apply hover:bg-info/80;
+		}
+	}
+	.c-badge.-success {
+		@apply bg-success text-success-foreground focus-visible:ring-success/50;
+		&.-is-link {
+			@apply hover:bg-success/80;
+		}
+	}
+	.c-badge.-warning {
+		@apply bg-warning text-warning-foreground focus-visible:ring-warning/50;
+		&.-is-link {
+			@apply hover:bg-warning/80;
+		}
+	}
+	.c-badge.-error {
+		@apply border-error bg-error text-error-foreground focus-visible:ring-error/50;
+		&.-is-link {
+			@apply hover:bg-error/80;
+		}
+	}
+</style>

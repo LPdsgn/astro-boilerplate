@@ -1,0 +1,64 @@
+---
+import { Icon } from 'astro-icon/components';
+
+interface Props {
+	links: Links[];
+	className?: string;
+}
+
+const { links, className } = Astro.props;
+
+const iconMap = {
+	Website: 'lucide:globe',
+	GitHub: 'fa6-brands:github',
+	LinkedIn: 'fa6-brands:linkedin',
+	Instagram: 'fa6-brands:instagram',
+	Discord: 'fa6-brands:discord',
+	Behance: 'fa6-brands:behance',
+	Email: 'lucide:mail',
+	RSS: 'simple-icons:rss',
+};
+
+const getSocialLink = ({ HREF, LABEL }: Links) => ({
+	href: LABEL === 'Email' ? `mailto:${HREF}` : HREF,
+	ariaLabel: LABEL,
+	iconName: iconMap[LABEL as keyof typeof iconMap] || 'lucide:message-circle-question',
+});
+---
+
+<div class:list={['socials', className]} role="list">
+	{
+		links.map((link) => {
+			const { href, ariaLabel, iconName } = getSocialLink(link);
+			return (
+				<a
+					href={href}
+					aria-label={ariaLabel}
+					title={ariaLabel}
+					class="social group"
+					target="_blank"
+				>
+					<Icon
+						name={iconName}
+						class="transition-all group-hover:scale-110 group-hover:text-primary-foreground"
+					/>
+				</a>
+			);
+		})
+	}
+</div>
+
+<style is:global>
+	@reference "#styles";
+
+	.socials {
+		@apply flex justify-center gap-2;
+
+		a {
+			@apply inline-flex aspect-square w-full items-center justify-center rounded-full border p-2 hover:bg-primary;
+
+			> svg {
+			}
+		}
+	}
+</style>

@@ -61,24 +61,24 @@ if (rest['aria-label']) {
 
 export const switchButton = tv({
 	base: [
-		'border-input bg-muted inline-flex h-(--height) w-(--width) items-center rounded-full border',
+		'inline-flex h-(--height) w-(--width) items-center rounded-full border border-input bg-muted',
 		'group peer ring-offset-background transition outline-none focus-visible:ring-3',
 		'not-disabled:cursor-pointer disabled:cursor-not-allowed disabled:opacity-50',
 	],
 	variants: {
 		variant: {
 			primary:
-				'aria-checked:border-primary focus-visible:border-primary/70 focus:ring-primary/50',
+				'focus:ring-primary/50 focus-visible:border-primary/70 aria-checked:border-primary',
 			secondary:
-				'aria-checked:border-secondary focus-visible:border-secondary/70 focus:ring-secondary/50',
+				'focus:ring-secondary/50 focus-visible:border-secondary/70 aria-checked:border-secondary',
 			default:
-				'aria-checked:border-foreground focus-visible:border-outline focus:ring-outline/50',
-			info: 'aria-checked:border-info focus-visible:border-info/70 focus:ring-info/50',
+				'focus:ring-outline/50 focus-visible:border-outline aria-checked:border-foreground',
+			info: 'focus:ring-info/50 focus-visible:border-info/70 aria-checked:border-info',
 			success:
-				'aria-checked:border-success focus-visible:border-success/70 focus:ring-success/50',
+				'focus:ring-success/50 focus-visible:border-success/70 aria-checked:border-success',
 			warning:
-				'aria-checked:border-warning focus-visible:border-warning/70 focus:ring-warning/50',
-			error: 'aria-checked:border-error focus-visible:border-error/70 focus:ring-error/50',
+				'focus:ring-warning/50 focus-visible:border-warning/70 aria-checked:border-warning',
+			error: 'focus:ring-error/50 focus-visible:border-error/70 aria-checked:border-error',
 		},
 	},
 	defaultVariants: { variant: 'default' },
@@ -86,7 +86,7 @@ export const switchButton = tv({
 
 export const switchToggle = tv({
 	base: [
-		'bg-foreground inline-block transform rounded-full transition-transform',
+		'inline-block transform rounded-full bg-foreground transition-transform',
 		'group-aria-checked:translate-x-(--translation) group-aria-[checked=false]:translate-x-[calc(var(--padding)-var(--border-offset))]',
 	],
 	variants: { size: { sm: 'size-4', md: 'size-5', lg: 'size-6' } },
@@ -94,7 +94,7 @@ export const switchToggle = tv({
 });
 
 export const switchLabel = tv({
-	base: 'text-foreground ml-2 font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
+	base: 'ml-2 font-medium text-foreground peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
 	variants: { size: { sm: 'text-sm', md: 'text-base', lg: 'text-lg' } },
 	defaultVariants: { size: 'md' },
 });
@@ -134,6 +134,7 @@ export const switchLabel = tv({
 </div>
 
 <script>
+	import { init } from '@/lib/classes';
 	import type { SwitchChangeEvent } from './SwitchTypes';
 
 	class SwitchHandler {
@@ -178,7 +179,7 @@ export const switchLabel = tv({
 	}
 
 	// Store instances in a WeakMap to avoid memory leaks
-	const switchInstances = new WeakMap<HTMLButtonElement, SwitchHandler>();
+	const switchInstances: WeakMap<HTMLButtonElement, SwitchHandler> = new WeakMap();
 
 	const setupSwitches = () => {
 		document
@@ -190,7 +191,6 @@ export const switchLabel = tv({
 			});
 	};
 
-	setupSwitches();
-	document.addEventListener('astro:after-swap', setupSwitches);
-	document.addEventListener('starwind:init', setupSwitches);
+	init('Switches', setupSwitches);
+	// document.addEventListener('starwind:init', setupSwitches);
 </script>

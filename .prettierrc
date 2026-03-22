@@ -19,6 +19,6 @@
 			}
 		}
 	],
-	"tailwindStylesheet": "./src/styles/tailwind.css",
+	"tailwindStylesheet": "./src/styles/main.css",
 	"tailwindFunctions": ["clsx", "cn", "cva", "tv", "twMerge"]
 }

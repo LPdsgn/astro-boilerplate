@@ -5,7 +5,7 @@ import { tv, type VariantProps } from 'tailwind-variants';
 type Props = HTMLAttributes<'caption'> & VariantProps<typeof tableCaption>;
 
 export const tableCaption = tv({
-	base: 'text-muted-foreground mt-4 text-sm',
+	base: 'mt-4 text-sm text-muted-foreground',
 });
 
 const { class: className, ...rest } = Astro.props;

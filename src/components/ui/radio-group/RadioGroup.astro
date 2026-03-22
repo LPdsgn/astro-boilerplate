@@ -61,6 +61,7 @@ const {
 </fieldset>
 
 <script>
+	import { init } from '@/lib/classes';
 	import type { RadioGroupChangeEvent } from './RadioGroupTypes';
 
 	class RadioGroupHandler {
@@ -139,7 +140,7 @@ const {
 	}
 
 	// Store instances in a WeakMap to avoid memory leaks
-	const radioGroupInstances = new WeakMap<HTMLElement, RadioGroupHandler>();
+	const radioGroupInstances: WeakMap<HTMLElement, RadioGroupHandler> = new WeakMap();
 	let radioGroupCounter = 0;
 
 	const setupRadioGroups = () => {
@@ -154,7 +155,6 @@ const {
 	};
 
 	// Initialize on page load and after Astro view transitions
-	setupRadioGroups();
-	document.addEventListener('astro:after-swap', setupRadioGroups);
-	document.addEventListener('starwind:init', setupRadioGroups);
+	init('Radio Groups', setupRadioGroups);
+	// document.addEventListener('starwind:init', setupRadioGroups);
 </script>

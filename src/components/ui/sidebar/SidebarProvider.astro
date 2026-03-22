@@ -36,10 +36,10 @@ const SIDEBAR_WIDTH_ICON = '3.5rem';
 
 // Parse style prop to extract CSS variable overrides
 const styleObj = typeof style === 'string' ? {} : ((style as Record<string, string>) ?? {});
-const mergedStyle = {
-	'--sidebar-width': styleObj['--sidebar-width'] ?? SIDEBAR_WIDTH,
-	'--sidebar-width-icon': styleObj['--sidebar-width-icon'] ?? SIDEBAR_WIDTH_ICON,
+const mergedStyle: Record<string, string> = {
 	...styleObj,
+	'--sidebar-width': (styleObj['--sidebar-width'] as string) ?? SIDEBAR_WIDTH,
+	'--sidebar-width-icon': (styleObj['--sidebar-width-icon'] as string) ?? SIDEBAR_WIDTH_ICON,
 };
 ---
 
@@ -56,6 +56,8 @@ const mergedStyle = {
 </div>
 
 <script>
+	import { init } from '@/lib/classes';
+
 	class SidebarController {
 		private provider: HTMLElement;
 		private boundKeyHandler: (e: KeyboardEvent) => void;
@@ -188,8 +190,8 @@ const mergedStyle = {
 		}
 	}
 
-	const sidebarInstances = new WeakMap<HTMLElement, SidebarController>();
-	const trackedProviders = new Set<HTMLElement>();
+	const sidebarInstances: WeakMap<HTMLElement, SidebarController> = new WeakMap();
+	const trackedProviders: Set<HTMLElement> = new Set();
 
 	const cleanupSidebars = () => {
 		// Destroy controllers for providers no longer in DOM
@@ -210,8 +212,7 @@ const mergedStyle = {
 		});
 	};
 
-	setupSidebars();
-	document.addEventListener('astro:before-swap', cleanupSidebars);
-	document.addEventListener('astro:after-swap', setupSidebars);
-	document.addEventListener('starwind:init', setupSidebars);
+	document.addEventListener('page:before-swap', cleanupSidebars);
+	init('Sidebars', setupSidebars);
+	// document.addEventListener('starwind:init', setupSidebars);
 </script>

@@ -41,10 +41,12 @@ export default defineConfig([
 		},
 	},
 
-	// Base configs
-	js.configs.recommended, // JavaScript
-	tseslint.configs.recommended, // TypeScript
-	eslintConfigPrettier, // Prettier
+	// Base JavaScript configuration
+	js.configs.recommended,
+	// TypeScript configurations
+	tseslint.configs.recommended,
+	// Prettier
+	eslintConfigPrettier,
 
 	// Astro configurations
 	astro.configs.recommended,

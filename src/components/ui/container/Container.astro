@@ -1,0 +1,62 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import { tv, type VariantProps } from 'tailwind-variants';
+
+interface Props extends HTMLAttributes<'div'>, VariantProps<typeof containerVariants> {
+	as?: 'div' | 'header' | 'footer' | 'section' | 'article' | 'aside' | 'main' | 'nav' | 'li';
+	theme?: string;
+}
+
+export const containerVariants = tv({
+	base: 'u-container',
+	variants: {
+		size: {
+			default: 'max-w-grid',
+			narrow: 'max-w-screen-md',
+			wide: 'max-w-none',
+		},
+		flow: {
+			row: 'flex',
+			rowWrap: 'flex flex-wrap',
+			col: 'flex flex-col',
+			grid: 'grid',
+		},
+		px: {
+			true: 'px-gutter',
+		},
+	},
+	defaultVariants: {
+		size: 'default',
+		px: true,
+	},
+});
+
+const {
+	// Defaults
+	class: className,
+	id,
+	size,
+	flow,
+	px,
+	as: HTMLelement = 'div',
+	theme,
+} = Astro.props;
+---
+
+<HTMLelement
+	id={id}
+	class={containerVariants({ size, flow, px, class: className })}
+	data-theme={theme}
+>
+	<slot />
+</HTMLelement>
+
+<style is:global lang="postcss">
+	@reference "#styles";
+
+	@layer components {
+		.u-container {
+			@apply mx-auto gap-fluid-sm px-fluid-sm py-fluid-md w-full;
+		}
+	}
+</style>

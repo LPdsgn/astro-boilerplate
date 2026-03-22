@@ -1,0 +1,18 @@
+---
+import { Button } from '@/components';
+import { Icon } from 'astro-icon/components';
+---
+
+<Button
+	variant="secondary"
+	size="icon"
+	class="group fixed right-8 bottom-8 z-50 hidden"
+	id="scroll-to-top"
+	title="Scroll to top"
+	aria-label="Scroll to top"
+>
+	<Icon
+		name="lucide:arrow-up"
+		class="mx-auto size-4 transition-all group-hover:-translate-y-0.5"
+	/>
+</Button>

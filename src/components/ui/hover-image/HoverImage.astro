@@ -1,0 +1,110 @@
+---
+import { getImage } from 'astro:assets';
+import { HoverEffects } from './hover-image';
+import './hover-image.css';
+
+type Tag = 'div' | 'span' | 'li' | 'a';
+
+interface Props {
+	tag?: Tag;
+	href?: string;
+	class?: string;
+	style?: string;
+	imageSrc: any;
+	fx: keyof typeof HoverEffects;
+	[key: string]: any;
+}
+
+const {
+	href,
+	tag = 'span',
+	class: className,
+	style,
+	imageSrc,
+	fx = 'Follow',
+	...rest
+} = Astro.props;
+
+// Pre-genera un URL ottimizzato da usare come background-image nel reveal
+// Nota: getImage() funziona con import locali (src/...) e con immagini remote autorizzate.
+// Per stringhe in public/ o non autorizzate, si effettua fallback all'URL originale.
+let optimizedBg: string | undefined = undefined;
+try {
+	if (imageSrc && typeof imageSrc === 'object' && 'src' in imageSrc) {
+		// ImageMetadata importato da src/*
+		const result = await getImage({
+			src: imageSrc,
+			format: 'webp',
+			quality: 68,
+			// Dimensione moderata per hover: evita file pesanti al primo utilizzo
+			width: 512,
+			// fit/position possono essere aggiunti se necessario
+		});
+		optimizedBg = result.src;
+	} else if (typeof imageSrc === 'string') {
+		if (imageSrc.startsWith('http')) {
+			// Prova a ottimizzare anche remote (richiede image.domains/remotePatterns)
+			try {
+				const result = await getImage({
+					src: imageSrc,
+					format: 'webp',
+					quality: 68,
+					width: 512,
+					inferSize: true,
+				});
+				optimizedBg = result.src;
+			} catch {
+				optimizedBg = imageSrc;
+			}
+		} else {
+			// Probabile asset in public/: fallback
+			optimizedBg = imageSrc;
+		}
+	}
+} catch (e) {
+	console.warn('HoverImage: getImage() failed, falling back to original src', e);
+	optimizedBg = typeof imageSrc === 'string' ? imageSrc : imageSrc?.src;
+}
+
+// Use the type directly as the HTMLelement
+const HTMLelement = tag;
+const hasImage = Boolean(optimizedBg);
+---
+
+<HTMLelement
+	href={href}
+	class:list={[className, hasImage && 'c-hoverImage']}
+	style={style}
+	data-img={hasImage ? optimizedBg : undefined}
+	data-fx={hasImage ? fx : undefined}
+	{...rest}
+>
+	<slot />
+</HTMLelement>
+
+<script>
+	import { init } from '@/lib/classes';
+	import { HoverEffects } from './hover-image';
+
+	function initHoverEffects() {
+		const hoverElements = document.querySelectorAll('.c-hoverImage');
+
+		hoverElements.forEach((el) => {
+			// Evita doppia inizializzazione
+			if (el.hasAttribute('data-hover-initialized')) return;
+
+			const fx = (el.getAttribute('data-fx') || 'Follow') as keyof typeof HoverEffects;
+			const EffectClass = HoverEffects[fx] || HoverEffects.Follow;
+
+			try {
+				new EffectClass(el as HTMLElement);
+				el.setAttribute('data-hover-initialized', 'true');
+			} catch (error) {
+				console.error('Error initializing hover effect:', error);
+			}
+		});
+	}
+
+	// Initialize on mount and after Astro page transitions
+	init('HoverImages', initHoverEffects);
+</script>

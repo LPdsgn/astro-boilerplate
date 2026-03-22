@@ -36,6 +36,7 @@ const {
 </div>
 
 <script>
+	import { init } from '@/lib/classes';
 	import { initCarousel } from './index';
 
 	const setupCarousels = () => {
@@ -48,8 +49,5 @@ const {
 		});
 	};
 
-	document.addEventListener('DOMContentLoaded', setupCarousels);
-
-	// Re-initialize after Astro page transitions
-	document.addEventListener('astro:after-swap', setupCarousels);
+	init('Carousels', setupCarousels);
 </script>

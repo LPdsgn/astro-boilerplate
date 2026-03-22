@@ -11,6 +11,8 @@ const { class: className, ...rest } = Astro.props;
 </div>
 
 <script>
+	import { init } from '@/lib/classes';
+
 	class AlertDialogHandler {
 		private triggers: HTMLButtonElement[] = [];
 		private dialog: HTMLDialogElement | null = null;
@@ -253,7 +255,7 @@ const { class: className, ...rest } = Astro.props;
 	}
 
 	// Store instances in a WeakMap to avoid memory leaks
-	const alertDialogInstances = new WeakMap<HTMLElement, AlertDialogHandler>();
+	const alertDialogInstances: WeakMap<HTMLElement, AlertDialogHandler> = new WeakMap();
 	let alertDialogCounter = 0;
 
 	// Initialize all dialogs
@@ -269,9 +271,8 @@ const { class: className, ...rest } = Astro.props;
 		});
 	};
 
-	setupAlertDialogs();
-	document.addEventListener('astro:after-swap', setupAlertDialogs);
-	document.addEventListener('starwind:init', setupAlertDialogs);
+	init('AlertDialogs', setupAlertDialogs);
+	// document.addEventListener('starwind:init', setupAlertDialogs);
 </script>
 
 <style>

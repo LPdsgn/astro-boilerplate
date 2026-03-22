@@ -6,7 +6,7 @@ interface Props
 	extends
 		HTMLAttributes<'button'>,
 		Omit<HTMLAttributes<'a'>, 'type'>,
-		VariantProps<typeof button> {
+		VariantProps<typeof buttonVariants> {
 	tabIndex?: string;
 	ariaHidden?: boolean;
 }
@@ -14,6 +14,7 @@ interface Props
 const {
 	variant,
 	size,
+	round,
 	class: className,
 	type,
 	target = '_self',
@@ -22,42 +23,34 @@ const {
 	...rest
 } = Astro.props;
 
-export const button = tv({
-	base: [
-		'inline-flex items-center justify-center gap-1.5 rounded-md font-medium whitespace-nowrap',
-		'[&_svg]:pointer-events-none [&_svg]:shrink-0',
-		'transition-all outline-none focus-visible:ring-3',
-		'disabled:pointer-events-none disabled:opacity-50',
-		'aria-invalid:border-error aria-invalid:focus-visible:ring-error/40',
-	],
+export const buttonVariants = tv({
+	base: ['c-button'],
 	variants: {
 		variant: {
-			default:
-				'bg-foreground text-background hover:bg-foreground/90 focus-visible:ring-outline/50',
-			primary:
-				'bg-primary text-primary-foreground hover:bg-primary/90 focus-visible:ring-primary/50',
-			secondary:
-				'bg-secondary text-secondary-foreground hover:bg-secondary/90 focus-visible:ring-secondary/50',
-			outline:
-				'dark:border-input focus-visible:ring-outline/50 bg-background dark:bg-input/30 focus-visible:border-outline hover:bg-muted dark:hover:bg-input/50 hover:text-foreground border shadow-xs',
-			ghost: 'hover:bg-muted hover:text-foreground focus-visible:ring-outline/50',
-			info: 'bg-info text-info-foreground hover:bg-info/90 focus-visible:ring-info/50',
-			success:
-				'bg-success text-success-foreground hover:bg-success/90 focus-visible:ring-success/50',
-			warning:
-				'bg-warning text-warning-foreground hover:bg-warning/90 focus-visible:ring-warning/50',
-			error: 'bg-error text-error-foreground hover:bg-error/90 focus-visible:ring-error/50',
+			default: '-default',
+			secondary: '-secondary',
+			outline: '-outline',
+			ghost: '-ghost',
+			info: '-info',
+			success: '-success',
+			warning: '-warning',
+			error: '-error',
+			link: '-link',
 		},
 		size: {
-			sm: "h-9 px-4 text-sm has-[>svg]:px-3 [&_svg:not([class*='size-'])]:size-3.5",
-			md: "h-11 px-5 text-base has-[>svg]:px-4 [&_svg:not([class*='size-'])]:size-4.5",
-			lg: "h-12 px-8 text-lg has-[>svg]:px-6 [&_svg:not([class*='size-'])]:size-5",
-			'icon-sm': "size-9 [&_svg:not([class*='size-'])]:size-3.5",
-			icon: "size-11 [&_svg:not([class*='size-'])]:size-4.5",
-			'icon-lg': "size-12 [&_svg:not([class*='size-'])]:size-5",
+			sm: '-small',
+			md: '-medium',
+			lg: '-large',
+			'icon-sm': '-icon-small',
+			icon: '-icon',
+			'icon-lg': '-icon-large',
+		},
+		round: {
+			default: '',
+			rounded: 'rounded-full',
 		},
 	},
-	defaultVariants: { variant: 'default', size: 'md' },
+	defaultVariants: { variant: 'default', size: 'md', round: 'default' },
 });
 
 const Tag = Astro.props.href ? 'a' : 'button';
@@ -69,7 +62,7 @@ const computedAriaHidden = ariaHidden ? 'true' : undefined;
 ---
 
 <Tag
-	class={button({ variant, size, class: className })}
+	class={buttonVariants({ variant, size, round, class: className })}
 	data-slot="button"
 	rel={computedRel}
 	type={computedType}
@@ -81,3 +74,68 @@ const computedAriaHidden = ariaHidden ? 'true' : undefined;
 	<slot />
 	{Tag === 'a' && target === '_blank' && <span aria-hidden="true">&#x2197;</span>}
 </Tag>
+
+<style is:global lang="postcss">
+	@reference "#styles";
+	.c-button {
+		@apply inline-flex items-center justify-center gap-fluid-xs rounded-xs whitespace-nowrap;
+		@apply text-base font-mono leading-1! uppercase;
+		@apply [&_svg]:pointer-events-none [&_svg]:shrink-0;
+		@apply transition-colors focus-visible:ring-1 focus-visible:ring-outline focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50;
+		@apply aria-invalid:border-error aria-invalid:focus-visible:ring-error/40;
+	}
+	.c-button.-default {
+		@apply bg-primary text-primary-foreground shadow hover:bg-primary/90 focus-visible:ring-primary/50;
+	}
+	.c-button.-secondary {
+		@apply bg-secondary text-secondary-foreground shadow-sm hover:bg-accent focus-visible:ring-secondary/50;
+	}
+	.c-button.-outline {
+		@apply border hover:border-accent hover:bg-accent/75 hover:text-accent-foreground focus-visible:border-accent focus-visible:ring-accent/50;
+	}
+	.c-button.-ghost {
+		@apply hover:bg-accent hover:text-accent-foreground focus-visible:ring-accent/50;
+	}
+	.c-button.-info {
+		@apply bg-info text-info-foreground hover:bg-info/90 focus-visible:ring-info/50;
+	}
+	.c-button.-success {
+		@apply bg-success text-success-foreground hover:bg-success/90 focus-visible:ring-success/50;
+	}
+	.c-button.-warning {
+		@apply bg-warning text-warning-foreground hover:bg-warning/90 focus-visible:ring-warning/50;
+	}
+	.c-button.-error {
+		@apply bg-error text-error-foreground hover:bg-error/90 focus-visible:ring-error/50;
+	}
+	.c-button.-link {
+		@apply underline-offset-4 hover:text-primary hover:underline;
+	}
+	.c-button.-small {
+		@apply text-sm px-fluid-sm py-fluid-xs font-semibold [&_svg:not([class*='size-'])]:size-3.5;
+		height: utopia.clamp(28, 32);
+	}
+	.c-button.-large {
+		@apply px-fluid-sm py-fluid-xs text-base font-medium tracking-tight;
+		height: utopia.clamp(34, 44);
+	}
+	.c-button.-medium {
+		@apply px-fluid-sm py-fluid-xs font-semibold tracking-tight;
+		height: utopia.clamp(31, 38);
+	}
+	.c-button.-icon-small {
+		@apply [&_svg:not([class*='size-'])]:size-3.5;
+		width: utopia.clamp(28, 32);
+		height: utopia.clamp(28, 32);
+	}
+	.c-button.-icon {
+		@apply [&_svg:not([class*='size-'])]:size-4.5;
+		width: utopia.clamp(32, 38);
+		height: utopia.clamp(32, 38);
+	}
+	.c-button.-icon-large {
+		@apply [&_svg:not([class*='size-'])]:size-5;
+		width: utopia.clamp(34, 44);
+		height: utopia.clamp(34, 44);
+	}
+</style>

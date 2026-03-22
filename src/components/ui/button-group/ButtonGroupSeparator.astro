@@ -13,7 +13,7 @@ type Props = HTMLAttributes<'div'> & {
 };
 
 export const buttonGroupSeparator = tv({
-	base: ['bg-input relative m-0! self-stretch data-[orientation=vertical]:h-auto'],
+	base: ['relative m-0! self-stretch bg-input data-[orientation=vertical]:h-auto'],
 });
 
 const { class: className, orientation = 'vertical', ...rest } = Astro.props;

@@ -1,0 +1,106 @@
+---
+import { Icon } from 'astro-icon/components';
+import type { BreadcrumbItemData } from '.';
+import './breadcrumb.css';
+
+interface Props {
+	items: BreadcrumbItemData[];
+	maxItems?: number;
+	class?: string;
+}
+
+const { items, maxItems = 3, class: className } = Astro.props;
+const lastItem = items[items.length - 1];
+const middleItems = items.slice(0, -1);
+const totalItems = 1 + items.length;
+const shouldShowEllipsis = totalItems > maxItems;
+const dropdownId = `c-breadcrumbDropdown-${Math.random().toString(36).substr(2, 9)}`;
+---
+
+<nav aria-label="breadcrumb" class:list={className}>
+	<ol class="c-breadcrumb_list">
+		<!-- Home link (always first) -->
+		<li class="c-breadcrumb_item">
+			<a href="/" class="c-breadcrumb_link c-breadcrumb -text">
+				<Icon name="carbon:home" class="size-4" />
+			</a>
+		</li>
+
+		<li role="presentation" aria-hidden="true" class="c-breadcrumb_sep">
+			<Icon name="carbon:chevron-right" class="size-3.5" />
+		</li>
+
+		<!-- Desktop: show all middle items -->
+		{
+			middleItems.map((item) => (
+				<>
+					<li class="c-breadcrumb_item max-md:hidden">
+						<a href={item.href || '#'} class="c-breadcrumb_link c-breadcrumb -text">
+							{item.icon && <Icon name={item.icon} class="size-4" />}
+							{item.label}
+						</a>
+					</li>
+					<li role="presentation" aria-hidden="true" class="c-breadcrumb_sep max-md:hidden">
+						<Icon name="carbon:chevron-right" class="size-3.5" />
+					</li>
+				</>
+			))
+		}
+
+		<!-- Mobile: show dropdown with ellipsis -->
+		{
+			shouldShowEllipsis && (
+				<>
+					<li class="c-breadcrumb_item md:hidden">
+						<div class="c-breadcrumbDropdown" data-dropdown-id={dropdownId}>
+							<button
+								class="c-breadcrumbDropdown_trigger flex items-center gap-1"
+								aria-label="Toggle menu"
+								aria-haspopup="true"
+								aria-expanded="false"
+								type="button"
+								data-dropdown-trigger
+							>
+								<span role="presentation" aria-hidden="true" class="c-breadcrumb_ellipsis">
+									<Icon name="carbon:overflow-menu-horizontal" class="size-4" />
+									<span class="sr-only">More</span>
+								</span>
+							</button>
+							<div class="c-breadcrumbDropdown_content" role="menu" data-dropdown-content>
+								{middleItems.map((item, index) => (
+									<a
+										href={item.href || '#'}
+										class="c-breadcrumbDropdown_item c-breadcrumb -text"
+										role="menuitem"
+										tabindex={index === 0 ? 0 : -1}
+									>
+										{item.icon && <Icon name={item.icon} class="size-4" />}
+										{item.label}
+									</a>
+								))}
+							</div>
+						</div>
+					</li>
+					<li role="presentation" aria-hidden="true" class="c-breadcrumb_sep md:hidden">
+						<Icon name="carbon:chevron-right" class="size-3.5" />
+					</li>
+				</>
+			)
+		}
+
+		<!-- Current page (always last) -->
+		<li class="c-breadcrumb_item">
+			<span
+				role="link"
+				aria-disabled="true"
+				aria-current="page"
+				class="c-breadcrumb_page c-breadcrumb -text"
+			>
+				{lastItem.icon && <Icon name={lastItem.icon} class="size-4" />}
+				{lastItem.label}
+			</span>
+		</li>
+	</ol>
+</nav>
+
+<script src="./breadcrumb.ts"></script>

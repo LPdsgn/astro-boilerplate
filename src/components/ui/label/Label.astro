@@ -6,7 +6,7 @@ type Props = HTMLAttributes<'label'> & VariantProps<typeof label>;
 
 export const label = tv({
 	base: [
-		'text-foreground leading-none font-medium',
+		'leading-none font-medium text-foreground',
 		'peer-disabled:cursor-not-allowed peer-disabled:opacity-70 has-[+:disabled]:cursor-not-allowed has-[+:disabled]:opacity-70',
 	],
 	variants: { size: { sm: 'text-sm', md: 'text-base', lg: 'text-lg' } },

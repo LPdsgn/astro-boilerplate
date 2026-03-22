@@ -1,0 +1,23 @@
+---
+interface Props {
+	src: string;
+	caption?: string;
+	gallery?: string;
+	class?: string;
+	[key: string]: any;
+}
+
+const { src, caption, gallery = 'gallery', class: className, ...rest } = Astro.props;
+---
+
+<a
+	href={src}
+	data-no-swup
+	data-lightbox={gallery}
+	data-lightbox-src={src}
+	{...caption && { 'data-lightbox-caption': caption }}
+	class={className}
+	{...rest}
+>
+	<slot />
+</a>

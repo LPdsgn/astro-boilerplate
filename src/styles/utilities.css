@@ -1,8 +1,7 @@
 /* Note on @utility coloring syntax https://github.com/tailwindlabs/tailwindcss-intellisense/issues/1146#issuecomment-2637758061 */
 /* Fix issue of tailwind container injecting max-w */
 @utility container {
-	@apply mx-auto w-full px-unit-md;
-	@apply max-w-none;
+	@apply mx-auto w-full max-w-none px-fluid-sm;
 }
 
 /* Force zero border radius */
@@ -18,4 +17,43 @@
 	.rounded-3xl {
 		border-radius: 0 !important;
 	}
+}
+
+/** Additional alignment utilities */
+@utility u-alignWide {
+	margin-left: calc(-50vw + 50%);
+	margin-right: calc(-50vw + 50%);
+	max-width: 100vw;
+	width: auto;
+}
+@utility u-alignWide-left {
+	margin-left: calc(-50vw + 50%);
+	max-width: calc(100% + calc(calc(-50vw + 50%) / 2));
+	width: auto;
+}
+@utility u-alignWide-right {
+	margin-right: calc(-50vw + 50%);
+	max-width: calc(100% + calc(calc(-50vw + 50%) / 2));
+	width: auto;
+}
+
+/** Additional fonts utilities */
+@utility font-narrow {
+	font-stretch: 75%;
+}
+@utility font-wide {
+	font-stretch: 125%;
+}
+
+@utility items-firstbaseline {
+	align-items: first baseline;
+}
+@utility items-lastbaseline {
+	align-items: last baseline;
+}
+@utility self-firstbaseline {
+	align-self: first baseline;
+}
+@utility self-lastbaseline {
+	align-self: last baseline;
 }

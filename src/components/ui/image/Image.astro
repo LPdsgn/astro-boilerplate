@@ -7,6 +7,7 @@ type Props = Partial<ComponentProps<typeof AstroImage>> & {
 	inferSize?: boolean;
 	tag?: 'div' | 'figure';
 	caption?: boolean | string;
+	pixelated?: boolean;
 };
 
 const {
@@ -21,6 +22,7 @@ const {
 	widths = [720, 1440, 1920],
 	sizes = '(max-width: 720px) 720px, (max-width: 1440px) 1440px, 1920px',
 	loading = 'lazy',
+	pixelated = false,
 	...rest
 } = Astro.props;
 
@@ -35,24 +37,30 @@ const classes = [
 	'c-image',
 	width && height && '-cover',
 	loading === 'lazy' && '-lazy-load',
+	pixelated && '-pixelated',
 	propsClass,
 ];
 ---
 
 {
 	src && (
-		<Tag class:list={classes} style={{ '--width': width, '--height': height }} {...rest}>
-			<AstroImage
-				class="c-image_img"
-				src={src}
-				alt={alt}
-				inferSize={typeof src === 'string'}
-				onload={onLoad}
-				data-slot="image"
-				{...(rest as any)}
-			/>
+		<>
+			<Tag class:list={classes} style={{ '--width': width, '--height': height }} {...rest}>
+				<AstroImage
+					class="c-image_img"
+					src={src}
+					alt={alt}
+					inferSize={typeof src === 'string'}
+					onload={onLoad}
+					data-slot="image"
+					{...(rest as any)}
+				/>
+				{pixelated && <div class="c-image_pixels" />}
 
-			{caption && <CaptionTag class="c-image_caption">{caption}</CaptionTag>}
-		</Tag>
+				{caption && <CaptionTag class="c-image_caption">{caption}</CaptionTag>}
+			</Tag>
+
+			{pixelated && <script src="./image.ts" />}
+		</>
 	)
 }

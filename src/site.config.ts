@@ -18,12 +18,12 @@ export const SITE: Site = {
 	},
 	siteUrl: 'https://example.xyz',
 	analytics: {
-		gtmId: '',
-		clarityId: '',
-		posthogId: '',
+		gtmId: import.meta.env.SITE_GTM_ID || '',
+		clarityId: import.meta.env.SITE_CLARITY_ID || '',
+		posthogId: import.meta.env.SITE_POSTHOG_ID || '',
 		matomo: {
-			url: '',
-			siteId: '',
+			url: import.meta.env.SITE_MATOMO_URL || '',
+			siteId: import.meta.env.SITE_MATOMO_SITE_ID || '',
 		},
 	},
 };

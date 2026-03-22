@@ -33,6 +33,7 @@ const { class: className, name, defaultValue, required, ...rest } = Astro.props;
 </div>
 
 <script>
+	import { init } from '@lib/classes';
 	import type { SelectChangeEvent, SelectEvent } from './SelectTypes';
 
 	class SelectHandler {
@@ -724,7 +725,7 @@ const { class: className, name, defaultValue, required, ...rest } = Astro.props;
 	}
 
 	// Store instances in a WeakMap to avoid memory leaks
-	const selectInstances = new WeakMap<HTMLElement, SelectHandler>();
+	const selectInstances: WeakMap<HTMLElement, SelectHandler> = new WeakMap();
 	let selectCounter = 0;
 
 	// Initialize selects
@@ -736,9 +737,8 @@ const { class: className, name, defaultValue, required, ...rest } = Astro.props;
 		});
 	};
 
-	initSelects();
-	document.addEventListener('astro:after-swap', initSelects);
-	document.addEventListener('starwind:init', initSelects);
+	init('Selects', initSelects);
+	// document.addEventListener('starwind:init', initSelects);
 </script>
 
 <style is:global>

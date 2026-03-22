@@ -33,7 +33,7 @@
   initTheme();
 
   // runs on view transitions navigation
-  document.addEventListener("astro:after-swap", initTheme);
+  document.addEventListener("page:load", initTheme);
 </script>
 */
 
@@ -92,6 +92,7 @@ const {
 
 <script>
 	import type { ToggleChangeEvent } from '@/components/ui/toggle';
+	import { init } from '@/lib/classes';
 
 	class ThemeToggleHandler {
 		private toggle: HTMLButtonElement;
@@ -170,9 +171,9 @@ const {
 	}
 
 	// Store instances in a WeakMap to avoid memory leaks
-	const themeToggleInstances = new WeakMap<HTMLElement, ThemeToggleHandler>();
+	const themeToggleInstances: WeakMap<HTMLElement, ThemeToggleHandler> = new WeakMap();
 	// Track active toggles for iteration (WeakMap is not iterable)
-	const activeToggles = new Set<HTMLButtonElement>();
+	const activeToggles: Set<HTMLButtonElement> = new Set();
 
 	const setupThemeToggles = (clearExisting = false) => {
 		// Clear stale references on page transitions to prevent memory leaks
@@ -202,7 +203,6 @@ const {
 
 	document.addEventListener('theme:change', handleThemeChange);
 
-	setupThemeToggles();
-	document.addEventListener('astro:after-swap', () => setupThemeToggles(true));
-	document.addEventListener('starwind:init', () => setupThemeToggles());
+	init('ThemeToggles', () => setupThemeToggles(true));
+	// document.addEventListener('starwind:init', () => setupThemeToggles());
 </script>

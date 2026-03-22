@@ -1,0 +1,39 @@
+---
+/**
+ * Indicatore stato online.
+ * Props:
+ *  online?: boolean | null
+ *  class?: string (classi extra sul wrapper)
+ */
+export interface OnlineStatusProps {
+	online?: boolean | any;
+	class?: string;
+	[key: string]: any;
+}
+
+const { online, class: className, ...rest } = Astro.props as OnlineStatusProps;
+
+const colorClass =
+	online === true ? 'bg-green-400' : online === false ? 'bg-red-400' : 'bg-amber-400';
+---
+
+<span class:list={['online-status', className]} {...rest}>
+	<span class:list={colorClass}></span>
+	<span class:list={colorClass}></span>
+</span>
+
+<style is:global>
+	@reference "#styles";
+
+	@layer components {
+		.online-status {
+			@apply relative flex h-3 w-3;
+			:first-child {
+				@apply absolute inline-flex h-full w-full animate-ping rounded-full opacity-75;
+			}
+			:last-child {
+				@apply relative inline-flex h-3 w-3 rounded-full;
+			}
+		}
+	}
+</style>

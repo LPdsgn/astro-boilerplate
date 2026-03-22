@@ -1,0 +1,51 @@
+---
+interface Props {
+	tag?: keyof HTMLElementTagNameMap;
+	class?: string;
+	chars?: 'default' | 'limit' | 'upperCase' | 'lowerCase' | 'upperAndLowerCase' | string;
+	duration?: number;
+	hover?: boolean;
+	scroll?: boolean;
+	text?: string;
+}
+
+const {
+	tag = 'span',
+	class: propClass,
+	chars = 'default',
+	duration = 0.8,
+	hover = true,
+	scroll = true,
+	text = '',
+} = Astro.props;
+
+// Crea dinamicamente l'elemento basato sulla prop tag
+const Element = tag;
+---
+
+<Element
+	class:list={['c-hyperText', propClass]}
+	data-duration={duration}
+	data-chars={chars}
+	data-scramble-hover={hover}
+	data-scramble-scroll={scroll}
+>
+	{text ? `${text}` : <slot />}
+</Element>
+
+<script>
+	import { scramble } from './scramble';
+	document.fonts.ready.then(scramble);
+	document.addEventListener('page:load', () => {
+		document.fonts.ready.then(scramble);
+	});
+</script>
+
+<style is:global>
+	@layer components {
+		.c-hyperText {
+			display: inline-flex;
+			align-items: baseline;
+		}
+	}
+</style>

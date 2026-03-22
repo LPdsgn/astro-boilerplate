@@ -1,0 +1,69 @@
+@reference "#styles";
+
+.c-breadcrumb_list {
+	@apply flex items-center wrap-break-word text-muted-foreground;
+	gap: utopia.clamp(6, 10);
+}
+.c-breadcrumb_page,
+.c-breadcrumb_link {
+	@apply inline-flex items-center gap-1.5;
+}
+.c-breadcrumb_link {
+	@apply transition-colors hover:text-foreground;
+}
+.c-breadcrumb_link,
+.c-breadcrumb_page,
+.c-breadcrumb_ellipsis {
+	padding: utopia.clamp(6, 10);
+}
+.c-breadcrumb_ellipsis {
+	@apply flex aspect-square items-center justify-center;
+}
+.c-breadcrumb.-text {
+	@apply font-mono font-medium uppercase;
+	font-size: utopia.clamp(13, 15);
+}
+.c-breadcrumb_item,
+.c-breadcrumb_sep {
+	@apply origin-left transition-all duration-300 ease-out;
+}
+/* Breadcrumb Dropdown */
+.c-breadcrumbDropdown {
+	@apply relative;
+
+	&_trigger {
+		@apply cursor-pointer border-none bg-none p-0 text-inherit hover:text-foreground;
+		transition: color 150ms;
+	}
+
+	&_content {
+		@apply absolute top-full left-0 z-50 mt-2 min-w-48 rounded-lg bg-background/80 p-1 shadow-lg backdrop-blur;
+		/* Hidden by default */
+		@apply pointer-events-none origin-top-left scale-95 opacity-0 transition-[opacity,transform] will-change-[transform,opacity];
+
+		/* Open state */
+		&[data-state='open'] {
+			@apply pointer-events-auto scale-100 opacity-100;
+		}
+		/* Closing animation */
+		&[data-state='closed'] {
+			animation: slideOut 150ms ease-in forwards;
+		}
+	}
+
+	&_item {
+		@apply flex items-center gap-2 rounded-md px-3 py-2 text-inherit transition-colors outline-none hover:bg-secondary/50 focus:bg-secondary/50;
+		text-decoration: none;
+	}
+}
+
+@keyframes slideOut {
+	from {
+		opacity: 1;
+		transform: scale(1);
+	}
+	to {
+		opacity: 0;
+		transform: scale(0.95);
+	}
+}

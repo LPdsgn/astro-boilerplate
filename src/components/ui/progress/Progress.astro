@@ -24,7 +24,7 @@ const valuePercent = isIndeterminate ? undefined : Math.round((value / max) * 10
 const valueText = isIndeterminate ? undefined : `${valuePercent}%`;
 
 export const progress = tv({
-	base: ['c-progress-bar', 'bg-muted h-2 w-full overflow-hidden rounded-full'],
+	base: ['c-progress-bar', 'h-2 w-full overflow-hidden rounded-full bg-muted'],
 	variants: {
 		variant: {
 			indeterminate: 'relative',
@@ -87,6 +87,8 @@ const indicatorStyle = isIndeterminate
 </div>
 
 <script>
+	import { init } from '@/lib/classes';
+
 	class ProgressHandler {
 		private progressElement: HTMLElement;
 		private observer!: MutationObserver;
@@ -142,7 +144,7 @@ const indicatorStyle = isIndeterminate
 	}
 
 	// Store instances in a WeakMap to avoid memory leaks
-	const progressInstances = new WeakMap<HTMLElement, ProgressHandler>();
+	const progressInstances: WeakMap<HTMLElement, ProgressHandler> = new WeakMap();
 
 	const setupProgressBars = () => {
 		document.querySelectorAll<HTMLElement>('.c-progress-bar').forEach((progressElement) => {
@@ -152,7 +154,6 @@ const indicatorStyle = isIndeterminate
 		});
 	};
 
-	setupProgressBars();
-	document.addEventListener('astro:after-swap', setupProgressBars);
-	document.addEventListener('starwind:init', setupProgressBars);
+	init('Progress Bars', setupProgressBars);
+	// document.addEventListener('starwind:init', setupProgressBars);
 </script>

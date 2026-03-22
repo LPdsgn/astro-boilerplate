@@ -29,7 +29,7 @@ type Props = HTMLAttributes<'div'> & {
 };
 
 export const sidebar = tv({
-	base: 'c-sidebar group peer text-sidebar-foreground hidden md:block',
+	base: 'c-sidebar group peer hidden text-sidebar-foreground md:block',
 });
 
 export const sidebarGap = tv({
@@ -75,12 +75,12 @@ export const sidebarContainer = tv({
 });
 
 export const sidebarInner = tv({
-	base: 'bg-sidebar flex h-full w-full flex-col',
+	base: 'flex h-full w-full flex-col bg-sidebar',
 	variants: {
 		variant: {
 			sidebar: '',
-			floating: 'border-sidebar-border rounded-lg border shadow-sm',
-			inset: 'border-sidebar-border rounded-lg border shadow-sm',
+			floating: 'rounded-lg border border-sidebar-border shadow-sm',
+			inset: 'rounded-lg border border-sidebar-border shadow-sm',
 		},
 	},
 	defaultVariants: {
@@ -89,7 +89,7 @@ export const sidebarInner = tv({
 });
 
 export const sidebarMobileContent = tv({
-	base: 'bg-sidebar text-sidebar-foreground w-(--sidebar-width) p-0 [&>button]:hidden',
+	base: 'w-(--sidebar-width) bg-sidebar p-0 text-sidebar-foreground [&>button]:hidden',
 });
 
 const {
@@ -164,6 +164,8 @@ const SIDEBAR_WIDTH_MOBILE = '18rem';
 }
 
 <script>
+	import { init } from '@lib/classes';
+
 	class SidebarHandler {
 		private sidebar: HTMLElement;
 		private provider: HTMLElement;
@@ -200,7 +202,7 @@ const SIDEBAR_WIDTH_MOBILE = '18rem';
 		}
 	}
 
-	const sidebarInstances = new WeakMap<HTMLElement, SidebarHandler>();
+	const sidebarInstances: WeakMap<HTMLElement, SidebarHandler> = new WeakMap();
 
 	const setupSidebars = () => {
 		document.querySelectorAll<HTMLElement>('[data-slot="sidebar"]').forEach((sidebar) => {
@@ -211,7 +213,6 @@ const SIDEBAR_WIDTH_MOBILE = '18rem';
 		});
 	};
 
-	setupSidebars();
-	document.addEventListener('astro:after-swap', setupSidebars);
-	document.addEventListener('starwind:init', setupSidebars);
+	init('Sidebars', setupSidebars);
+	// document.addEventListener('starwind:init', setupSidebars);
 </script>

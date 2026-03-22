@@ -39,6 +39,8 @@ const {
 </div>
 
 <script>
+	import { init } from '@/lib/classes';
+
 	class TooltipHandler {
 		private tooltip: HTMLElement;
 		private trigger: HTMLElement | null;
@@ -265,7 +267,7 @@ const {
 	}
 
 	// Store instances in a WeakMap to avoid memory leaks
-	const tooltipInstances = new WeakMap<HTMLElement, TooltipHandler>();
+	const tooltipInstances: WeakMap<HTMLElement, TooltipHandler> = new WeakMap();
 	let tooltipCounter = 0;
 
 	const setupTooltips = () => {
@@ -276,7 +278,6 @@ const {
 		});
 	};
 
-	setupTooltips();
-	document.addEventListener('astro:after-swap', setupTooltips);
-	document.addEventListener('starwind:init', setupTooltips);
+	init('Tooltips', setupTooltips);
+	// document.addEventListener('starwind:init', setupTooltips);
 </script>

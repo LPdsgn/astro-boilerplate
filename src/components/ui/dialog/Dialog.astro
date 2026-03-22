@@ -11,8 +11,10 @@ const { class: className, ...rest } = Astro.props;
 </div>
 
 <script>
+	import { init } from '@/lib/classes';
+
 	// Store instances in a WeakMap to avoid memory leaks
-	const dialogInstances = new WeakMap<HTMLElement, DialogHandler>();
+	const dialogInstances: WeakMap<HTMLElement, DialogHandler> = new WeakMap();
 	let dialogCounter = 0;
 
 	class DialogHandler {
@@ -380,9 +382,8 @@ const { class: className, ...rest } = Astro.props;
 		});
 	};
 
-	setupDialogs();
-	document.addEventListener('astro:after-swap', setupDialogs);
-	document.addEventListener('starwind:init', setupDialogs);
+	init('Dialogs', setupDialogs);
+	// document.addEventListener('starwind:init', setupDialogs);
 </script>
 
 <style>
