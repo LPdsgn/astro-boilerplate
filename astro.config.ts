@@ -36,7 +36,9 @@ export default defineConfig({
 			postcss: {
 				plugins: [
 					postcssNested(), // before tailwindcss so &_suffix nesting resolves before @apply
-					tailwindcss(),
+					tailwindcss({
+						optimize: false, // disable Lightning CSS — it breaks postcss-nested's BEM &_suffix concatenation
+					}),
 					postcssUtopia({
 						minWidth: 360, // Default minimum viewport
 						maxWidth: 1536, // Default maximum viewport
@@ -58,12 +60,22 @@ export default defineConfig({
 							template: 'flamegraph',
 							gzipSize: true,
 							brotliSize: true,
-						}),
+						}) as any,
 					]
 				: []),
 		],
 		build: {
 			sourcemap: false, // !!process.env.SOURCE_MAP | SOURCE_MAP=1 pnpm build solo quando devi debuggare in produzione
+			/* rollupOptions: {
+				output: {
+					manualChunks(id) {
+						// Keep animations + classes in one chunk to avoid circular-dep warnings
+						if (id.includes('src/lib/animations') || id.includes('src/lib/classes/')) {
+							return 'animations';
+						}
+					},
+				},
+			}, */
 		},
 	},
 	integrations: [
@@ -75,7 +87,14 @@ export default defineConfig({
 			name: 'Astro Boilerplate',
 			short_name: 'Astro Boilerplate',
 		}),
-		...(isDev ? [metaTags()] : []),
+		...(isDev
+			? [
+					metaTags(),
+					astroThemes({
+						devToolbar: true,
+					}),
+				]
+			: []),
 		...(process.env.ANALYZE
 			? [
 					Sonda({

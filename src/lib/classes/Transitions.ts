@@ -7,6 +7,7 @@ import SwupDebugPlugin from '@swup/debug-plugin'; /* https://swup.js.org/plugins
 import SwupHeadPlugin from '@swup/head-plugin';
 import SwupPreloadPlugin from '@swup/preload-plugin';
 import SwupProgressPlugin from '@swup/progress-plugin'; /* https://swup.js.org/plugins/progress-plugin/ */
+import SwupRouteNamePlugin from '@swup/route-name-plugin';
 import SwupScriptsPlugin from '@swup/scripts-plugin';
 import Swup from 'swup';
 
@@ -67,6 +68,9 @@ export class Transitions {
 					preloadInitialPage: isProd,
 				}),
 				new SwupProgressPlugin(),
+				new SwupRouteNamePlugin({
+					unknownRoute: 'default',
+				}),
 				new SwupScriptsPlugin(),
 				...(isDebug ? [new SwupDebugPlugin({ globalInstance: true })] : []),
 			],
@@ -103,6 +107,15 @@ export class Transitions {
 		Object.entries(newDataset).forEach(([key, val]) => {
 			document.documentElement.setAttribute(`data-${toDash(key)}`, val ?? '');
 		});
+
+		// Remove data-* attributes not present in the incoming HTML
+		const currentKeys = Object.keys(document.documentElement.dataset);
+		const newKeys = Object.keys(newDataset);
+		for (const key of currentKeys) {
+			if (!newKeys.includes(key)) {
+				document.documentElement.removeAttribute(`data-${toDash(key)}`);
+			}
+		}
 	}
 
 	// =============================================================================
@@ -116,7 +129,7 @@ export class Transitions {
 	 * @see https://swup.js.org/hooks/#visit-start
 	 * @param visit: VisitType
 	 */
-	onVisitStart() {
+	onVisitStart(visit: VisitType) {
 		document.documentElement.classList.add(Transitions.TRANSITION_CLASS);
 		document.documentElement.classList.remove(Transitions.READY_CLASS);
 
@@ -131,7 +144,7 @@ export class Transitions {
 	 * @see https://swup.js.org/hooks/#content-replace
 	 * @param visit: VisitType
 	 */
-	beforeContentReplace() {
+	beforeContentReplace(visit: VisitType) {
 		Scroll?.destroy();
 
 		// Dispatch custom event for scripts re-initialization

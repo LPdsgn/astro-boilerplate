@@ -1,13 +1,5 @@
 import { init } from '@/lib/classes';
 
-// Initialize all breadcrumb dropdowns
-init('Breadcrumb Dropdowns', () => {
-	const dropdowns = document.querySelectorAll('.c-breadcrumbDropdown');
-	dropdowns.forEach((dropdown) => {
-		new BreadcrumbDropdown(dropdown as HTMLElement);
-	});
-});
-
 class BreadcrumbDropdown {
 	private dropdown: HTMLElement;
 	private trigger: HTMLElement;
@@ -136,3 +128,11 @@ class BreadcrumbDropdown {
 		}
 	}
 }
+
+// Initialize all breadcrumb dropdowns
+init('Breadcrumb Dropdowns', () => {
+	const dropdowns = document.querySelectorAll('.c-breadcrumbDropdown');
+	dropdowns.forEach((dropdown) => {
+		new BreadcrumbDropdown(dropdown as HTMLElement);
+	});
+});

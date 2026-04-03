@@ -49,6 +49,7 @@
 		"@swup/head-plugin": "^2.3.1",
 		"@swup/preload-plugin": "^3.2.11",
 		"@swup/progress-plugin": "^3.2.0",
+		"@swup/route-name-plugin": "^4.1.0",
 		"@swup/scripts-plugin": "^2.1.0",
 		"@tabler/icons": "^3.36.1",
 		"@tailwindcss/forms": "^0.5.11",
@@ -112,10 +113,15 @@
 		"*.{js,mjs,cjs,ts,tsx,jsx,astro}": [
 			"eslint --fix"
 		],
-		"*.{js,mjs,cjs,ts,tsx,jsx,astro,css,scss,json,html,yaml,yml}": [
+		"*.{js,mjs,cjs,ts,tsx,jsx,astro,css,scss,html,yaml,yml}": [
 			"prettier --write --ignore-unknown"
 		]
 	},
+	"browserslist": [
+		"defaults",
+		"fully supports es6-module",
+		"> 0.2%"
+	],
 	"pnpm": {
 		"onlyBuiltDependencies": [
 			"esbuild",

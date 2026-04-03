@@ -34,13 +34,17 @@ const dropdownId = `c-breadcrumbDropdown-${Math.random().toString(36).substr(2, 
 		{
 			middleItems.map((item) => (
 				<>
-					<li class="c-breadcrumb_item max-md:hidden">
+					<li class:list={['c-breadcrumb_item', { 'max-md:hidden': shouldShowEllipsis }]}>
 						<a href={item.href || '#'} class="c-breadcrumb_link c-breadcrumb -text">
 							{item.icon && <Icon name={item.icon} class="size-4" />}
 							{item.label}
 						</a>
 					</li>
-					<li role="presentation" aria-hidden="true" class="c-breadcrumb_sep max-md:hidden">
+					<li
+						role="presentation"
+						aria-hidden="true"
+						class:list={['c-breadcrumb_sep', { 'max-md:hidden': shouldShowEllipsis }]}
+					>
 						<Icon name="carbon:chevron-right" class="size-3.5" />
 					</li>
 				</>
