@@ -9,7 +9,6 @@ import { CookieConsent, Footer, Header } from '@components/layout';
 import { getSeo } from '@lib/seo';
 import { ThemeProvider } from '@lpdsgn/astro-themes/components';
 import '@styles/main.css';
-import SpeedInsights from '@vercel/speed-insights/astro';
 import { Head } from 'astro-capo';
 import { SEO } from 'astro-seo';
 import { type CssVariable, Font } from 'astro:assets';
@@ -91,7 +90,5 @@ const FONTS: CssVariable[] = ['--font-sans', '--font-mono'];
 				setViewportSize();
 			});
 		</script>
-
-		<SpeedInsights />
 	</body>
 </html>

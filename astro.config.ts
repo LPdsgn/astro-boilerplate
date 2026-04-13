@@ -26,11 +26,7 @@ import astroThemes from '@lpdsgn/astro-themes';
 export default defineConfig({
 	// site: '',
 	output: 'static',
-	adapter: vercel({
-		webAnalytics: {
-			enabled: true,
-		},
-	}),
+	adapter: vercel(),
 	vite: {
 		css: {
 			postcss: {
@@ -67,15 +63,15 @@ export default defineConfig({
 		build: {
 			sourcemap: false, // !!process.env.SOURCE_MAP | SOURCE_MAP=1 pnpm build solo quando devi debuggare in produzione
 			/* rollupOptions: {
-				output: {
-					manualChunks(id) {
-						// Keep animations + classes in one chunk to avoid circular-dep warnings
-						if (id.includes('src/lib/animations') || id.includes('src/lib/classes/')) {
-							return 'animations';
-						}
-					},
-				},
-			}, */
+              output: {
+                  manualChunks(id) {
+                      // Keep animations + classes in one chunk to avoid circular-dep warnings
+                      if (id.includes('src/lib/animations') || id.includes('src/lib/classes/')) {
+                          return 'animations';
+                      }
+                  },
+              },
+          }, */
 		},
 	},
 	integrations: [
@@ -115,43 +111,41 @@ export default defineConfig({
 		layout: 'constrained',
 		breakpoints: [640, 768, 900, 1024, 1280, 1440, 1920],
 	},
-	experimental: {
-		fonts: [
-			{
-				provider: fontProviders.local(),
-				name: 'Innovator Grotesk',
-				cssVariable: '--font-sans',
-				fallbacks: ['sans-serif'],
-				options: {
-					variants: [
-						{
-							weight: '100 900',
-							style: 'normal',
-							display: 'swap',
-							featureSettings: `"liga", "calt", "dlig", "ss01", "cv02", "cv06", "cv10", "cv11", "zero", "tnum";`,
-							src: ['./src/assets/fonts/Innovator-Grotesk-VF.woff2'],
-						},
-					],
-				},
+	fonts: [
+		{
+			provider: fontProviders.local(),
+			name: 'Innovator Grotesk',
+			cssVariable: '--font-sans',
+			fallbacks: ['sans-serif'],
+			options: {
+				variants: [
+					{
+						weight: '100 900',
+						style: 'normal',
+						display: 'swap',
+						featureSettings: `"liga", "calt", "dlig", "ss01", "cv02", "cv06", "cv10", "cv11", "zero", "tnum";`,
+						src: ['./src/assets/fonts/Innovator-Grotesk-VF.woff2'],
+					},
+				],
 			},
-			{
-				provider: fontProviders.local(),
-				name: 'JetBrains Mono',
-				cssVariable: '--font-mono',
-				fallbacks: ['sans-serif'],
-				options: {
-					variants: [
-						{
-							weight: '100 900',
-							style: 'normal',
-							display: 'swap',
-							src: ['./src/assets/fonts/JetBrains-Mono-VF.woff2'],
-						},
-					],
-				},
+		},
+		{
+			provider: fontProviders.local(),
+			name: 'JetBrains Mono',
+			cssVariable: '--font-mono',
+			fallbacks: ['sans-serif'],
+			options: {
+				variants: [
+					{
+						weight: '100 900',
+						style: 'normal',
+						display: 'swap',
+						src: ['./src/assets/fonts/JetBrains-Mono-VF.woff2'],
+					},
+				],
 			},
-		],
-	},
+		},
+	],
 	server: {
 		port: 8888,
 		host: '0.0.0.0',
