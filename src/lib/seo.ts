@@ -7,7 +7,7 @@
  * Based on lpdsgn-astro SEO system, adapted for astro-boilerplate-new
  */
 
-import { SITE } from '@/site.config';
+import { isProd, SITE } from '@/site.config';
 import type { Props as SEOProps } from 'astro-seo';
 
 // Re-export SEOProps for convenience
@@ -95,7 +95,7 @@ export function getSeo(seo: Partial<Seo>, url: URL): SEOProps {
  * @returns Absolute URL to dynamic OG image
  */
 export function buildOGImageUrl(baseUrl: URL, title: string, description?: string): string {
-	const ogUrl = new URL('/api/og.png', baseUrl.origin);
+	const ogUrl = new URL('/api/og.png', isProd ? SITE.siteUrl : baseUrl.origin);
 	ogUrl.searchParams.set('title', title);
 	if (description) {
 		ogUrl.searchParams.set('description', description);

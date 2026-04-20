@@ -26,7 +26,11 @@ import astroThemes from '@lpdsgn/astro-themes';
 export default defineConfig({
 	// site: '',
 	output: 'static',
-	adapter: vercel(),
+	adapter: vercel({
+		includeFiles: [
+			/* You must include the files, if any, that are consumed by src/pages/api/og.png.ts */
+		],
+	}),
 	vite: {
 		css: {
 			postcss: {
