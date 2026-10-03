@@ -77,7 +77,8 @@ const FONTS: CssVariable[] = ['--font-sans', '--font-mono'];
 			</div>
 		</main>
 
-		{footer ? <Footer class="transition-fade" /> : <slot name="footer" />}
+		{/* Container swup sempre presente: `display: contents`, non genera box né semantica */}
+		<div id="swup-footer">{footer ? <Footer /> : <slot name="footer" />}</div>
 
 		{cookieBanner ? <CookieConsent /> : null}
 

@@ -52,7 +52,7 @@ export class Transitions {
 	initSwup() {
 		this.swup = new Swup({
 			animateHistoryBrowsing: true,
-			containers: ['#swup'],
+			containers: ['#swup', '#swup-footer'],
 			plugins: [
 				new SwupA11yPlugin(),
 				new SwupBodyClassPlugin({

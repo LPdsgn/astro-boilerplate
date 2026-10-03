@@ -117,6 +117,12 @@ canvas {
 	transition: none !important;
 }
 
+/* Container swup del footer: deve esistere su ogni pagina perché swup non abortisca
+   la visita ("Container mismatch"), ma non deve generare un box */
+#swup-footer {
+	display: contents;
+}
+
 /* Define a transition duration during page visits */
 html.is-changing .transition-fade {
 	transition: opacity 0.25s;
