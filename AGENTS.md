@@ -44,7 +44,8 @@ Astro project boilerplate built with **Astro 7** as a static site, deployed on *
 - `src/components/ui/` — Starwind design system components (Button, Dialog, Toast, Tabs, etc.) and project UI components
 - `src/components/layout/` — Header, Footer, Breadcrumb, CookieConsent
 - `src/components/analytics/` — Analytics providers (GA, GTM, Clarity, PostHog, Matomo)
-- `src/lib/classes/` — AnimationManager (GSAP coordinator), Transitions (Swup), Scroll (LocomotiveScroll), Lightbox
+- `src/lib/classes/` — Transitions (Swup), Scroll (LocomotiveScroll), Lightbox
+- `src/lib/animations.ts` — GSAP + plugins, global `mm`, and `AM` (AnimationManager from `@lpdsgn/gsap-spa-manager`): import animation tools from here
 - `src/lib/stores/` — Nanostores: screen, mouse, scroll, deviceStatus, localStorage
 - `src/lib/utils/` — Helpers for UI, devices, data, maths, string, query, lightbox
 - `src/styles/` — CSS layer system: main.css imports tailwind.css, typography.css, utilities.css
@@ -57,7 +58,7 @@ Astro project boilerplate built with **Astro 7** as a static site, deployed on *
 ### Page Lifecycle (Swup transitions + script execution)
 
 1. **`Transitions`** class initializes Swup with HeadPlugin, PreloadPlugin, ScriptsPlugin and dispatches three custom `document` events: `page:before-preparation` (visit starts), `page:before-swap` (before DOM swap), `page:load` (after DOM swap)
-2. **`AnimationManager`** singleton coordinates GSAP animations — cleans up on `before('content:replace')`, refreshes ScrollTriggers on `content:replace`
+2. **`AM`** (AnimationManager singleton from `@lpdsgn/gsap-spa-manager`, initialized in `app.ts` with `swupAdapter`) coordinates GSAP animations — cleans up on `before('content:replace')`, refreshes ScrollTriggers on `content:replace`
 3. **`Scroll`** class wraps LocomotiveScroll — destroyed before content replace, re-initialized after
 4. **SwupScriptsPlugin is required** — Astro hoists and bundles `<script>` tags, so they only execute on initial browser load. On Swup navigations, the browser won't re-execute scripts inserted via innerHTML. ScriptsPlugin forces re-execution of scripts found in swapped HTML, which is essential for both page-specific and component scripts (e.g. sidebar, lightbox). Without it, scripts from pages never directly visited would never execute.
 
@@ -85,6 +86,6 @@ For full AM API, usage patterns, and the `setup()` context pattern, see [`docs/a
 
 - **Folders:** kebab-case, only for components with co-located `.css`/`.ts` files; a single-file component sits directly in its group folder (see `.claude/rules/components.md`)
 - **Astro files:** CamelCase (e.g. `ScrollToTopButton.astro`, `SocialIcons.astro`)
-- **TS/JS files:** Capital case for class files (e.g. `AnimationManager.ts`), standard or kebab-case for snippet/function/barrel files (e.g. `devices.ts`, `setViewportSize.ts`)
+- **TS/JS files:** Capital case for class files (e.g. `Transitions.ts`), standard or kebab-case for snippet/function/barrel files (e.g. `devices.ts`, `setViewportSize.ts`)
 
 CSS, TypeScript, icon, Starwind and Vercel function-size conventions are in `.claude/rules/` (loaded automatically when editing matching files). Before reading files at runtime in an on-demand route, see `.claude/rules/vercel.md`: a directory path bundles the whole folder into the Vercel function.

@@ -1,17 +1,17 @@
 import { Scroll, Transitions, init } from '@lib/classes';
 import { AM, mm } from '@lib/animations';
+import { swupAdapter } from '@lpdsgn/gsap-spa-manager';
 
 // Initialize the Transitions class
 export const transitions = new Transitions();
 transitions.init();
 
-// Initialize AnimationManager with Swup instance
+// Initialize AnimationManager with the Swup adapter (standalone mode without Swup).
 // Must happen after Transitions.init() so Swup is available
-if (transitions.swup) {
-	AM.init(transitions.swup);
-} else {
-	AM.isDebug && AM.log('⚠️ Swup instance not available for AnimationManager');
-}
+AM.init({
+	debug: import.meta.env.DEV,
+	adapter: transitions.swup ? swupAdapter(transitions.swup) : undefined,
+});
 
 // Initialize the Scroll class
 Scroll.init();
