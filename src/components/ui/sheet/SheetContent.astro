@@ -1,5 +1,5 @@
 ---
-import X from '@tabler/icons/outline/x.svg';
+import { Icon } from 'astro-icon/components';
 import type { HTMLAttributes } from 'astro/types';
 import { tv } from 'tailwind-variants';
 
@@ -85,7 +85,7 @@ export const sheetCloseButton = tv({
 		aria-label="Close dialog"
 	>
 		<slot name="icon">
-			<X class="size-5 transition-opacity" />
+			<Icon name="carbon:close" class="size-5 transition-opacity" />
 		</slot>
 		<span class="sr-only">Close</span>
 	</button>

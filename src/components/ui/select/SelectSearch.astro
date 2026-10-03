@@ -1,5 +1,5 @@
 ---
-import Search from '@tabler/icons/outline/search.svg';
+import { Icon } from 'astro-icon/components';
 import type { HTMLAttributes } from 'astro/types';
 import { tv } from 'tailwind-variants';
 
@@ -31,7 +31,7 @@ const {
 	class="-mx-1 -mt-1 mb-1 flex items-center gap-2 border-b px-3"
 >
 	<slot name="icon">
-		<Search class="size-4.5 shrink-0 text-muted-foreground" />
+		<Icon name="carbon:search" class="size-4.5 shrink-0 text-muted-foreground" />
 	</slot>
 	<input
 		type="text"

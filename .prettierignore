@@ -3,6 +3,8 @@ src/components/analytics/**
 src/components/ui/marquee/Marquee.astro
 *.md
 *.mdx
+**/*.yaml
+**/*.yml
 
 # Ignore specific files that should not be formatted
 .claude

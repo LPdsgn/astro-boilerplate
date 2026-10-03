@@ -19,8 +19,8 @@
 
 Make sure you have the following installed:
 
-- [Node] — at least 22.0, the latest LTS is recommended.
-- [NPM] — at least 8.0, the latest LTS is recommended.
+- [Node] — at least 22.12 (Astro 7 minimum), the latest LTS is recommended.
+- [pnpm] — at least 11 (the version is pinned in `packageManager`).
 
 > 💡 You can use [NVM] to install and use different versions of Node via the command-line.
 
@@ -38,33 +38,34 @@ cd my-new-project
 # Switch to recommended Node version from .nvmrc
 nvm use
 
-# Install dependencies from package.json
-npm install
+# Install dependencies (also installs the lefthook git hooks)
+pnpm install
 ```
 
 ## Development
 
 ```sh
 # Start development server, watch for changes, and compile assets
-npm start
+pnpm dev
 
-# Compile and minify assets
-npm run build
+# Type check, compile and minify assets
+pnpm build
 ```
 
 ## Commands
 
 All commands are run from the root of the project, from a terminal:
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-| `npm run format`          | Format files using prettier                      |
+| Command             | Action                                           |
+| :------------------ | :----------------------------------------------- |
+| `pnpm install`      | Installs dependencies                            |
+| `pnpm dev`          | Starts local dev server at `localhost:8888`      |
+| `pnpm build`        | Type check and build the production site         |
+| `pnpm preview`      | Preview your build locally, before deploying     |
+| `pnpm astro ...`    | Run CLI commands like `astro add`, `astro check` |
+| `pnpm astro --help` | Get help using the Astro CLI                     |
+| `pnpm lint`         | Lint files using ESLint                          |
+| `pnpm format`       | Format files using Prettier                      |
 
 ## Documentation
 
@@ -80,7 +81,7 @@ All commands are run from the root of the project, from a terminal:
 [Locomotive Scroll]: https://scroll.locomotive.ca/docs
 [Swup]: https://swup.js.org/getting-started/
 [Node]: https://nodejs.org/
-[NPM]: https://npmjs.com/
+[pnpm]: https://pnpm.io/
 [NVM]: https://github.com/nvm-sh/nvm
 [Prettier]: https://prettier.io/
 [Nanostores]: https://github.com/nanostores/nanostores

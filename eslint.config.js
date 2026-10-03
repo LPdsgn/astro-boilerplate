@@ -1,6 +1,5 @@
 import { defineConfig } from 'eslint/config';
 import js from '@eslint/js';
-import react from 'eslint-plugin-react';
 import astro from 'eslint-plugin-astro';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
@@ -34,11 +33,6 @@ export default defineConfig([
 			ecmaVersion: 'latest',
 			sourceType: 'module',
 		},
-		settings: {
-			react: {
-				version: 'detect',
-			},
-		},
 	},
 
 	// Base JavaScript configuration
@@ -48,7 +42,12 @@ export default defineConfig([
 	// Prettier
 	eslintConfigPrettier,
 
-	// Astro configurations
+	// Astro configurations.
+	// NB: `jsx-a11y-recommended` funziona grazie a eslint-plugin-jsx-a11y, che
+	// eslint-plugin-astro carica a runtime (`require("eslint-plugin-jsx-a11y")`)
+	// SENZA dichiararlo tra le sue dependencies/peerDependencies. Sta in
+	// devDependencies e sembra inutilizzato: non rimuoverlo, le regole
+	// astro/jsx-a11y/* smetterebbero di girare.
 	astro.configs.recommended,
 	astro.configs['jsx-a11y-recommended'],
 	// Astro-specific rules
@@ -71,9 +70,6 @@ export default defineConfig([
 			'astro/no-set-html-directive': 'warn',
 			'astro/jsx-a11y/iframe-has-title': 'warn',
 			'@typescript-eslint/no-empty-object-type': 'off',
-			// Disable React rules that don't apply to Astro
-			'react/no-unknown-property': 'off',
-			'react/jsx-key': 'off',
 		},
 	},
 
@@ -104,17 +100,6 @@ export default defineConfig([
 			'no-console': ['warn', { allow: ['log', 'warn', 'error'] }],
 			'no-undef': 'off', // Handled by TypeScript
 			'prefer-const': 'warn',
-		},
-	},
-
-	// React-specific rules (only for React files)
-	{
-		...react.configs.flat.recommended,
-		files: ['**/*.{jsx,tsx}'],
-		rules: {
-			'react/react-in-jsx-scope': 'off', // Not needed with React 17+
-			'react/prop-types': 'off', // Using TypeScript
-			'react/jsx-no-target-blank': 'warn', // Security best practice
 		},
 	},
 ]);

@@ -1,5 +1,5 @@
 ---
-import Check from '@tabler/icons/outline/check.svg';
+import { Icon } from 'astro-icon/components';
 import type { HTMLAttributes } from 'astro/types';
 import { tv } from 'tailwind-variants';
 
@@ -45,7 +45,7 @@ const { class: className, value, disabled, ...rest } = Astro.props;
 	</span>
 	<span class={selectItemIcon()}>
 		<slot name="icon">
-			<Check class="size-4" />
+			<Icon name="carbon:checkmark" class="size-4" />
 		</slot>
 	</span>
 </div>

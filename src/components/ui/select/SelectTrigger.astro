@@ -1,5 +1,5 @@
 ---
-import ChevronDown from '@tabler/icons/outline/chevron-down.svg';
+import { Icon } from 'astro-icon/components';
 import type { HTMLAttributes } from 'astro/types';
 import { tv, type VariantProps } from 'tailwind-variants';
 
@@ -49,6 +49,6 @@ const { class: className, size, ...rest } = Astro.props;
 >
 	<slot />
 	<slot name="icon">
-		<ChevronDown class="size-4 opacity-50" />
+		<Icon name="carbon:chevron-down" class="size-4 opacity-50" />
 	</slot>
 </button>

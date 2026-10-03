@@ -1,5 +1,5 @@
 ---
-import ArrowRight from '@tabler/icons/outline/arrow-right.svg';
+import { Icon } from 'astro-icon/components';
 import type { ComponentProps } from 'astro/types';
 import { tv } from 'tailwind-variants';
 
@@ -29,7 +29,7 @@ const { class: className = '', variant = 'outline', size = 'icon', ...rest } = A
 	{...rest}
 >
 	<slot name="icon">
-		<ArrowRight />
+		<Icon name="carbon:arrow-right" />
 	</slot>
 	<slot>
 		<span class="sr-only">Next slide</span>

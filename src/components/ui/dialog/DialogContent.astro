@@ -1,5 +1,5 @@
 ---
-import X from '@tabler/icons/outline/x.svg';
+import { Icon } from 'astro-icon/components';
 import type { HTMLAttributes } from 'astro/types';
 import { tv } from 'tailwind-variants';
 
@@ -64,7 +64,7 @@ const { class: className, animationDuration = 200, ...rest } = Astro.props;
 	<slot />
 	<button type="button" class={dialogCloseButton()} data-dialog-close aria-label="Close dialog">
 		<slot name="icon">
-			<X class="size-5 transition-opacity" />
+			<Icon name="carbon:close" class="size-5 transition-opacity" />
 		</slot>
 		<span class="sr-only">Close</span>
 	</button>

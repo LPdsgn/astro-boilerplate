@@ -1,4 +1,4 @@
-import { defineConfig, fontProviders } from 'astro/config';
+import { defineConfig, fontProviders, svgoOptimizer } from 'astro/config';
 import vercel from '@astrojs/vercel';
 import icon from 'astro-icon';
 import mdx from '@astrojs/mdx';
@@ -9,8 +9,6 @@ const isProd = import.meta.env.PROD;
 const isDev = import.meta.env.DEV;
 
 // PostCSS Plugins
-import postcssHelpersFunctions from '@locomotivemtl/postcss-helpers-functions';
-import postcssTailwindShortcuts from '@locomotivemtl/postcss-tailwind-shortcuts';
 import tailwindcss from '@tailwindcss/postcss';
 import autoprefixer from 'autoprefixer';
 import cssnanoPlugin from 'cssnano';
@@ -22,15 +20,49 @@ import metaTags from 'astro-meta-tags';
 import favicons from 'astro-favicons';
 import astroThemes from '@lpdsgn/astro-themes';
 
+const assetsDir = '_assets';
+
+const rolldownOutput = {
+	entryFileNames: assetsDir + '/js/[name].[hash].js',
+	chunkFileNames: assetsDir + '/js/chunks/[name].[hash].js',
+	manualChunks(id: string) {
+		// Keep animations + classes in one chunk to avoid circular-dep warnings
+		if (id.includes('src/lib/animations') || id.includes('src/lib/classes/Transitions')) {
+			return 'animations';
+		}
+	},
+	assetFileNames: (assetInfo: { names?: string[] }) => {
+		const ext = assetInfo.names?.[0]?.split('.').pop();
+
+		if (ext === 'css') return assetsDir + '/css/[name].[hash][extname]';
+		if (/png|jpe?g|svg|gif|webp|avif|mp4|webm/.test(ext ?? ''))
+			return assetsDir + '/media/[name].[hash][extname]';
+		if (/woff2?|ttf|eot|otf/.test(ext ?? '')) return assetsDir + '/fonts/[name].[hash][extname]';
+
+		return assetsDir + '/[name].[hash][extname]'; // fallback
+	},
+};
+
 // https://astro.build/config
 export default defineConfig({
 	// site: '',
 	output: 'static',
+	/**
+	 * Astro 7 changed the default to 'jsx', which strips whitespace between elements using JSX rules.
+	 * Keep the v6 HTML-aware behaviour. Switching to 'jsx' needs a visual pass first.
+	 *
+	 * @link https://docs.astro.build/en/guides/upgrade-to/v7/#new-default-whitespace-handling-compresshtml-jsx
+	 */
+	compressHTML: true,
+
 	adapter: vercel({
-		includeFiles: [
-			/* You must include the files, if any, that are consumed by src/pages/api/og.png.ts */
-		],
+		// Read at runtime by /api/og.png (Satori needs a static .ttf/.otf/.woff)
+		includeFiles: ['src/assets/fonts/Innovator-Grotesk-VF.woff'],
 	}),
+	build: {
+		assets: assetsDir,
+		inlineStylesheets: 'never',
+	},
 	vite: {
 		css: {
 			postcss: {
@@ -44,8 +76,6 @@ export default defineConfig({
 						maxWidth: 1536, // Default maximum viewport
 						rootSize: 16, // Default root size
 					}),
-					postcssHelpersFunctions(),
-					postcssTailwindShortcuts(),
 					autoprefixer(),
 					...(isProd ? [cssnanoPlugin()] : []),
 				],
@@ -65,22 +95,64 @@ export default defineConfig({
 				: []),
 		],
 		build: {
+			cssMinify: false, // handled by cssnano in postcss plugins
 			sourcemap: false, // !!process.env.SOURCE_MAP | SOURCE_MAP=1 pnpm build solo quando devi debuggare in produzione
-			/* rollupOptions: {
-              output: {
-                  manualChunks(id) {
-                      // Keep animations + classes in one chunk to avoid circular-dep warnings
-                      if (id.includes('src/lib/animations') || id.includes('src/lib/classes/')) {
-                          return 'animations';
-                      }
-                  },
-              },
-          }, */
+			rolldownOptions: {
+				output: rolldownOutput, // applied to the prerender build by Astro
+			},
+		},
+		environments: {
+			/** Astro overrides entryFileNames/chunkFileNames in its client environment
+			 * (see node_modules/astro/dist/core/build/static-build.js). User overrides
+			 * must be declared here to actually reach the client build.
+			 */
+			client: {
+				build: {
+					rolldownOptions: {
+						output: rolldownOutput,
+					},
+				},
+			},
 		},
 	},
 	integrations: [
 		icon({
 			iconDir: './src/assets/svgs',
+			/** With on-demand routes (/api/og.png) astro-icon bundles every installed Iconify set
+			 * into the server function. Only these icons ship. A missing name fails the build,
+			 * so add new icons here (.claude/rules/vercel.md).
+			 */
+			include: {
+				carbon: [
+					'arrow-left',
+					'arrow-right',
+					'arrow-up',
+					'caret-up',
+					'checkmark',
+					'checkmark-outline',
+					'chevron-down',
+					'chevron-left',
+					'chevron-right',
+					'circle-dash',
+					'circle-solid',
+					'close',
+					'close-outline',
+					'cloud-upload',
+					'email',
+					'help',
+					'home',
+					'information',
+					'link',
+					'moon',
+					'open-panel-left',
+					'overflow-menu-horizontal',
+					'search',
+					'subtract',
+					'sun',
+					'warning-alt',
+				],
+				'simple-icons': ['behance', 'discord', 'github', 'instagram', 'linkedin', 'rss'],
+			},
 		}),
 		mdx(),
 		favicons({
@@ -150,6 +222,13 @@ export default defineConfig({
 			},
 		},
 	],
+	experimental: {
+		svgOptimizer: svgoOptimizer({
+			plugins: ['preset-default', { name: 'removeViewBox' }],
+		}),
+		chromeDevtoolsWorkspace: true,
+		contentIntellisense: true,
+	},
 	server: {
 		port: 8888,
 		host: '0.0.0.0',

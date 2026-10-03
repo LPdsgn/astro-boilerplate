@@ -1,5 +1,5 @@
 ---
-import Check from '@tabler/icons/outline/check.svg';
+import { Icon } from 'astro-icon/components';
 import type { HTMLAttributes } from 'astro/types';
 import { tv, type VariantProps } from 'tailwind-variants';
 
@@ -22,7 +22,7 @@ export const checkbox = tv({
 			'aria-invalid:border-error aria-invalid:focus-visible:ring-error/40',
 		],
 		icon: [
-			'pointer-events-none absolute stroke-3 p-0.5 opacity-0 transition-opacity peer-checked:opacity-100',
+			'pointer-events-none absolute p-0.5 opacity-0 transition-opacity peer-checked:opacity-100',
 			'c-check-icon',
 		],
 		label: 'font-medium peer-not-disabled:cursor-pointer peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
@@ -81,7 +81,7 @@ const { base, input, icon, label: labelClass } = checkbox({ size, variant });
 		{checked}
 		{...rest}
 	/>
-	<Check class={icon()} />
+	<Icon name="carbon:checkmark" class={icon()} />
 	{
 		label && (
 			<label for={id} class={labelClass()} data-slot="checkbox-label">
@@ -96,10 +96,9 @@ const { base, input, icon, label: labelClass } = checkbox({ size, variant });
 		background-image: none;
 	}
 
-	/* Check drawing animation */
+	/* Check drawing animation: carbon icons are filled, so a left-to-right wipe instead of a stroke */
 	.c-check-icon {
-		stroke-dasharray: 65;
-		stroke-dashoffset: 65;
+		clip-path: inset(0 100% 0 0);
 		opacity: 0;
 	}
 
@@ -110,11 +109,11 @@ const { base, input, icon, label: labelClass } = checkbox({ size, variant });
 
 	@keyframes draw-check {
 		0% {
-			stroke-dashoffset: 65;
+			clip-path: inset(0 100% 0 0);
 			opacity: 1;
 		}
 		100% {
-			stroke-dashoffset: 0;
+			clip-path: inset(0 0 0 0);
 			opacity: 1;
 		}
 	}

@@ -1,0 +1,30 @@
+# Configurazione lefthook (git hooks). Sostituisce simple-git-hooks +
+# lint-staged: {staged_files} e stage_fixed sono nativi di lefthook.
+# https://github.com/evilmartians/lefthook
+
+pre-commit:
+  # NIENTE `parallel: true`, per due motivi:
+  #  1. i glob di eslint e prettier si sovrappongono sui file di codice, e in
+  #     parallelo i due processi si sovrascriverebbero a vicenda lo stesso file;
+  #  2. `priority` funziona solo con `parallel: false` (default) o `piped: true`
+  #     — con l'esecuzione parallela viene ignorato.
+  # L'ordine conta: eslint --fix puo' emettere codice non formattato, che
+  # prettier poi normalizza. Invertendoli si committerebbe output non formattato.
+  # priority: numero piu' basso = prima (0 / assente = per ultimo).
+  commands:
+    eslint:
+        priority: 1
+        glob: '*.{js,mjs,cjs,ts,tsx,jsx,astro}'
+        run: pnpm exec eslint --fix --no-warn-ignored {staged_files}
+        stage_fixed: true
+    prettier:
+        priority: 2
+        glob: '*.{js,mjs,cjs,ts,tsx,jsx,astro,css,scss,json,html}'
+        run: pnpm exec prettier --write --ignore-unknown {staged_files}
+        stage_fixed: true
+
+# Il build completo resta sul pre-push: e' troppo lento per un pre-commit.
+pre-push:
+  commands:
+    build:
+        run: pnpm build

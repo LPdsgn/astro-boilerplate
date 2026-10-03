@@ -1,5 +1,5 @@
 ---
-import Dots from '@tabler/icons/outline/dots.svg';
+import { Icon } from 'astro-icon/components';
 import type { HTMLAttributes } from 'astro/types';
 import { tv } from 'tailwind-variants';
 
@@ -20,7 +20,7 @@ const { class: className, ...rest } = Astro.props;
 	{...rest}
 >
 	<slot name="icon">
-		<Dots />
+		<Icon name="carbon:overflow-menu-horizontal" />
 	</slot>
 	<slot>
 		<span class="sr-only">More</span>

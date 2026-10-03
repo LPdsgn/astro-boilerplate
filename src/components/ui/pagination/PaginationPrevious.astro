@@ -1,5 +1,5 @@
 ---
-import ChevronLeft from '@tabler/icons/outline/chevron-left.svg';
+import { Icon } from 'astro-icon/components';
 import type { HTMLAttributes } from 'astro/types';
 import { tv, type VariantProps } from 'tailwind-variants';
 
@@ -24,7 +24,10 @@ const { class: className, size = 'md', ...rest } = Astro.props;
 	{...rest}
 >
 	<slot name="icon">
-		<ChevronLeft class="size-4 transition-transform group-hover:-translate-x-1" />
+		<Icon
+			name="carbon:chevron-left"
+			class="size-4 transition-transform group-hover:-translate-x-1"
+		/>
 	</slot>
 	<slot />
 </PaginationLink>

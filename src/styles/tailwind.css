@@ -1,4 +1,8 @@
-@import 'tailwindcss';
+/* Explicit subpath, not the bare 'tailwindcss': Vite 8's SSR-environment CSS
+   @import resolver picks tailwindcss' JS export (`import`/`require`) over its
+   `style` condition and then fails to resolve, breaking `astro build` while the
+   client build works. Same file the `style` condition points to. */
+@import 'tailwindcss/index.css';
 @import 'tw-animate-css';
 @plugin '@tailwindcss/forms';
 @custom-variant dark (&:where(.dark, .dark *));

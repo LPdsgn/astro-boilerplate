@@ -1,5 +1,5 @@
 ---
-import CaretUp from '@tabler/icons/filled/caret-up.svg';
+import { Icon } from 'astro-icon/components';
 import type { HTMLAttributes } from 'astro/types';
 import { tv } from 'tailwind-variants';
 
@@ -85,5 +85,5 @@ const {
 	style={{ animationDuration: `${animationDuration}ms` }}
 >
 	<slot> My tooltip! </slot>
-	<CaretUp class={tooltipCaret({ side })} />
+	<Icon name="carbon:caret-up" class={tooltipCaret({ side })} />
 </div>

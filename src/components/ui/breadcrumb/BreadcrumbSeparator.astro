@@ -1,5 +1,5 @@
 ---
-import ChevronRight from '@tabler/icons/outline/chevron-right.svg';
+import { Icon } from 'astro-icon/components';
 import type { HTMLAttributes } from 'astro/types';
 import { tv } from 'tailwind-variants';
 
@@ -18,6 +18,6 @@ const { class: className, ...rest } = Astro.props;
 	{...rest}
 >
 	<slot>
-		<ChevronRight />
+		<Icon name="carbon:chevron-right" />
 	</slot>
 </li>

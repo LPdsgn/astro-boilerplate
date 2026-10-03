@@ -9,20 +9,20 @@ interface Props {
 const { links, className } = Astro.props;
 
 const iconMap = {
-	Website: 'lucide:globe',
-	GitHub: 'fa6-brands:github',
-	LinkedIn: 'fa6-brands:linkedin',
-	Instagram: 'fa6-brands:instagram',
-	Discord: 'fa6-brands:discord',
-	Behance: 'fa6-brands:behance',
-	Email: 'lucide:mail',
+	Website: 'carbon:link',
+	GitHub: 'simple-icons:github',
+	LinkedIn: 'simple-icons:linkedin',
+	Instagram: 'simple-icons:instagram',
+	Discord: 'simple-icons:discord',
+	Behance: 'simple-icons:behance',
+	Email: 'carbon:email',
 	RSS: 'simple-icons:rss',
 };
 
 const getSocialLink = ({ HREF, LABEL }: Links) => ({
 	href: LABEL === 'Email' ? `mailto:${HREF}` : HREF,
 	ariaLabel: LABEL,
-	iconName: iconMap[LABEL as keyof typeof iconMap] || 'lucide:message-circle-question',
+	iconName: iconMap[LABEL as keyof typeof iconMap] || 'carbon:help',
 });
 ---
 

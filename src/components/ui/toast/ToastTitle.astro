@@ -1,9 +1,5 @@
 ---
-import WarningIcon from '@tabler/icons/outline/alert-triangle.svg';
-import SuccessIcon from '@tabler/icons/outline/circle-check.svg';
-import ErrorIcon from '@tabler/icons/outline/circle-x.svg';
-import InfoIcon from '@tabler/icons/outline/info-circle.svg';
-import LoaderIcon from '@tabler/icons/outline/loader-2.svg';
+import { Icon } from 'astro-icon/components';
 import type { HTMLAttributes } from 'astro/types';
 import { tv } from 'tailwind-variants';
 
@@ -34,14 +30,14 @@ const { class: className, variant = 'default', ...rest } = Astro.props;
 
 const icons = {
 	default: null,
-	success: SuccessIcon,
-	error: ErrorIcon,
-	warning: WarningIcon,
-	info: InfoIcon,
-	loading: LoaderIcon,
+	success: 'carbon:checkmark-outline',
+	error: 'carbon:close-outline',
+	warning: 'carbon:warning-alt',
+	info: 'carbon:information',
+	loading: 'carbon:circle-dash',
 };
 
-const Icon = icons[variant];
+const icon = icons[variant];
 ---
 
 <div
@@ -51,7 +47,7 @@ const Icon = icons[variant];
 	{...rest}
 >
 	<slot name="icon">
-		{Icon && (variant === 'loading' ? <Icon class="animate-spin" /> : <Icon />)}
+		{icon && <Icon name={icon} class={variant === 'loading' ? 'animate-spin' : undefined} />}
 	</slot>
 	<span data-toast-title-text><slot /></span>
 </div>

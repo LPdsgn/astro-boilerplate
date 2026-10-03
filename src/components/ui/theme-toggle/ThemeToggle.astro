@@ -37,8 +37,7 @@
 </script>
 */
 
-import Moon from '@tabler/icons/outline/moon.svg';
-import Sun from '@tabler/icons/outline/sun.svg';
+import { Icon } from 'astro-icon/components';
 import { tv, type VariantProps } from 'tailwind-variants';
 
 import { Toggle, ToggleVariants } from '@/components/ui/toggle';
@@ -81,10 +80,18 @@ const {
 	<slot>
 		<span class="size-5" data-theme-icon-wrapper>
 			<slot name="light-icon">
-				<Sun class="hidden size-5 group-data-[state=off]:data-ready:block" data-theme-icon />
+				<Icon
+					name="carbon:sun"
+					class="hidden size-5 group-data-[state=off]:data-ready:block"
+					data-theme-icon
+				/>
 			</slot>
 			<slot name="dark-icon">
-				<Moon class="hidden size-5 group-data-[state=on]:data-ready:block" data-theme-icon />
+				<Icon
+					name="carbon:moon"
+					class="hidden size-5 group-data-[state=on]:data-ready:block"
+					data-theme-icon
+				/>
 			</slot>
 		</span>
 	</slot>

@@ -2,6 +2,7 @@ import type { APIRoute } from 'astro';
 import { satoriAstroOG } from 'satori-astro';
 import { html } from 'satori-html';
 import { readFile } from 'node:fs/promises';
+import { join } from 'node:path';
 import { SITE } from '@/site.config';
 
 /**
@@ -9,8 +10,9 @@ import { SITE } from '@/site.config';
  *
  * Usage: /api/og.png?title=Title&description=Description
  *
- * NOTE: Satori doesn't support .woff2. Fonts must be in .ttf, .otf, or .woff format.
- * This implementation uses the local Innovator Grotesk variable font.
+ * NOTE: Satori doesn't support .woff2 and ignores variable-font axes (it renders the default
+ * instance). Fonts must be in .ttf, .otf, or .woff format and listed in `includeFiles` of the
+ * Vercel adapter (astro.config.ts) to reach the function.
  */
 
 // Disable prerendering to have access to query params at runtime
@@ -22,10 +24,12 @@ let fontCache: ArrayBuffer | null = null;
 async function loadFont() {
 	if (fontCache) return fontCache;
 
-	// Load local variable font - supports all weights
-	const fontPath = new URL('../../assets/fonts/Innovator-Grotesk-VF.woff', import.meta.url)
-		.pathname;
-	const fontBuffer = await readFile(fontPath);
+	// process.cwd(): import.meta.url no longer points to src/ once the route is bundled.
+	// Full file path literal at the call site: a directory would make Vercel's file tracer
+	// bundle the whole folder into the function (.claude/rules/vercel.md).
+	const fontBuffer = await readFile(
+		join(process.cwd(), 'src/assets/fonts/Innovator-Grotesk-VF.woff')
+	);
 	fontCache = fontBuffer.buffer.slice(
 		fontBuffer.byteOffset,
 		fontBuffer.byteOffset + fontBuffer.byteLength

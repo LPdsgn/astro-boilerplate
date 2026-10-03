@@ -1,5 +1,5 @@
 ---
-import CircleFilled from '@tabler/icons/filled/circle.svg';
+import { Icon } from 'astro-icon/components';
 import type { HTMLAttributes } from 'astro/types';
 import { tv, type VariantProps } from 'tailwind-variants';
 
@@ -123,7 +123,7 @@ const {
 	/>
 	<span class={radioControl({ variant, class: className })} data-slot="radio-group-item-control">
 		<slot name="icon">
-			<CircleFilled class={radioIndicator({ size })} />
+			<Icon name="carbon:circle-solid" class={radioIndicator({ size })} />
 		</slot>
 	</span>
 </div>
