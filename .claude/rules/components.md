@@ -6,6 +6,12 @@ paths:
 
 # Astro Component Conventions
 
+## File layout
+- A self-contained component (one `.astro` file) lives directly in its group folder: `src/components/ui/ScrollToTopButton.astro`, `src/components/ui/SocialIcons.astro`. No folder for a single file.
+- A component with co-located files (`.css`, `.ts`, barrel `index.ts`) gets its own kebab-case folder named after it: `src/components/ui/hover-image/HoverImage.astro` + `hover-image.css` + `index.ts`.
+- Superseded components move to an `old/` folder inside their group and stay exported from the barrel as `@deprecated` aliases until removed.
+- Import through the group barrel (`@/components/ui`, `@/components/layout`), never by folder path.
+
 ## Props
 - Extend `HTMLAttributes<'element'>` from `astro/types` for proper HTML attribute passthrough
 - When using TV variants, also extend `VariantProps<typeof variantName>`
@@ -33,3 +39,7 @@ paths:
 ## Swup page transitions
 
 See `.claude/rules/lifecycle.md` for the full page lifecycle documentation (SwupScriptsPlugin, custom events, script placement, initialization patterns).
+
+## Starwind components
+
+Components copied from Starwind into `src/components/ui/` (listed in `starwind.config.json`) follow `.claude/rules/starwind.md`: legacy CLI only, and lifecycle and icons customized after every add or update.

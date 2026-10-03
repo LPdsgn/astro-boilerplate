@@ -15,7 +15,7 @@ paths:
     X.init(/* ... */);
   </script>
   ```
-- **GSAP animations must always use the AnimationManager** so their lifecycle is properly coordinated with Swup page transitions. See `.docs/animation-manager.md` for the full API.
+- **GSAP animations must always use the AnimationManager** so their lifecycle is properly coordinated with Swup page transitions. See `docs/animation-manager.md` for the full API.
 
 ## Script initialization & lifecycle
 
