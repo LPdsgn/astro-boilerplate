@@ -89,10 +89,12 @@ if (import.meta.env.DEV) {
 	// Dynamically import the grid-helper only in development mode
 	import('@locomotivemtl/grid-helper')
 		.then(({ default: GridHelper }) => {
+			// Mirrors the layout: `grid-cols-12 gap-gutter` inside the content well of `.container`
+			// and the default Container (`px-well`, utilities.css). marginWidth is a raw CSS value.
 			new GridHelper({
-				columns: 'var(--grid-columns)',
+				columns: 12,
 				gutterWidth: `var(--spacing-gutter)`,
-				marginWidth: `var(--spacing-margin)`,
+				marginWidth: `max(var(--spacing-margin), calc((100% - var(--container-grid)) / 2))`,
 			});
 		})
 		.catch((error) => {

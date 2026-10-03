@@ -3,7 +3,18 @@ import type { HTMLAttributes } from 'astro/types';
 import { tv, type VariantProps } from 'tailwind-variants';
 
 interface Props extends HTMLAttributes<'div'>, VariantProps<typeof containerVariants> {
-	as?: 'div' | 'header' | 'footer' | 'section' | 'article' | 'aside' | 'main' | 'nav' | 'li';
+	as?:
+		| 'div'
+		| 'header'
+		| 'footer'
+		| 'section'
+		| 'article'
+		| 'aside'
+		| 'main'
+		| 'nav'
+		| 'li'
+		| 'ul'
+		| 'ol';
 	theme?: string;
 }
 
@@ -11,9 +22,9 @@ export const containerVariants = tv({
 	base: 'u-container',
 	variants: {
 		size: {
-			default: 'max-w-grid',
-			narrow: 'max-w-screen-md',
-			wide: 'max-w-none',
+			default: '-default',
+			narrow: '-narrow',
+			wide: '-wide',
 		},
 		flow: {
 			row: 'flex',
@@ -22,7 +33,7 @@ export const containerVariants = tv({
 			grid: 'grid',
 		},
 		px: {
-			true: 'px-gutter',
+			true: '-px',
 		},
 	},
 	defaultVariants: {
@@ -40,6 +51,7 @@ const {
 	px,
 	as: HTMLelement = 'div',
 	theme,
+	...rest
 } = Astro.props;
 ---
 
@@ -47,6 +59,7 @@ const {
 	id={id}
 	class={containerVariants({ size, flow, px, class: className })}
 	data-theme={theme}
+	{...rest}
 >
 	<slot />
 </HTMLelement>
@@ -56,7 +69,24 @@ const {
 
 	@layer components {
 		.u-container {
-			@apply mx-auto gap-fluid-sm px-fluid-sm py-fluid-md w-full;
+			@apply mx-auto gap-fluid-sm py-fluid-md w-full;
+
+			&.-px {
+				@apply px-margin;
+			}
+
+			/* Same side margin as `.container` and the grid helper (src/lib/app.ts) */
+			&.-default.-px {
+				@apply px-well;
+			}
+
+			&.-narrow {
+				@apply max-w-screen-md;
+			}
+
+			&.-wide {
+				@apply max-w-none;
+			}
 		}
 	}
 </style>

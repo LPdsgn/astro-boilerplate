@@ -1,7 +1,13 @@
 /* Note on @utility coloring syntax https://github.com/tailwindlabs/tailwindcss-intellisense/issues/1146#issuecomment-2637758061 */
 /* Fix issue of tailwind container injecting max-w */
 @utility container {
-	@apply mx-auto w-full max-w-none px-fluid-sm;
+	@apply px-well mx-auto w-full max-w-none;
+}
+
+/* Content well: fluid margin below --container-grid, then grows to center the content
+   while the element stays full width (backgrounds bleed on ultra-wide screens) */
+@utility px-well {
+	padding-inline: max(var(--spacing-margin), calc((100% - var(--container-grid)) / 2));
 }
 
 /* Force zero border radius */
