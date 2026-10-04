@@ -196,6 +196,9 @@ importers:
       lefthook:
         specifier: ^2.1.16
         version: 2.1.16
+      postcss:
+        specifier: ^8.5.28
+        version: 8.5.28
       postcss-nested:
         specifier: ^7.0.2
         version: 7.0.2(postcss@8.5.28)

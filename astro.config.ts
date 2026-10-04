@@ -14,6 +14,7 @@ import autoprefixer from 'autoprefixer';
 import cssnanoPlugin from 'cssnano';
 import postcssUtopia from 'postcss-utopia';
 import postcssNested from 'postcss-nested';
+import type { Helpers, Root } from 'postcss';
 
 // Astro Integrations
 import metaTags from 'astro-meta-tags';
@@ -21,6 +22,19 @@ import favicons from 'astro-favicons';
 import astroThemes from '@lpdsgn/astro-themes';
 
 const assetsDir = '_assets';
+
+/**
+ * postcss-nested runs in a `Rule` visitor, i.e. after every plugin's `Once` hook. Tailwind 4.3
+ * flattens nested rules with `@apply` in its own `Once` with native-nesting semantics
+ * (`&_list` → `:is(.c-breadcrumb)_list`), so the BEM `&_suffix` must be resolved in a `Once` first.
+ */
+const postcssNestedFirst = {
+	postcssPlugin: 'postcss-nested-first',
+	Once(root: Root, { postcss }: Helpers) {
+		// sync run on the same root (a Root passed to process() is mutated in place)
+		void postcss([postcssNested()]).process(root, { from: root.source?.input.file }).root;
+	},
+};
 
 const rolldownOutput = {
 	entryFileNames: assetsDir + '/js/[name].[hash].js',
@@ -67,7 +81,8 @@ export default defineConfig({
 		css: {
 			postcss: {
 				plugins: [
-					postcssNested(), // before tailwindcss so &_suffix nesting resolves before @apply
+					postcssNestedFirst, // before tailwindcss so &_suffix nesting resolves before @apply
+					postcssNested(), // flattens the nested variants Tailwind emits (&:hover, :where(&>…))
 					tailwindcss({
 						optimize: false, // disable Lightning CSS — it breaks postcss-nested's BEM &_suffix concatenation
 					}),

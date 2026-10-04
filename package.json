@@ -88,6 +88,7 @@
 		"eslint-plugin-jsx-a11y": "^6.10.2",
 		"globals": "^17.13.0",
 		"lefthook": "^2.1.16",
+		"postcss": "^8.5.28",
 		"postcss-nested": "^7.0.2",
 		"postcss-utopia": "^1.1.0",
 		"prettier": "^3.8.2",
