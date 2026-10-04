@@ -73,6 +73,14 @@ export default defineConfig([
 		},
 	},
 
+	// Starwind exports its tv() variants from the frontmatter, imported by the barrels
+	{
+		files: ['src/components/ui/**/*.astro'],
+		rules: {
+			'astro/no-exports-from-components': 'off',
+		},
+	},
+
 	// TypeScript files configuration
 	{
 		files: ['**/*.{ts,tsx}'],
