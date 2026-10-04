@@ -6,8 +6,6 @@
 		"forceConsistentCasingInFileNames": true,
 		"strictNullChecks": true,
 		"moduleResolution": "bundler",
-		"ignoreDeprecations": "6.0",
-		"baseUrl": ".",
 		"paths": {
 			"@/*": ["./src/*"],
 			"@components/*": ["./src/components/*"],
@@ -17,7 +15,7 @@
 			"@lib/*": ["./src/lib/*"],
 			"@styles/*": ["./src/styles/*"],
 			"@templates/*": ["./src/templates/*"],
-			"@types/*": ["types/*"],
+			"@types/*": ["./types/*"],
 			"@data/*": ["./src/data/*"]
 		}
 	}

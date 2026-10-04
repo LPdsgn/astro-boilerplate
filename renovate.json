@@ -1,0 +1,12 @@
+{
+	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
+	"extends": ["config:recommended", "schedule:weekly"],
+	"prConcurrentLimit": 3,
+	"minimumReleaseAge": "3 days",
+	"packageRules": [
+		{ "matchFileNames": ["pnpm-workspace.yaml"], "enabled": false },
+		{ "matchPackageNames": ["typescript"], "allowedVersions": "<7" },
+		{ "matchUpdateTypes": ["minor", "patch"], "groupName": "non-major dependencies" },
+		{ "matchUpdateTypes": ["major"], "dependencyDashboardApproval": true }
+	]
+}

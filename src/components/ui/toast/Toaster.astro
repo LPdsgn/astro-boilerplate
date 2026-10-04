@@ -17,12 +17,7 @@ export const toastViewport = tv({
 });
 
 type Position =
-	| 'top-left'
-	| 'top-center'
-	| 'top-right'
-	| 'bottom-left'
-	| 'bottom-center'
-	| 'bottom-right';
+	'top-left' | 'top-center' | 'top-right' | 'bottom-left' | 'bottom-center' | 'bottom-right';
 
 type Props = HTMLAttributes<'div'> & {
 	position?: Position;

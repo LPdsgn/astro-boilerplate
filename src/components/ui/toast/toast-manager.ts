@@ -59,9 +59,7 @@ export interface PromiseStateOption {
 }
 
 export type PromiseStateValue<T> =
-	| string
-	| PromiseStateOption
-	| ((data: T) => string | PromiseStateOption);
+	string | PromiseStateOption | ((data: T) => string | PromiseStateOption);
 
 export interface PromiseOptions<T, E = Error> {
 	loading: string | PromiseStateOption;
