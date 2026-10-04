@@ -15,10 +15,12 @@ export const mm = gsap.matchMedia();
 
 /**
  * Exports the Animation Manager singleton for centralized animation control
+ * (@lpdsgn/gsap-spa-manager, initialized with the Swup adapter in app.ts)
  * @module
- * @exports animationManager - Singleton instance for managing GSAP animations and ScrollTriggers
+ * @exports AM - Singleton instance for managing GSAP animations and ScrollTriggers
  */
-export { AM, init } from '@lib/classes';
+export { AM } from '@lpdsgn/gsap-spa-manager';
+export { init } from '@lib/classes';
 
 /**
  * Animation utilities for mouse tracking and position calculations

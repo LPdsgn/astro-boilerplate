@@ -1,7 +1,8 @@
 # AnimationManager (AM)
 
 Singleton that manages all GSAP animations, coordinated with Swup page transitions.
-Initialized in `src/lib/app.ts` after Swup via `AM.init(swup)`.
+Provided by [`@lpdsgn/gsap-spa-manager`](https://www.npmjs.com/package/@lpdsgn/gsap-spa-manager), re-exported from `@lib/animations` (import it from there).
+Initialized in `src/lib/app.ts` after Swup via `AM.init({ debug, adapter: swupAdapter(swup) })`.
 
 ## API
 
@@ -19,14 +20,14 @@ Initialized in `src/lib/app.ts` after Swup via `AM.init(swup)`.
 | `isActive(key)`                         | Check if key has active animations/triggers/contexts    |
 | `getStatus()`                           | Return counts, registered keys, persistent keys         |
 
-All methods accept `opts?: { persist: true }` to survive page transitions.
+All methods accept `opts?: { persist: true }` to survive page transitions. `setup()` also accepts `scope` (element or selector) to scope the GSAP selectors of its context.
 
 ## Lifecycle (Swup integration)
 
 1. `before('content:replace')` → `cleanupAll()` (kills non-persistent)
 2. `on('content:replace')` → `ScrollTrigger.refresh()`
 
-This replaces the old `page:before-swap` / `page:load` pattern. Swup hooks are set up in `src/lib/classes/Transitions.ts`.
+This replaces the old `page:before-swap` / `page:load` pattern. The hooks are registered by the package's `swupAdapter`.
 
 ## setup() — Context-based pattern
 
@@ -56,9 +57,11 @@ Use `setup()` when your animation block includes event listeners, observers, or 
 
 ## Scroll system
 
-Smooth scrolling uses **LocomotiveScroll 5** (not Lenis). Managed by `src/lib/classes/Scroll.ts`, which:
+Smooth scrolling uses **LocomotiveScroll 5** (built on Lenis; use its API, not Lenis directly). Managed by `src/lib/classes/Scroll.ts`, which:
 
 - Initializes with a callback that updates the `$scroll` nanostore
+- Runs Lenis on `gsap.ticker` and calls `ScrollTrigger.update` on scroll (one RAF loop)
+- Refreshes ScrollTriggers (debounced) when the page height changes
 - Destroys on `beforeContentReplace`, re-initializes on `contentReplace`
 
 ## Debugging
