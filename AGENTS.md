@@ -21,7 +21,7 @@ Astro project boilerplate built with **Astro 7** as a static site, deployed on *
 | `pnpm clean`           | Remove `dist`, `.astro`, `.vercel/output` |
 | `ANALYZE=1 pnpm build` | Build with bundle visualization    |
 
-**Package manager:** pnpm 11 (settings in `pnpm-workspace.yaml`, not in `package.json`). **Node:** 22.12+ (Astro 7 minimum; see `.nvmrc`). One-off package binaries run with `pnpx <pkg>` (or `pnpm dlx <pkg>`), never `npx`.
+**Package manager:** pnpm 12 (settings in `pnpm-workspace.yaml`, not in `package.json`). **Node:** 24 (see `.nvmrc`). One-off package binaries run with `pnpx <pkg>` (or `pnpm dlx <pkg>`), never `npx`.
 
 **Git hooks (lefthook, `lefthook.yml`):** pre-commit runs ESLint + Prettier on staged files. Pre-push runs the full build.
 
