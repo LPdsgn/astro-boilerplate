@@ -46,8 +46,8 @@ export const buttonVariants = tv({
 			'icon-lg': '-icon-large',
 		},
 		round: {
-			default: '',
-			rounded: 'rounded-full',
+			default: '-rounded',
+			pill: '-pill',
 		},
 	},
 	defaultVariants: { variant: 'default', size: 'md', round: 'default' },
@@ -72,70 +72,79 @@ const computedAriaHidden = ariaHidden ? 'true' : undefined;
 	{...rest}
 >
 	<slot />
-	{Tag === 'a' && target === '_blank' && <span aria-hidden="true">&#x2197;</span>}
+	{
+		variant === 'link' && Tag === 'a' && target === '_blank' && (
+			<span aria-hidden="true">&#x2197;</span>
+		)
+	}
 </Tag>
 
 <style is:global lang="postcss">
 	@reference "#styles";
-	.c-button {
-		@apply inline-flex items-center justify-center gap-fluid-xs rounded-xs whitespace-nowrap;
-		@apply text-base font-mono leading-1! uppercase;
-		@apply [&_svg]:pointer-events-none [&_svg]:shrink-0;
-		@apply transition-colors focus-visible:ring-1 focus-visible:ring-outline focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50;
-		@apply aria-invalid:border-error aria-invalid:focus-visible:ring-error/40;
-	}
-	.c-button.-default {
-		@apply bg-primary text-primary-foreground shadow hover:bg-primary/90 focus-visible:ring-primary/50;
-	}
-	.c-button.-secondary {
-		@apply bg-secondary text-secondary-foreground shadow-sm hover:bg-accent focus-visible:ring-secondary/50;
-	}
-	.c-button.-outline {
-		@apply border hover:border-accent hover:bg-accent/75 hover:text-accent-foreground focus-visible:border-accent focus-visible:ring-accent/50;
-	}
-	.c-button.-ghost {
-		@apply hover:bg-accent hover:text-accent-foreground focus-visible:ring-accent/50;
-	}
-	.c-button.-info {
-		@apply bg-info text-info-foreground hover:bg-info/90 focus-visible:ring-info/50;
-	}
-	.c-button.-success {
-		@apply bg-success text-success-foreground hover:bg-success/90 focus-visible:ring-success/50;
-	}
-	.c-button.-warning {
-		@apply bg-warning text-warning-foreground hover:bg-warning/90 focus-visible:ring-warning/50;
-	}
-	.c-button.-error {
-		@apply bg-error text-error-foreground hover:bg-error/90 focus-visible:ring-error/50;
-	}
-	.c-button.-link {
-		@apply underline-offset-4 hover:text-primary hover:underline;
-	}
-	.c-button.-small {
-		@apply text-sm px-fluid-sm py-fluid-xs font-semibold [&_svg:not([class*='size-'])]:size-3.5;
-		height: utopia.clamp(28, 32);
-	}
-	.c-button.-large {
-		@apply px-fluid-sm py-fluid-xs text-base font-medium tracking-tight;
-		height: utopia.clamp(34, 44);
-	}
-	.c-button.-medium {
-		@apply px-fluid-sm py-fluid-xs font-semibold tracking-tight;
-		height: utopia.clamp(31, 38);
-	}
-	.c-button.-icon-small {
-		@apply [&_svg:not([class*='size-'])]:size-3.5;
-		width: utopia.clamp(28, 32);
-		height: utopia.clamp(28, 32);
-	}
-	.c-button.-icon {
-		@apply [&_svg:not([class*='size-'])]:size-4.5;
-		width: utopia.clamp(32, 38);
-		height: utopia.clamp(32, 38);
-	}
-	.c-button.-icon-large {
-		@apply [&_svg:not([class*='size-'])]:size-5;
-		width: utopia.clamp(34, 44);
-		height: utopia.clamp(34, 44);
+	@layer components {
+		.c-button {
+			@apply inline-flex items-center justify-center gap-3xs whitespace-nowrap;
+			@apply text-label font-mono leading-1! uppercase;
+			@apply [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-[1.25em];
+			@apply transition-colors focus-visible:ring-1 focus-visible:ring-outline focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50;
+			@apply aria-invalid:border-error aria-invalid:focus-visible:ring-error/40;
+		}
+		.c-button.-default {
+			@apply bg-primary text-primary-foreground shadow hover:bg-primary/90 focus-visible:ring-primary/50;
+		}
+		.c-button.-secondary {
+			@apply bg-secondary text-secondary-foreground shadow-sm hover:bg-accent focus-visible:ring-secondary/50;
+		}
+		.c-button.-outline {
+			@apply border hover:border-accent hover:bg-accent/75 hover:text-accent-foreground focus-visible:border-accent focus-visible:ring-accent/50;
+		}
+		.c-button.-ghost {
+			@apply hover:bg-accent hover:text-accent-foreground focus-visible:ring-accent/50;
+		}
+		.c-button.-info {
+			@apply bg-info text-info-foreground hover:bg-info/90 focus-visible:ring-info/50;
+		}
+		.c-button.-success {
+			@apply bg-success text-success-foreground hover:bg-success/90 focus-visible:ring-success/50;
+		}
+		.c-button.-warning {
+			@apply bg-warning text-warning-foreground hover:bg-warning/90 focus-visible:ring-warning/50;
+		}
+		.c-button.-error {
+			@apply bg-error text-error-foreground hover:bg-error/90 focus-visible:ring-error/50;
+		}
+		.c-button.-link {
+			@apply underline-offset-4 hover:text-primary hover:underline;
+		}
+		.c-button.-rounded {
+			@apply rounded-fluid-xs;
+		}
+		.c-button.-pill {
+			@apply rounded-full;
+		}
+		.c-button.-small {
+			@apply text-micro px-2xs py-3xs font-semibold;
+			height: utopia.clamp(28, 32);
+		}
+		.c-button.-large {
+			@apply px-sm py-2xs text-body-sm font-medium tracking-tight;
+			height: utopia.clamp(34, 44);
+		}
+		.c-button.-medium {
+			@apply px-xs py-2xs font-semibold tracking-tight;
+			height: utopia.clamp(31, 38);
+		}
+		.c-button.-icon-small {
+			width: utopia.clamp(28, 32);
+			height: utopia.clamp(28, 32);
+		}
+		.c-button.-icon {
+			width: utopia.clamp(32, 38);
+			height: utopia.clamp(32, 38);
+		}
+		.c-button.-icon-large {
+			width: utopia.clamp(34, 44);
+			height: utopia.clamp(34, 44);
+		}
 	}
 </style>

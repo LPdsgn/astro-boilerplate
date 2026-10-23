@@ -1,7 +1,18 @@
 /* Note on @utility coloring syntax https://github.com/tailwindlabs/tailwindcss-intellisense/issues/1146#issuecomment-2637758061 */
 /* Fix issue of tailwind container injecting max-w */
 @utility container {
-	@apply px-well mx-auto w-full max-w-none;
+	@apply mx-auto w-full max-w-none;
+}
+
+@utility o-grid {
+	display: grid;
+	grid-template-rows: repeat(var(--rows, 1), 1fr);
+	grid-template-columns: repeat(var(--columns, 12), minmax(0, 1fr));
+}
+
+.o-grid > * {
+	grid-column: auto/span var(--column-span, 12);
+	grid-column-start: var(--column-start, auto);
 }
 
 /* Content well: fluid margin below --container-grid, then grows to center the content
@@ -11,7 +22,7 @@
 }
 
 /* Force zero border radius */
-@layer utilities {
+/* @layer utilities {
 	[class*='rounded'],
 	.rounded,
 	.rounded-xs,
@@ -23,6 +34,24 @@
 	.rounded-3xl {
 		border-radius: 0 !important;
 	}
+} */
+
+/** Additional fonts utilities */
+@utility f-steady {
+	font-family: var(--font-steady);
+}
+
+/** Outlined text: no fill, 1px stroke in the foreground color */
+@utility text-outline {
+	color: transparent;
+	-webkit-text-fill-color: transparent;
+	-webkit-text-stroke: 1px var(--foreground);
+}
+@utility font-narrow {
+	font-stretch: 75%;
+}
+@utility font-wide {
+	font-stretch: 125%;
 }
 
 /** Additional alignment utilities */
@@ -41,14 +70,6 @@
 	margin-right: calc(-50vw + 50%);
 	max-width: calc(100% + calc(calc(-50vw + 50%) / 2));
 	width: auto;
-}
-
-/** Additional fonts utilities */
-@utility font-narrow {
-	font-stretch: 75%;
-}
-@utility font-wide {
-	font-stretch: 125%;
 }
 
 @utility items-firstbaseline {
