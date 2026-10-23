@@ -16,7 +16,7 @@ Wired in `src/lib/app.ts`: `encore.init({ adapter: swupAdapter(swup) })` after `
 | Call | Purpose |
 | --- | --- |
 | `encore.setup(key, (ctx, contextSafe) => …, { scope?, persist? })` | Run once per key inside a `gsap.context()`; returns `{ context, contextSafe }` |
-| `encore.cleanup(key)` | Revert one key (used by instances with their own lifecycle: `HoverImage`, `Lightbox`) |
+| `encore.cleanup(key)` | Revert one key (used by instances with their own lifecycle: `HoverImage`) |
 | `encore.refresh()` | `ScrollTrigger.refresh(true)` after a layout change |
 
 Removed from the old manager: `animate`, `timeline`, `scroll`, `register*`, `getStatus`, `debug`, `forceCleanupAll`, `refresh(keys)` and the global `ScrollTrigger.getAll()` sweep. Anything GSAP created inside a setup (or a `contextSafe` wrapper) is tracked; nothing created outside is.
@@ -51,7 +51,7 @@ const { contextSafe } = encore.setup(key, (ctx) => {
 const onEnter = contextSafe(() => gsap.to(el, { … }));
 ```
 
-Reference: `hover-image.ts` (per-instance key, `encore.cleanup(key)` in `destroy()`), `hyper-text/scramble.ts`, `Lightbox.ts`. A `gsap.quickTo` created inside the setup is callable from any handler without wrapping. Callbacks that need `this` (Draggable) cannot be wrapped: `contextSafe` rebinds `this` to the context.
+Reference: `hover-image.ts` (per-instance key, `encore.cleanup(key)` in `destroy()`), `hyper-text/scramble.ts`. A `gsap.quickTo` created inside the setup is callable from any handler without wrapping. Callbacks that need `this` (Draggable) cannot be wrapped: `contextSafe` rebinds `this` to the context.
 
 **D. `gsap.matchMedia()`.** The global `mm` is reverted on `page:before-swap` in `app.ts`; a setup may call `mm.add()` inside its callback (`mask-title.ts`, `marquee.ts`). Elements outside the Swup containers use a local `gsap.matchMedia()` reverted in the setup's teardown.
 

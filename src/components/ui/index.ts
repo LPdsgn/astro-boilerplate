@@ -20,7 +20,6 @@ export * from './hover-image';
 export { default as HyperText } from './hyper-text/HyperText.astro';
 export { default as Icon } from './icon/Icon.astro';
 export * from './image';
-export * from './lightbox-item';
 export * from './input';
 export * from './input-otp';
 export * from './item';

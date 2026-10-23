@@ -44,10 +44,10 @@ Astro project boilerplate built with **Astro 7** as a static site, deployed on *
 - `src/components/ui/` — Starwind design system components (Button, Dialog, Toast, Tabs, etc.) and project UI components
 - `src/components/layout/` — Header, Footer, Breadcrumb, CookieConsent
 - `src/components/analytics/` — Analytics providers (GA, GTM, Clarity, PostHog, Matomo)
-- `src/lib/classes/` — Transitions (Swup), Scroll (LocomotiveScroll), Lightbox
+- `src/lib/classes/` — Transitions (Swup), Scroll (LocomotiveScroll)
 - `src/lib/animations.ts` — GSAP + plugins, global `mm`, and `encore` (`gsap-encore`, see `docs/encore.md`): import animation tools from here
 - `src/lib/stores/` — Nanostores: screen, mouse, scroll, deviceStatus, localStorage
-- `src/lib/utils/` — Helpers for UI, devices, data, maths, string, query, lightbox
+- `src/lib/utils/` — Helpers for UI, devices, data, maths, string, query
 - `src/styles/` — CSS layer system: main.css imports tailwind.css, typography.css, utilities.css
 - `src/site.config.ts` — Global config (SITE, NAV_LINKS, SOCIAL_LINKS)
 
@@ -60,7 +60,7 @@ Astro project boilerplate built with **Astro 7** as a static site, deployed on *
 1. **`Transitions`** class initializes Swup with HeadPlugin, PreloadPlugin, ScriptsPlugin and dispatches three custom `document` events: `page:before-preparation` (visit starts), `page:before-swap` (before DOM swap), `page:load` (after DOM swap)
 2. **`encore`** (`gsap-encore`, initialized in `app.ts` with `swupAdapter`) reverts every non-persistent `gsap.context()` on `before('content:replace')`, refreshes ScrollTriggers on `content:replace`
 3. **`Scroll`** class wraps LocomotiveScroll — destroyed before content replace, re-initialized after
-4. **SwupScriptsPlugin is required** — Astro hoists and bundles `<script>` tags, so they only execute on initial browser load. On Swup navigations, the browser won't re-execute scripts inserted via innerHTML. ScriptsPlugin forces re-execution of scripts found in swapped HTML, which is essential for both page-specific and component scripts (e.g. sidebar, lightbox). Without it, scripts from pages never directly visited would never execute.
+4. **SwupScriptsPlugin is required** — Astro hoists and bundles `<script>` tags, so they only execute on initial browser load. On Swup navigations, the browser won't re-execute scripts inserted via innerHTML. ScriptsPlugin forces re-execution of scripts found in swapped HTML, which is essential for both page-specific and component scripts (e.g. sidebar, tabs). Without it, scripts from pages never directly visited would never execute.
 
 Page/component scripts use the `init(key, func)` helper from `@lib/classes/Transitions`, which handles first-load execution and `page:load` re-initialization with `AbortController`-based listener deduplication. **Do not use `init()` for persistent `encore.setup()` calls or scripts outside Swup containers** — see `.claude/rules/lifecycle.md` for caveats and the legacy manual pattern.
 
