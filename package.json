@@ -27,14 +27,18 @@
 		"dev:stop": "astro dev stop",
 		"start": "astro dev --host",
 		"check": "astro check",
-		"build": "astro check && astro build",
-		"build:debug": "astro check && astro build 2>&1 | grep -E \"\\[ERROR\\]|\\[vite\\]|Cannot apply unknown|Could not resolve|Can't resolve|Unable to locate|✓ Completed|Build failed|Build complete|ELIFECYCLE\"",
+		"build": "pnpm tokens:check && astro check && astro build",
+		"build:debug": "pnpm tokens:check && astro check && astro build 2>&1 | grep -E \"\\[ERROR\\]|\\[vite\\]|Cannot apply unknown|Could not resolve|Can't resolve|Unable to locate|✓ Completed|Build failed|Build complete|ELIFECYCLE\"",
 		"preview": "astro preview",
 		"astro": "astro",
 		"format": "prettier --write .",
 		"lint": "eslint .",
 		"lint:fix": "eslint . --fix",
-		"precommit": "pnpm lint:fix && pnpm format"
+		"precommit": "pnpm lint:fix && pnpm format",
+		"test": "vitest",
+		"test:run": "vitest run",
+		"tokens:build": "tsx scripts/tokens/extract.ts",
+		"tokens:check": "tsx scripts/tokens/extract.ts --check"
 	},
 	"dependencies": {
 		"@astrojs/check": "^0.9.12",
@@ -97,8 +101,10 @@
 		"prettier-plugin-tailwindcss": "^0.8.1",
 		"rollup-plugin-visualizer": "^7.1.1",
 		"sonda": "^0.14.0",
+		"tsx": "^4.23.15",
 		"typescript": "^6.0.3",
-		"typescript-eslint": "^8.72.0"
+		"typescript-eslint": "^8.72.0",
+		"vitest": "^5.0.5"
 	},
 	"browserslist": [
 		"defaults",
