@@ -5,7 +5,7 @@ import { tv } from 'tailwind-variants';
 type Props = HTMLAttributes<'div'>;
 
 export const itemActions = tv({
-	base: 'flex items-center gap-2',
+	base: ['c-itemActions'],
 });
 
 const { class: className, ...rest } = Astro.props;
@@ -14,3 +14,12 @@ const { class: className, ...rest } = Astro.props;
 <div class={itemActions({ class: className })} data-slot="item-actions" {...rest}>
 	<slot />
 </div>
+
+<style is:global lang="postcss">
+	@reference "#styles";
+	@layer components {
+		.c-itemActions {
+			@apply flex items-center gap-2;
+		}
+	}
+</style>

@@ -7,7 +7,7 @@ import { Separator } from '@/components/ui/separator';
 type Props = ComponentProps<typeof Separator>;
 
 export const itemSeparator = tv({
-	base: 'my-0',
+	base: ['c-itemSeparator'],
 });
 
 const { class: className, orientation = 'horizontal', ...rest } = Astro.props;
@@ -19,3 +19,12 @@ const { class: className, orientation = 'horizontal', ...rest } = Astro.props;
 	data-slot="item-separator"
 	{...rest}
 />
+
+<style is:global lang="postcss">
+	@reference "#styles";
+	@layer components {
+		.c-itemSeparator {
+			@apply my-0;
+		}
+	}
+</style>

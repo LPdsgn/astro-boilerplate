@@ -5,10 +5,7 @@ import { tv } from 'tailwind-variants';
 type Props = HTMLAttributes<'p'>;
 
 export const itemDescription = tv({
-	base: [
-		'line-clamp-2 leading-snug font-normal text-balance text-muted-foreground',
-		'[&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary',
-	],
+	base: ['c-itemDescription'],
 });
 
 const { class: className, ...rest } = Astro.props;
@@ -17,3 +14,16 @@ const { class: className, ...rest } = Astro.props;
 <p class={itemDescription({ class: className })} data-slot="item-description" {...rest}>
 	<slot />
 </p>
+
+<style is:global lang="postcss">
+	@reference "#styles";
+	@layer components {
+		.c-itemDescription {
+			@apply line-clamp-2 leading-snug font-normal text-balance text-muted-foreground;
+
+			> a {
+				@apply underline underline-offset-4 hover:text-primary;
+			}
+		}
+	}
+</style>

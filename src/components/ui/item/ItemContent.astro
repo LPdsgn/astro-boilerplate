@@ -5,7 +5,7 @@ import { tv } from 'tailwind-variants';
 type Props = HTMLAttributes<'div'>;
 
 export const itemContent = tv({
-	base: 'flex flex-1 flex-col gap-1.5 [&+[data-slot=item-content]]:flex-none',
+	base: ['c-itemContent'],
 });
 
 const { class: className, ...rest } = Astro.props;
@@ -14,3 +14,17 @@ const { class: className, ...rest } = Astro.props;
 <div class={itemContent({ class: className })} data-slot="item-content" {...rest}>
 	<slot />
 </div>
+
+<style is:global lang="postcss">
+	@reference "#styles";
+	@layer components {
+		.c-itemContent {
+			@apply flex flex-1 flex-col gap-1.5;
+
+			/* A second content column keeps its own width */
+			& + .c-itemContent {
+				@apply flex-none;
+			}
+		}
+	}
+</style>
