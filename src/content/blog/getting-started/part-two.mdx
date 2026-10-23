@@ -1,0 +1,31 @@
+---
+title: 'Part two: writing a series'
+description: 'The second part of the sample series: how parts are ordered, linked and rendered inside their parent post.'
+date: '2026-10-23'
+order: 1
+tags: ['astro']
+---
+
+This part lives in `getting-started/part-two.mdx` with `order: 1`. It renders inside the parent
+post and has its own address, `/blog/getting-started/part-two`.
+
+## Ordering parts
+
+Parts are sorted by `order`, then by date. The parent has no `order`. Headings are namespaced
+per part, so two parts can both have a "Summary" section without colliding in the table of
+contents.
+
+## Linking between parts
+
+A link to [the parent](/blog/getting-started) or to [this part](/blog/getting-started/part-two)
+from inside the series scrolls the page instead of reloading it.
+
+:::important
+Keep each part self-contained: readers can land on it directly from search or the feed.
+:::
+
+## Summary
+
+- One folder per series, `index.mdx` as parent
+- `order` on the parts
+- Tags on every file: the tag pages count them all
