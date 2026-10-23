@@ -7,12 +7,8 @@
 	}
 	&_page,
 	&_link {
-		@apply inline-flex items-center gap-1.5;
-		overflow: hidden;
-		display: -webkit-box;
-		-webkit-box-orient: vertical;
-		-webkit-line-clamp: 1;
-		line-clamp: 1;
+		/* One line, clipped: a -webkit-box clamp would stack an icon over its label */
+		@apply inline-flex min-w-0 items-center gap-1.5 overflow-hidden whitespace-nowrap;
 	}
 	&_link {
 		@apply transition-colors hover:text-foreground;
