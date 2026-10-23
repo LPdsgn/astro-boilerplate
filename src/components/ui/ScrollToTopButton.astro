@@ -6,13 +6,48 @@ import { Icon } from 'astro-icon/components';
 <Button
 	variant="secondary"
 	size="icon"
-	class="group fixed right-8 bottom-8 z-50 hidden"
+	round="pill"
+	class="group fixed right-margin bottom-(--header-pad-y) z-50"
 	id="scroll-to-top"
 	title="Scroll to top"
 	aria-label="Scroll to top"
+	data-active="false"
 >
 	<Icon
 		name="carbon:arrow-up"
 		class="mx-auto size-4 transition-all group-hover:-translate-y-0.5"
 	/>
 </Button>
+
+<style is:global lang="postcss">
+	@reference "#styles";
+	@layer components {
+		#scroll-to-top {
+			@apply transition-transform;
+
+			&[data-active="false"] {
+				@apply scale-0;
+			}
+		}
+	}
+</style>
+
+<script>
+	import { Scroll, init } from '@lib/classes';
+
+	let ac: AbortController | undefined;
+	document.addEventListener('page:before-swap', () => ac?.abort());
+
+	init('Scroll to top', () => {
+		ac?.abort();
+		ac = new AbortController();
+		const { signal } = ac;
+		const button = document.getElementById('scroll-to-top');
+		if (!button) return;
+
+		const update = () => (button.dataset.active = (scrollY > innerHeight * 0.5).toString());
+		addEventListener('scroll', update, { passive: true, signal });
+		button.addEventListener('click', () => Scroll.scrollTo(0), { signal });
+		update();
+	});
+</script>

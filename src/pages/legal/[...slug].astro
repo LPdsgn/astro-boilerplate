@@ -1,0 +1,54 @@
+---
+import { Container, Prose, PageTitle, Badge } from '@/components';
+import { Layout } from '@/layouts';
+import { formatDate } from '@/lib/utils';
+import { type CollectionEntry, getCollection, render } from 'astro:content';
+
+// Create the static pages for legal docs
+export async function getStaticPaths() {
+	const docs = await getCollection('legal');
+	return docs.map((doc: CollectionEntry<'legal'>) => ({
+		params: { slug: doc.id },
+		props: doc,
+	}));
+}
+
+// Get the requested legal doc
+type Props = CollectionEntry<'legal'>;
+const doc = Astro.props;
+const pageMeta = {
+	title: doc.data.title,
+	description: doc.data.title,
+};
+const { date } = doc.data;
+const { Content } = await render(doc);
+---
+
+<Layout seo={pageMeta}>
+	<PageTitle breadcrumbs={[{ label: 'Legal' }, { label: pageMeta.title }]}>
+		<div>
+			<h1 class="c-pageTitle_heading">{pageMeta.title}</h1>
+			<p class="legal-updated">
+				<Badge variant="secondary">Last updated</Badge>
+				<span>{formatDate(date)}</span>
+			</p>
+		</div>
+	</PageTitle>
+	<Container size="narrow">
+		<Prose class="text-body max-w-none font-normal">
+			<Content />
+		</Prose>
+	</Container>
+</Layout>
+
+<style is:global>
+	@reference "#styles";
+
+	.legal-updated {
+		@apply text-label mt-xs flex items-center gap-2xs;
+
+		> span:not(.c-badge) {
+			@apply font-mono text-muted-foreground uppercase;
+		}
+	}
+</style>

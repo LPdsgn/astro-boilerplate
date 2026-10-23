@@ -1,0 +1,21 @@
+---
+import { PageTitle } from '@/components/blocks';
+import { BlogCard } from '@/components/loop-item';
+import { Layout } from '@/layouts';
+import { getPosts } from '@/lib/utils/blog';
+
+const posts = await getPosts();
+
+const pageMeta = {
+	title: 'Journal',
+	description: 'Notes, opinions and experiments.',
+};
+---
+
+<Layout seo={pageMeta}>
+	<PageTitle title="Journal" spacing="middle" />
+
+	<ul class="c-blogList mb-3xl divide-y border-y">
+		{posts.map((post) => <BlogCard post={post} />)}
+	</ul>
+</Layout>

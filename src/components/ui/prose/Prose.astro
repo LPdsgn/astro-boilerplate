@@ -2,16 +2,24 @@
 import type { HTMLAttributes } from 'astro/types';
 import { tv } from 'tailwind-variants';
 
+import './prose.css';
+import './prose-math.css';
+
 export const prose = tv({
 	base: 'sw-prose max-w-[65ch]',
 });
 
-type Props = HTMLAttributes<'div'>;
+interface Props extends HTMLAttributes<'div'> {
+	as?: 'div' | 'header' | 'footer' | 'section' | 'article' | 'aside' | 'main';
+	theme?: string;
+}
 
-const { class: className, ...rest } = Astro.props;
+const { class: className, as: HTMLelement = 'div', ...rest } = Astro.props;
 ---
 
-<div class:list={[prose({ class: className })]} data-slot="prose" {...rest}><slot /></div>
+<HTMLelement class:list={[prose({ class: className })]} data-slot="prose" {...rest}
+	><slot /></HTMLelement
+>
 
 <style is:global>
 	/* ==========================================================================
@@ -21,13 +29,13 @@ const { class: className, ...rest } = Astro.props;
 
 	/* --------------------------------------------------------------------------
    * CSS Custom Properties
-   * 
+   *
    * Sizing is em-based, so it scales with the inherited font-size.
    * Control overall size via Tailwind text utilities: text-sm md:text-base
-   * 
+   *
    * Override specific values using CSS variables (supports responsive):
    *   class="[--prose-spacing:1.5em] md:[--prose-spacing:1.25em]"
-   * 
+   *
    * Or set on a parent element:
    *   <div style="--prose-h1-size: 3em;"><Prose>...</Prose></div>
    * -------------------------------------------------------------------------- */
@@ -206,6 +214,7 @@ const { class: className, ...rest } = Astro.props;
 	.sw-prose p:not(:where(.not-sw-prose *)) {
 		margin-top: var(--sw-prose-spacing);
 		margin-bottom: var(--sw-prose-spacing);
+		font-weight: normal;
 	}
 
 	/* --------------------------------------------------------------------------

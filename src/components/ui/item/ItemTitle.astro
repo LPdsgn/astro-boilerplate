@@ -5,7 +5,7 @@ import { tv } from 'tailwind-variants';
 type Props = HTMLAttributes<'div'>;
 
 export const itemTitle = tv({
-	base: 'flex w-fit items-center gap-2 leading-snug font-medium',
+	base: ['c-itemTitle'],
 });
 
 const { class: className, ...rest } = Astro.props;
@@ -14,3 +14,12 @@ const { class: className, ...rest } = Astro.props;
 <div class={itemTitle({ class: className })} data-slot="item-title" {...rest}>
 	<slot />
 </div>
+
+<style is:global lang="postcss">
+	@reference "#styles";
+	@layer components {
+		.c-itemTitle {
+			@apply flex w-fit items-center gap-2 leading-snug font-medium;
+		}
+	}
+</style>

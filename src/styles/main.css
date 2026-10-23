@@ -1,5 +1,5 @@
 /* Vendors */
-@import '../../node_modules/locomotive-scroll/dist/locomotive-scroll';
+@import '../../node_modules/locomotive-scroll/dist/locomotive-scroll.css';
 
 /* tailwind */
 @import './tailwind.css';
@@ -8,7 +8,29 @@
 @import './utilities.css';
 @import './typography.css';
 
-/* Global styles */
+/* GLOBAL STYLES */
+
+/* Variable Font Supports */
+@supports (font-variation-settings: normal) {
+	/* Use variable font if supported */
+	:root,
+	.font-sans,
+	.f-sans,
+	.f-steady {
+		font-family: var(--font-sans);
+	}
+	.font-mono,
+	.f-mono {
+		font-family: var(--font-mono);
+	}
+}
+
+/* Vertical padding shared by the page title and the scroll-to-top button (the header's own
+   padding on the site). Outside theme.css on purpose: the token pipeline doesn't track it */
+:root {
+	--header-pad-y: var(--spacing-sm-md);
+}
+
 *,
 ::before,
 ::after {
@@ -27,14 +49,14 @@
 }
 
 html {
-	@apply bg-background font-sans font-medium text-foreground antialiased scheme-light dark:scheme-dark;
+	@apply bg-background font-steady font-medium text-foreground antialiased scheme-light dark:scheme-dark;
 
 	&.theme-dark {
 		color-scheme: dark;
 	}
 
 	/* Scrollbars styles */
-	scrollbar-color: var(--scrollbar) transparent;
+	scrollbar-color: var(--color-accent) transparent;
 	scrollbar-width: thin;
 	scrollbar-gutter: stable;
 
@@ -73,38 +95,53 @@ main,
 	@apply overflow-x-clip;
 }
 
-/* Base transition per elementi semantici comuni */
-html,
-body,
-section,
-div,
-header,
-footer,
-main,
-nav,
-article,
-aside,
-a,
-button,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p,
-span {
-	transition-property: color, background-color, border-color, text-decoration-color;
-	transition-timing-function: var(--theme-transition-easing);
-	transition-duration: var(--theme-transition-duration);
+main#swup {
+	@apply relative z-above min-h-screen bg-background shadow-xl;
 }
 
-/* SVG specifico (per icone) */
-svg,
-svg path {
-	transition-property: fill, stroke;
-	transition-timing-function: var(--theme-transition-easing);
-	transition-duration: var(--theme-transition-duration);
+/* <Layout background="dot">: on main, the body is covered by its background */
+.bg-dot main#swup {
+	background-image: radial-gradient(
+		color-mix(in oklab, var(--foreground) 18%, transparent) 1px,
+		transparent 1px
+	);
+	background-size: 1.5rem 1.5rem;
+}
+
+@layer base {
+	/* Base transition per elementi semantici comuni */
+	html,
+	body,
+	section,
+	div,
+	header,
+	footer,
+	main,
+	nav,
+	article,
+	aside,
+	a,
+	button,
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6,
+	p,
+	span {
+		transition-property: color, background-color, border-color, text-decoration-color;
+		transition-timing-function: var(--theme-transition-easing);
+		transition-duration: var(--theme-transition-duration);
+	}
+
+	/* SVG specifico (per icone) */
+	svg,
+	svg path {
+		transition-property: fill, stroke;
+		transition-timing-function: var(--theme-transition-easing);
+		transition-duration: var(--theme-transition-duration);
+	}
 }
 
 /* Esclusioni (elementi che non devono transizionare) */
@@ -118,7 +155,7 @@ canvas {
 }
 
 /* Container swup del footer: deve esistere su ogni pagina perché swup non abortisca
-   la visita ("Container mismatch"), ma non deve generare un box */
+   la visita, ma non deve generare un box */
 #swup-footer {
 	display: contents;
 }

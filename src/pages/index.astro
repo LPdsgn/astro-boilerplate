@@ -1,45 +1,188 @@
 ---
-import { Button } from '@/components';
-import Layout from '@layouts/Layout.astro';
+/** Design system showcase: tokens, type scale, buttons and badges, in both themes. */
+import { Badge, Button, Container, PageTitle, ThemeToggle } from '@/components';
+import { Layout } from '@/layouts';
+import { Icon } from 'astro-icon/components';
+
+const pageMeta = {
+	title: 'Design system',
+	description: 'Tokens, type scale and components of the boilerplate.',
+};
+
+const variants = ['default', 'error', 'outline', 'secondary', 'ghost', 'link'] as const;
+const spacing = ['3xs', '2xs', 'xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl'];
+const headings = [
+	'heading-display',
+	'heading-2xl',
+	'heading-xl',
+	'heading-lg',
+	'heading-md',
+	'heading-sm',
+];
+const texts = [
+	'text-lead',
+	'text-body-lg',
+	'text-body',
+	'text-body-sm',
+	'text-caption',
+	'text-label',
+	'text-micro',
+];
+const sample = 'The quick brown fox jumps over the lazy dog';
 ---
 
-<Layout title="Welcome to the Locomotive Astro Boilerplate.">
-	<header class="container">
-		<h1 class="heading-lg">Welcome to the Locomotive Astro Boilerplate.</h1>
-	</header>
+<Layout seo={pageMeta} background="dot">
+	<PageTitle
+		title={pageMeta.title}
+		breadcrumbs={[
+			{ label: 'Boilerplate', icon: 'carbon:settings-check' },
+			{ label: 'Design system' },
+		]}
+	/>
 
-	<div class="container mt-fluid-xl">
-		<div class="grid grid-cols-12 gap-gutter">
-			<div class="text-body col-span-full md:col-span-4">
-				<p>
-					Lorem, ipsum dolor sit amet consectetur adipisicing elit. Itaque quam, nam omnis sunt
-					laudantium tenetur obcaecati? Inventore eos vitae id repellat cum possimus voluptates
-					nam voluptatum, assumenda, atque nesciunt debitis?
-				</p>
-
-				<Button href="/about" class="mt-fluid-sm"> Learn More </Button>
-			</div>
-
-			<div class="col-span-full text-body-sm md:col-span-4">
-				<p>
-					Lorem, ipsum dolor sit amet consectetur adipisicing elit. Itaque quam, nam omnis sunt
-					laudantium tenetur obcaecati? Inventore eos vitae id repellat cum possimus voluptates
-					nam voluptatum, assumenda, atque nesciunt debitis?
-				</p>
-				<Button href="https://google.ca" target="_blank" class="mt-fluid-sm"> Visit Us </Button>
-			</div>
-
-			<div class="col-span-full text-body-sm md:col-span-4">
-				<p>
-					Lorem, ipsum dolor sit amet consectetur adipisicing elit. Itaque quam, nam omnis sunt
-					laudantium tenetur obcaecati? Inventore eos vitae id repellat cum possimus voluptates
-					nam voluptatum, assumenda, atque nesciunt debitis?
-				</p>
-			</div>
+	<Container size="narrow" class="border-t">
+		<div class="flex flex-wrap items-center justify-between gap-sm">
+			<p class="text-body text-muted-foreground">
+				Fluid tokens (Utopia, 360–1536px), semantic colors with a dark and a light theme, Inter
+				and JetBrains Mono. Toggle the theme to check both.
+			</p>
+			<ThemeToggle />
 		</div>
+	</Container>
 
-		<!-- Placeholder -->
-		<div class="mt-fluid-xl h-[50vh] w-full bg-black opacity-50"></div>
-		<div class="bg-grey mt-fluid-xl h-[50vh] w-full"></div>
+	<Container size="narrow" class="space-y-sm border-t">
+		<h2 class="heading-sm">Colors</h2>
+		<ul class="grid grid-cols-2 gap-xs sm:grid-cols-3 md:grid-cols-4">
+			{
+				[
+					'background',
+					'card',
+					'popover',
+					'primary',
+					'secondary',
+					'muted',
+					'accent',
+					'border',
+				].map((name) => (
+					<li class="flex items-center gap-2xs">
+						<span class:list={['size-10 shrink-0 rounded-fluid border', `bg-${name}`]} />
+						<code class="text-label font-mono">--{name}</code>
+					</li>
+				))
+			}
+		</ul>
+	</Container>
+
+	<Container size="narrow" class="space-y-sm border-t">
+		<h2 class="heading-sm">Spacing</h2>
+		<ul class="space-y-3xs">
+			{
+				spacing.map((step) => (
+					<li class="flex items-center gap-xs">
+						<code class="text-label w-10 font-mono">{step}</code>
+						<span class:list={['h-3 bg-primary', `w-${step}`]} />
+					</li>
+				))
+			}
+		</ul>
+	</Container>
+
+	<Container size="narrow" class="space-y-sm border-t">
+		<h2 class="heading-sm">Type scale</h2>
+		<ul class="space-y-xs">
+			{
+				headings.map((utility) => (
+					<li>
+						<code class="text-label font-mono text-muted-foreground">{utility}</code>
+						<p class={utility}>{sample}</p>
+					</li>
+				))
+			}
+			{
+				texts.map((utility) => (
+					<li>
+						<code class="text-label font-mono text-muted-foreground">{utility}</code>
+						<p class={utility}>{sample}</p>
+					</li>
+				))
+			}
+		</ul>
+	</Container>
+
+	<Container size="narrow" class="space-y-sm border-t">
+		<h2 class="heading-sm">Buttons</h2>
+		{
+			variants.map((variant) => (
+				<div class="flex flex-wrap items-center gap-xs">
+					<Button variant={variant} size="sm">
+						Small {variant}
+					</Button>
+					<Button variant={variant} size="md">
+						Default {variant}
+					</Button>
+					<Button variant={variant} size="lg">
+						Large {variant}
+					</Button>
+					<Button variant={variant} size="icon" aria-label="Icon button">
+						<Icon name="carbon:checkmark" />
+					</Button>
+					<Button variant={variant} disabled>
+						Disabled
+					</Button>
+				</div>
+			))
+		}
+		<div class="flex flex-wrap items-center gap-xs">
+			<Button variant="default">
+				<Icon name="carbon:arrow-right" />
+				Next
+			</Button>
+			<Button variant="outline">
+				<Icon name="carbon:update-now" />
+				Refresh
+			</Button>
+			<Button variant="secondary">
+				Save
+				<Icon name="carbon:save" />
+			</Button>
+		</div>
+	</Container>
+
+	<Container size="narrow" class="space-y-sm border-t">
+		<h2 class="heading-sm">Badges</h2>
+		<div class="flex flex-wrap items-center gap-2xs">
+			<Badge variant="default">Default</Badge>
+			<Badge variant="secondary">Secondary</Badge>
+			<Badge variant="error">Error</Badge>
+			<Badge variant="outline">Outline</Badge>
+			<Badge variant="secondary" href="/tags">#link</Badge>
+		</div>
+	</Container>
+
+	<Container size="narrow" class="border-t">
+		<h2 class="heading-sm">Prose</h2>
+	</Container>
+	<div class="flex flex-wrap md:flex-nowrap">
+		<Container size="narrow" class="prose bg-background">
+			<h1>Heading one</h1>
+			<h2>Heading two</h2>
+			<h3>Heading three</h3>
+			<p>
+				Body text with a <a href="/blog">link to the journal</a>, some <code>inline code</code> and
+				<strong>bold</strong> words. The journal pages show the full prose styles: callouts, code
+				blocks and math.
+			</p>
+			<blockquote>A quote, set in the same scale.</blockquote>
+		</Container>
+		<Container size="narrow" class="theme-light prose bg-background text-foreground">
+			<h1>Heading one</h1>
+			<h2>Heading two</h2>
+			<h3>Heading three</h3>
+			<p>
+				Body text with a <a href="/blog">link to the journal</a>, some <code>inline code</code> and
+				<strong>bold</strong> words. The same block in the light theme.
+			</p>
+			<blockquote>A quote, set in the same scale.</blockquote>
+		</Container>
 	</div>
 </Layout>

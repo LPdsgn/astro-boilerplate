@@ -4,9 +4,26 @@
 	"prConcurrentLimit": 3,
 	"minimumReleaseAge": "3 days",
 	"packageRules": [
-		{ "matchFileNames": ["pnpm-workspace.yaml"], "enabled": false },
-		{ "matchPackageNames": ["typescript"], "allowedVersions": "<7" },
-		{ "matchUpdateTypes": ["minor", "patch"], "groupName": "non-major dependencies" },
-		{ "matchUpdateTypes": ["major"], "dependencyDashboardApproval": true }
+		{
+			"matchFileNames": ["pnpm-workspace.yaml"],
+			"enabled": false
+		},
+		{
+			"matchPackageNames": ["typescript"],
+			"allowedVersions": "<7"
+		},
+		{
+			"description": "stessa minor di expressive-code in satteri-expressive-code (^0.42)",
+			"matchPackageNames": ["@expressive-code/**"],
+			"allowedVersions": "<0.43"
+		},
+		{
+			"matchUpdateTypes": ["minor", "patch"],
+			"groupName": "non-major dependencies"
+		},
+		{
+			"matchUpdateTypes": ["major"],
+			"dependencyDashboardApproval": true
+		}
 	]
 }

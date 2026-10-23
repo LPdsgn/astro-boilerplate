@@ -1,4 +1,5 @@
 import { Scroll, Transitions, init } from '@lib/classes';
+import { normalizePath } from '@lib/utils';
 import { encore, mm } from '@lib/animations';
 import { swupAdapter } from 'gsap-encore';
 
@@ -41,8 +42,16 @@ if (transitions.swup) {
 		return false;
 	});
 
-	// Cross-page navigation: scroll to top (immediate, no animation flash)
+	// Cross-page navigation: scroll to top (immediate, no animation flash).
+	// Series URLs (blog/<series>/<part>) render inside the parent: land on the article instead.
 	transitions.swup.hooks.replace('scroll:top', () => {
+		const part = document.querySelector<HTMLElement>(
+			`article[data-embedded][data-url="${normalizePath(location.pathname)}"]`
+		);
+		if (part && !location.hash) {
+			Scroll.scrollTo(part, { immediate: true });
+			return true;
+		}
 		window.scrollTo(0, 0);
 		return true;
 	});

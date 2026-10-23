@@ -1,0 +1,71 @@
+---
+title: 'Getting started with the journal'
+description: 'What a post can do here: callouts, code blocks with line numbers, inline code, math, series and tags.'
+date: '2026-10-23'
+cover: '../../../assets/images/printer.jpg'
+coverAlt: 'A printer, the sample cover of this post'
+tags: ['astro', 'design-system']
+---
+
+This is the parent post of a short series. Everything below is Markdown rendered through
+the Sätteri pipeline configured in `astro.config.ts`: directives for callouts, Expressive Code for
+code blocks, Temml for math. The second part of the series renders right after this one on the
+same page, and has its own URL.
+
+## Callouts
+
+Callouts are [directives](https://talk.commonmark.org/t/generic-directives-plugins-syntax/444):
+`:::note`, `:::tip`, `:::warning`, `:::caution` and `:::important`, with an optional label and a
+`{closed}` flag. They become native `<details>` elements, so they need no JavaScript.
+
+:::note
+A plain note, open by default.
+:::
+
+:::tip[Keep the label short]{closed}
+A tip that starts collapsed: the reader opens it on demand.
+:::
+
+:::warning
+Something to double check before shipping.
+:::
+
+## Code blocks
+
+Fenced blocks get line numbers. The `title`, line range and `collapse` meta below are ready for
+when the Sätteri pipeline passes them to Expressive Code (it doesn't yet).
+
+```ts title="src/lib/encore.ts" {3-4} showLineNumbers collapse={7-11}
+import { encore } from 'gsap-encore';
+
+const { contextSafe } = encore.setup('cards', (ctx) => {
+	ctx.add(() => listen());
+});
+
+const enter = contextSafe((card: HTMLElement) =>
+	gsap.to(card, {
+		scale: 1.05,
+	})
+);
+```
+
+Inline code can carry a language too: `const total = items.length{:ts}` or a scope class like
+`--spacing-md{:.token}`.
+
+## Math
+
+Inline math such as $E = mc^2$ sits in the paragraph; display math gets its own block:
+
+$$
+\int_0^1 x^2 \, dx = \frac{1}{3}
+$$
+
+## Series and tags
+
+A series is a folder: this file is `index.md`, the parts are siblings ordered by `order`. The
+tags in the frontmatter feed the `/tags` pages, and the parent post is the only entry in the RSS feed.
+
+### What comes next
+
+Part two continues below. Scrolling into it updates the URL and the breadcrumb; a direct visit
+to its URL lands on it.

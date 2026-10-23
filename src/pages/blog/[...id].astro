@@ -1,0 +1,208 @@
+---
+/**
+ * Post page. A series (blog/<series>/index.md + <part>.md files) is one continuous
+ * document rendered for every member URL; SeriesReader keeps the URL in sync with
+ * the article being read, TableOfContents outlines the whole chain.
+ */
+import { Badge, Container, Image, Prose } from '@/components';
+import { PageTitle, SeriesReader, TableOfContents } from '@/components/blocks';
+import { PostNavigation } from '@/components/loop-item';
+import { ScrollToTop } from '@/components/ui';
+import { Layout } from '@/layouts';
+import { getContentSEO } from '@/lib/seo';
+import { formatDate, isSubpost, subpostSlug } from '@/lib/utils';
+import { getPosts, getSubposts, type Post } from '@/lib/utils/blog';
+import { SITE } from '@/site.config';
+import type { MarkdownHeading } from 'astro';
+import { render } from 'astro:content';
+
+export async function getStaticPaths() {
+	const posts = await getPosts();
+	const series = await getSubposts();
+	return posts.flatMap((parent, i) => {
+		const chain = [parent, ...(series.get(parent.id) ?? [])];
+		return chain.map((post) => ({
+			params: { id: post.id },
+			props: { post, chain, prev: posts[i + 1], next: posts[i - 1] },
+		}));
+	});
+}
+
+interface Props {
+	post: Post;
+	chain: Post[];
+	prev?: Post;
+	next?: Post;
+}
+
+const { post, chain, prev, next } = Astro.props;
+const [parent] = chain;
+
+const rendered = await Promise.all(
+	chain.map(async (entry) => ({ entry, ...(await render(entry)) }))
+);
+
+const sections = rendered.map(({ entry, headings }, i) => ({
+	id: i === 0 ? undefined : subpostSlug(entry.id),
+	label: entry.data.title,
+	open: entry.id === post.id,
+	headings: headings.filter(
+		({ depth, text }: MarkdownHeading) => depth >= 2 && depth <= 4 && text.trim()
+	),
+}));
+const hasToc = sections.length > 1 || sections.some(({ headings }) => headings.length > 0);
+
+const seo = {
+	...getContentSEO(post),
+	author: SITE.default.author,
+	// every part of a series shares the parent's document
+	canonical: isSubpost(post.id) ? new URL(`/blog/${parent.id}`, Astro.site).href : undefined,
+};
+
+const toNav = (entry?: Post) =>
+	entry && { id: entry.id, title: entry.data.title, thumbnail: entry.data.cover };
+---
+
+<Layout seo={seo}>
+	<PageTitle
+		breadcrumbs={[{ label: 'Journal', href: '/blog' }, { label: parent.data.title }]}
+		spacing="middle"
+		pb="pb-0"
+	/>
+
+	{
+		rendered.map(({ entry, Content }, i) => (
+			<Container
+				as="article"
+				class="c-post"
+				id={i === 0 ? undefined : subpostSlug(entry.id)}
+				data-url={`/blog/${entry.id}`}
+				data-title={`${entry.data.title} | ${SITE.default.title}`}
+				data-embedded={i > 0 || undefined}
+			>
+				<header class="c-post_header">
+					<h1 class="c-post_title">{entry.data.title}</h1>
+					<p class="c-post_meta">
+						{/* <a href={SITE.author.href}>{SITE.author.name}</a>
+							<span aria-hidden="true">·</span> */}
+						{entry.data.tags && (
+							<span class="c-post_tags">
+								{entry.data.tags.map((tag) => (
+									<Badge variant="secondary" size="sm" href={`/tags/${tag}`}>
+										#{tag}
+									</Badge>
+								))}
+							</span>
+						)}
+						<time datetime={entry.data.date.toISOString()}>
+							{formatDate(entry.data.date)}
+						</time>
+					</p>
+					<p class="c-post_description">{entry.data.description}</p>
+				</header>
+				{entry.data.cover && (
+					<Image
+						tag="div"
+						class="c-post_cover"
+						src={entry.data.cover}
+						alt={entry.data.coverAlt ?? entry.data.title}
+						width={1200}
+						height={630}
+						loading={entry.id === post.id ? 'eager' : 'lazy'}
+						fetchpriority={entry.id === post.id ? 'high' : undefined}
+						pixelated
+					/>
+				)}
+				{hasToc && (
+					<TableOfContents title={parent.data.title} sections={sections} class="c-post_toc" />
+				)}
+				<Prose class="c-post_content max-w-[50rem]" as="main">
+					<Content />
+				</Prose>
+			</Container>
+		))
+	}
+
+	<PostNavigation prevPost={toNav(prev)} nextPost={toNav(next)} collectionPath="blog" />
+	{chain.length > 1 && <SeriesReader />}
+	<ScrollToTop />
+</Layout>
+
+<style is:global>
+	@reference "#styles";
+
+	.c-post {
+		@apply flex flex-col gap-md;
+		@media (width >= theme(--breakpoint-lg)) {
+			display: grid;
+			grid-template-columns: minmax(0, 18rem) minmax(65ch, 1fr) minmax(0, 18rem);
+			align-items: flex-start;
+		}
+
+		&_toc {
+			@apply sticky max-lg:mb-md;
+
+			@media (width >= theme(--breakpoint-lg)) {
+				top: calc(var(--header-pad-y) * 2 + 8rem);
+			}
+			@media (width < theme(--breakpoint-lg)) {
+				@apply top-0 z-10 -mx-margin -my-(--header-pad-y) bg-background px-margin py-(--header-pad-y);
+				.c-toc_bar,
+				.c-toc_list {
+					margin-right: calc((var(--spacing, 0.25rem /* 4px */) * 20) + var(--spacing-gutter));
+				}
+			}
+		}
+		&[data-embedded] {
+			@apply mt-xl border-t-2 pt-xl;
+			scroll-margin-block-start: var(--spacing-md);
+		}
+		&_header {
+			@apply col-span-full flex flex-col gap-2xs;
+		}
+		&_title {
+			@apply heading-md lg:heading-lg m-0 leading-tight font-medium tracking-tight;
+		}
+		&[data-embedded] &_title {
+			@apply heading-md;
+		}
+		&_meta {
+			@apply text-label flex flex-wrap items-center gap-2xs font-mono text-muted-foreground uppercase;
+
+			a:hover {
+				@apply text-foreground;
+			}
+		}
+		&_tags {
+			@apply flex flex-wrap gap-1.5;
+
+			.c-badge {
+				@apply normal-case;
+			}
+		}
+		&_description {
+			@apply text-body-lg mt-2xs text-muted-foreground;
+		}
+		&_cover {
+			@apply col-span-2 overflow-hidden rounded-fluid;
+		}
+		&_content {
+			@apply mx-auto text-base font-normal lg:col-start-2;
+		}
+
+		/* Astro embed stuff */
+		.link-preview {
+			--link-preview-width: 100%;
+			--link-preview-corners: var(--radius-xs);
+			--link-preview-padding-inline: var(--spacing-xs);
+			--link-preview-padding-block: var(--spacing-xs);
+			@apply bg-secondary;
+		}
+		lite-youtube {
+			@apply w-full max-w-full rounded-xs;
+		}
+		/* figure {
+			@apply w-full max-w-full;
+		} */
+	}
+</style>

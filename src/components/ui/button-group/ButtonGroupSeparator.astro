@@ -12,9 +12,7 @@ type Props = HTMLAttributes<'div'> & {
 	orientation?: 'horizontal' | 'vertical';
 };
 
-export const buttonGroupSeparator = tv({
-	base: ['relative m-0! self-stretch bg-input data-[orientation=vertical]:h-auto'],
-});
+export const buttonGroupSeparator = tv({ base: ['c-buttonGroup_separator'] });
 
 const { class: className, orientation = 'vertical', ...rest } = Astro.props;
 ---
@@ -25,3 +23,12 @@ const { class: className, orientation = 'vertical', ...rest } = Astro.props;
 	class={buttonGroupSeparator({ class: className })}
 	{...rest}
 />
+
+<style is:global lang="postcss">
+	@reference "#styles";
+	@layer components {
+		.c-buttonGroup_separator {
+			@apply relative m-0! self-stretch bg-border data-[orientation=vertical]:h-auto;
+		}
+	}
+</style>

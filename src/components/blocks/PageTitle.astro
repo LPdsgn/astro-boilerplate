@@ -1,0 +1,40 @@
+---
+import { Breadcrumbs, Container, type BreadcrumbItemData } from '@/components';
+
+type Tag = 'div' | 'header' | 'section';
+
+interface Props {
+	title?: string;
+	breadcrumbs?: BreadcrumbItemData[];
+	spacing?: 'bottom' | 'middle';
+	pb?: string;
+	class?: string;
+	tag?: Tag;
+}
+
+const {
+	title,
+	breadcrumbs = [{ label: title || 'Untitled' }],
+	spacing = 'bottom',
+	pb = spacing === 'bottom' ? 'pb-xl' : 'pb-(--header-pad-y)',
+	class: className,
+	tag = 'header',
+} = Astro.props;
+---
+
+<Container
+	as={tag}
+	flow="col"
+	class:list={['c-pageTitle', spacing === 'middle' ? 'gap-xl' : '', pb, className]}
+>
+	<Breadcrumbs items={breadcrumbs} />
+	{title ? <h1 class="c-pageTitle_heading">{title}</h1> : <slot />}
+</Container>
+
+<style is:global>
+	@reference "#styles";
+
+	.c-pageTitle_heading {
+		@apply heading-xl m-0 pt-(--header-pad-y) leading-none font-medium;
+	}
+</style>

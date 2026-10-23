@@ -25,10 +25,10 @@ Vercel's file tracer (`@vercel/nft`) statically follows `fs` calls. If a path re
 ```ts
 // ❌ bundles all of src/assets into the function
 const assetsDir = join(process.cwd(), 'src', 'assets');
-readFile(join(assetsDir, 'fonts/Innovator-Grotesk-VF.woff'));
+readFile(join(assetsDir, 'fonts/Inter-SemiBold.ttf'));
 
 // ✅ traces only this file
-readFile(join(process.cwd(), 'src/assets/fonts/Innovator-Grotesk-VF.woff'));
+readFile(join(process.cwd(), 'src/assets/fonts/Inter-SemiBold.ttf'));
 ```
 
 - Write the full file path as a literal at the call site. Don't pass a base directory to a helper.

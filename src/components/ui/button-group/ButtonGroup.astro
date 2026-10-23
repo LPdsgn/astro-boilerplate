@@ -1,51 +1,18 @@
 ---
 import type { HTMLAttributes } from 'astro/types';
-import { tv } from 'tailwind-variants';
+import { tv, type VariantProps } from 'tailwind-variants';
 
-type Props = HTMLAttributes<'div'> & {
-	/**
-	 * The orientation of the button group.
-	 * @default "horizontal"
-	 */
-	orientation?: 'horizontal' | 'vertical';
-};
+type Props = HTMLAttributes<'div'> & VariantProps<typeof buttonGroup>;
 
 export const buttonGroup = tv({
-	base: [
-		'flex w-fit items-stretch',
-		'[&>*]:focus-visible:relative [&>*]:focus-visible:z-10',
-		"has-[>[data-slot=button-group]]:gap-2 [&>[data-slot=select-trigger]:not([class*='w-'])]:w-fit [&>input]:flex-1",
-	],
+	base: ['c-buttonGroup'],
 	variants: {
 		orientation: {
-			horizontal: [
-				'[&>*:not(:first-child)]:rounded-l-none',
-				'[&>*:not(:first-child)]:border-l-0',
-				'[&>*:not(:last-child):not(:has(+_script:last-child))]:rounded-r-none',
-				'[&>*:not(:first-child)_>_[data-as-child]_>_*]:rounded-l-none',
-				'[&>*:not(:first-child)_>_[data-as-child]_>_*]:border-l-0',
-				'[&>*:not(:last-child):not(:has(+_script:last-child))_>_[data-as-child]_>_*]:rounded-r-none',
-				'[&>*:not(:first-child)_>_[data-slot=select-trigger]]:rounded-l-none',
-				'[&>*:not(:first-child)_>_[data-slot=select-trigger]]:border-l-0',
-				'[&>*:not(:last-child):not(:has(+_script:last-child))_>_[data-slot=select-trigger]]:rounded-r-none',
-			],
-			vertical: [
-				'flex-col',
-				'[&>*:not(:first-child)]:rounded-t-none',
-				'[&>*:not(:first-child)]:border-t-0',
-				'[&>*:not(:last-child):not(:has(+_script:last-child))]:rounded-b-none',
-				'[&>*:not(:first-child)_>_[data-as-child]_>_*]:rounded-t-none',
-				'[&>*:not(:first-child)_>_[data-as-child]_>_*]:border-t-0',
-				'[&>*:not(:last-child):not(:has(+_script:last-child))_>_[data-as-child]_>_*]:rounded-b-none',
-				'[&>*:not(:first-child)_>_[data-slot=select-trigger]]:rounded-t-none',
-				'[&>*:not(:first-child)_>_[data-slot=select-trigger]]:border-t-0',
-				'[&>*:not(:last-child):not(:has(+_script:last-child))_>_[data-slot=select-trigger]]:rounded-b-none',
-			],
+			horizontal: '-horizontal',
+			vertical: '-vertical',
 		},
 	},
-	defaultVariants: {
-		orientation: 'horizontal',
-	},
+	defaultVariants: { orientation: 'horizontal' },
 });
 
 const { class: className, orientation = 'horizontal', ...rest } = Astro.props;
@@ -60,3 +27,41 @@ const { class: className, orientation = 'horizontal', ...rest } = Astro.props;
 >
 	<slot />
 </div>
+
+<style is:global lang="postcss">
+	@reference "#styles";
+	@layer components {
+		/* Joins Button (.c-button) and ButtonGroupText (.c-buttonGroupText) items: the shared
+		   edges lose radius and border. Adjacent-sibling selectors ignore the <script> that
+		   Astro renders in place after the last item. */
+		.c-buttonGroup {
+			@apply flex w-fit items-stretch;
+
+			> * {
+				@apply focus-visible:relative focus-visible:z-10;
+			}
+			/* Nested groups */
+			&:has(> .c-buttonGroup) {
+				@apply gap-2xs;
+			}
+		}
+		.c-buttonGroup.-horizontal {
+			> :is(.c-button, .c-buttonGroupText) + :is(.c-button, .c-buttonGroupText) {
+				@apply rounded-l-none border-l-0;
+			}
+			> :is(.c-button, .c-buttonGroupText):has(+ :is(.c-button, .c-buttonGroupText)) {
+				@apply rounded-r-none;
+			}
+		}
+		.c-buttonGroup.-vertical {
+			@apply flex-col;
+
+			> :is(.c-button, .c-buttonGroupText) + :is(.c-button, .c-buttonGroupText) {
+				@apply rounded-t-none border-t-0;
+			}
+			> :is(.c-button, .c-buttonGroupText):has(+ :is(.c-button, .c-buttonGroupText)) {
+				@apply rounded-b-none;
+			}
+		}
+	}
+</style>

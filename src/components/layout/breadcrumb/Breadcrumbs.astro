@@ -17,11 +17,11 @@ const shouldShowEllipsis = totalItems > maxItems;
 const dropdownId = `c-breadcrumbDropdown-${Math.random().toString(36).substr(2, 9)}`;
 ---
 
-<nav aria-label="breadcrumb" class:list={className}>
+<nav aria-label="breadcrumb" class:list={['c-breadcrumb', className]}>
 	<ol class="c-breadcrumb_list">
 		<!-- Home link (always first) -->
 		<li class="c-breadcrumb_item">
-			<a href="/" class="c-breadcrumb_link c-breadcrumb -text">
+			<a href="/" class="c-breadcrumb_link c-breadcrumb -text -index">
 				<Icon name="carbon:home" class="size-4" />
 			</a>
 		</li>

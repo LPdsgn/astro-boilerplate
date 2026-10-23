@@ -30,7 +30,7 @@
 	pointer-events: none;
 	opacity: 0;
 	overflow: hidden;
-	border-radius: var(--rounded-xs);
+	border-radius: theme('borderRadius.fluid-xs');
 }
 
 .c-hoverReveal_inner,
@@ -39,8 +39,8 @@
 	height: 100%;
 	position: relative;
 	overflow: hidden;
-	border-radius: var(--rounded-xs);
-	background-color: var(--color-accent);
+	border-radius: theme('borderRadius.fluid-xs');
+	background-color: theme('colors.accent.DEFAULT');
 	background-size: cover;
 	background-position: center;
 	background-repeat: no-repeat;

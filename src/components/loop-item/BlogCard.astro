@@ -1,0 +1,87 @@
+---
+/**
+ * Blog listing row, after astro-erudite's BlogCard: cover on the left, info column with title,
+ * description and a meta row (date, reading time, tags). Stacks under the `md` breakpoint.
+ */
+import { Badge } from '@/components';
+import { formatDate, readingTime } from '@/lib/utils';
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+	post: CollectionEntry<'blog'>;
+	class?: string;
+}
+
+const { post, class: className } = Astro.props;
+const { title, description, date, cover, coverAlt, tags } = post.data;
+const href = `/${post.collection}/${post.id}`;
+---
+
+<li class:list={['c-blogCard', className]} data-slot="blog-card">
+	{
+		cover && (
+			<a href={href} class="c-blogCard_cover" tabindex="-1" aria-hidden="true">
+				<Image src={cover} alt={coverAlt ?? ''} width={640} height={360} />
+			</a>
+		)
+	}
+	<div class="c-blogCard_info">
+		<h2 class="c-blogCard_title">
+			<a href={href}>{title}</a>
+		</h2>
+		<p class="c-blogCard_description">{description}</p>
+		<div class="c-blogCard_meta">
+			<time datetime={date.toISOString()}>{formatDate(date)}</time>
+			<span aria-hidden="true">·</span>
+			<span>{readingTime(post.body ?? '')}</span>
+			{
+				tags && (
+					<ul class="c-blogCard_tags">
+						{tags.map((tag) => (
+							<li>
+								<Badge variant="secondary" size="sm" href={`/tags/${tag}`}>
+									#{tag}
+								</Badge>
+							</li>
+						))}
+					</ul>
+				)
+			}
+		</div>
+	</div>
+</li>
+
+<style is:global>
+	@reference '#styles';
+
+	@layer components {
+		.c-blogCard {
+			@apply px-well flex flex-col gap-sm py-md md:flex-row md:items-start md:gap-md;
+		}
+		.c-blogCard_cover {
+			@apply w-full max-w-2xl shrink-0 overflow-hidden rounded-fluid-sm md:w-56;
+			img {
+				@apply aspect-video h-auto w-full object-cover;
+			}
+		}
+		.c-blogCard_info {
+			@apply flex min-w-0 flex-col gap-2xs;
+		}
+		.c-blogCard_title {
+			@apply heading-sm font-semibold;
+			a {
+				@apply transition-colors hover:text-primary;
+			}
+		}
+		.c-blogCard_description {
+			@apply text-body-sm line-clamp-2 text-muted-foreground;
+		}
+		.c-blogCard_meta {
+			@apply text-label mt-2xs flex flex-wrap items-center gap-x-2xs gap-y-3xs font-mono text-muted-foreground;
+		}
+		.c-blogCard_tags {
+			@apply flex flex-wrap gap-3xs;
+		}
+	}
+</style>

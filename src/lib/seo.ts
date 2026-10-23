@@ -7,7 +7,7 @@
  * Based on lpdsgn-astro SEO system, adapted for astro-boilerplate-new
  */
 
-import { isProd, SITE } from '@/site.config';
+import { SITE } from '@/site.config';
 import type { Props as SEOProps } from 'astro-seo';
 
 // Re-export SEOProps for convenience
@@ -95,7 +95,7 @@ export function getSeo(seo: Partial<Seo>, url: URL): SEOProps {
  * @returns Absolute URL to dynamic OG image
  */
 export function buildOGImageUrl(baseUrl: URL, title: string, description?: string): string {
-	const ogUrl = new URL('/api/og.png', isProd ? SITE.siteUrl : baseUrl.origin);
+	const ogUrl = new URL('/api/og.png', baseUrl.origin);
 	ogUrl.searchParams.set('title', title);
 	if (description) {
 		ogUrl.searchParams.set('description', description);
@@ -122,12 +122,14 @@ export function getContentSEO(entry: {
 		title: string;
 		description?: string;
 		summary?: string;
-		ogImage?: { src: string };
-		thumbnail?: { src: string };
-		cover?: { src: string };
+		/** ImageMetadata (content collections) or a remote URL (Storyblok) */
+		ogImage?: { src: string } | string;
+		thumbnail?: { src: string } | string;
+		cover?: { src: string } | string;
 		date?: Date;
 		publishDate?: Date;
 		noindex?: boolean;
+		canonical?: string;
 	};
 	collection?: string;
 }): Partial<Seo> {
@@ -137,7 +139,8 @@ export function getContentSEO(entry: {
 	const description = data.description || data.summary;
 
 	// Determine image: prefer ogImage, fallback to thumbnail/cover
-	const image = data.ogImage?.src || data.thumbnail?.src || data.cover?.src;
+	const src = (img?: { src: string } | string) => (typeof img === 'string' ? img : img?.src);
+	const image = src(data.ogImage) || src(data.thumbnail) || src(data.cover);
 
 	// Determine type based on collection
 	const type = collection === 'blog' ? 'article' : 'website';
@@ -152,6 +155,7 @@ export function getContentSEO(entry: {
 		type,
 		publishedTime,
 		noindex: data.noindex,
+		canonical: data.canonical,
 	};
 }
 

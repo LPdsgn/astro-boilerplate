@@ -16,20 +16,17 @@ type Props<Tag extends HTMLTag> = Polymorphic<{ as: Tag }> & {
 };
 
 export const item = tv({
-	base: [
-		'group/item flex flex-wrap items-center rounded-md border border-transparent text-sm transition-colors',
-		'[a]:transition-colors [a]:hover:bg-accent/50',
-		'focus-visible:border-ring outline-none focus-visible:ring-[3px] focus-visible:ring-outline/50',
-	],
+	// group/item: scope for consumers' group-*/item: variants
+	base: ['c-item', 'group/item'],
 	variants: {
 		variant: {
-			default: 'bg-transparent',
-			outline: 'border-border',
-			muted: 'bg-muted/50',
+			default: '-default',
+			outline: '-outline',
+			muted: '-muted',
 		},
 		size: {
-			default: 'gap-4 p-4',
-			sm: 'gap-2.5 px-4 py-3',
+			default: '-medium',
+			sm: '-small',
 		},
 	},
 	defaultVariants: {
@@ -50,3 +47,32 @@ const {
 <Tag class={item({ variant, size, class: className })} data-slot="item" {...rest}>
 	<slot />
 </Tag>
+
+<style is:global lang="postcss">
+	@reference "#styles";
+	@layer components {
+		.c-item {
+			@apply flex flex-wrap items-center rounded-md border border-transparent text-sm transition-colors;
+			@apply outline-none focus-visible:border-outline focus-visible:ring-[3px] focus-visible:ring-outline/50;
+
+			&:is(a) {
+				@apply hover:bg-accent/50;
+			}
+		}
+		.c-item.-default {
+			@apply bg-transparent;
+		}
+		.c-item.-outline {
+			@apply border-border;
+		}
+		.c-item.-muted {
+			@apply bg-muted/50;
+		}
+		.c-item.-medium {
+			@apply gap-4 p-4;
+		}
+		.c-item.-small {
+			@apply gap-2.5 px-4 py-3;
+		}
+	}
+</style>

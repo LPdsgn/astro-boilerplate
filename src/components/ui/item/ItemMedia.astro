@@ -11,15 +11,12 @@ type Props = HTMLAttributes<'div'> & {
 };
 
 export const itemMedia = tv({
-	base: [
-		'flex shrink-0 items-center justify-center gap-2 [&_svg]:pointer-events-none',
-		'group-has-[[data-slot=item-description]]/item:translate-y-0.5 group-has-[[data-slot=item-description]]/item:self-start',
-	],
+	base: ['c-itemMedia'],
 	variants: {
 		variant: {
-			default: 'bg-transparent',
-			icon: "size-8 rounded-sm border bg-muted [&_svg:not([class*='size-'])]:size-4",
-			image: 'size-10 overflow-hidden rounded-sm [&_img]:size-full [&_img]:object-cover',
+			default: '-default',
+			icon: '-icon',
+			image: '-image',
 		},
 	},
 	defaultVariants: {
@@ -38,3 +35,29 @@ const { variant = 'default', class: className, ...rest } = Astro.props;
 >
 	<slot />
 </div>
+
+<style is:global lang="postcss">
+	@reference "#styles";
+	@layer components {
+		.c-itemMedia {
+			@apply flex shrink-0 items-center justify-center gap-2 [&_svg]:pointer-events-none;
+		}
+		/* Next to a description, the media aligns with the title instead of the center */
+		.c-item:has(.c-itemDescription) .c-itemMedia {
+			@apply translate-y-0.5 self-start;
+		}
+		.c-itemMedia.-default {
+			@apply bg-transparent;
+		}
+		.c-itemMedia.-icon {
+			@apply size-8 rounded-sm border bg-muted [&_svg:not([class*='size-'])]:size-4;
+		}
+		.c-itemMedia.-image {
+			@apply size-10 overflow-hidden rounded-sm;
+
+			img {
+				@apply size-full object-cover;
+			}
+		}
+	}
+</style>

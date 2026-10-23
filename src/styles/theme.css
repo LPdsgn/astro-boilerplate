@@ -1,0 +1,199 @@
+:root {
+	/* Dark scale from darkest to lightest */
+	--dark-900: 0 0% 6.2%; /* Background */
+	--dark-800: 0 0% 11%; /* Card */
+	--dark-700: 0 0% 18%; /* Popover */
+	--dark-675: 0 0% 19%; /* Secondary */
+	--dark-550: 0 0% 23%; /* Muted */
+	--dark-525: 0 0% 27.8%; /* Accent */
+	--dark-500: 0 0% 30%; /* Border/Input */
+
+	/* Light scale (opposites of dark scale) */
+	--light-900: 0 0% 93.8%; /* Background (opposite of dark-900) */
+	--light-800: 0 0% 89%; /* Card (opposite of dark-800) */
+	--light-700: 0 0% 82%; /* Popover (opposite of dark-700) */
+	--light-675: 0 0% 81%; /* Secondary (opposite of dark-675) */
+	--light-550: 0 0% 77%; /* Muted (opposite of dark-550) */
+	--light-525: 0 0% 72.2%; /* Accent (opposite of dark-525) */
+	--light-500: 0 0% 70%; /* Border/Input (opposite of dark-500) */
+
+	--black: 0 0% 0%; /* Black */
+	--white: 0 0% 100%; /* White */
+
+	/* Primary color scale (green) */
+	--primary-950: 76 40% 10%;
+	--primary-900: 76 60% 20%;
+	--primary-800: 76 80% 30%;
+	--primary-700: 76 100% 40%;
+	--primary-600: 76 100% 50%;
+	--primary-500: 76 100% 57%; /* Main primary color */
+	--primary-400: 76 100% 65%;
+	--primary-300: 76 100% 75%;
+	--primary-200: 76 100% 85%;
+	--primary-100: 76 100% 90%;
+	--primary-50: 76 100% 95%;
+
+	/* Error/Destructive scale */
+	--error-900: 0 65% 20%;
+	--error-700: 0 65% 30%;
+	--error-500: 0 65% 45%; /* Main error color */
+	--error-300: 0 65% 60%;
+	--error-100: 0 65% 90%;
+
+	/* Success scale */
+	--success-900: 112 50% 20%;
+	--success-700: 112 50% 30%;
+	--success-500: 112 50% 36%; /* Main success color */
+	--success-300: 112 50% 50%;
+	--success-100: 112 50% 90%;
+
+	/* Warning scale */
+	--warning-900: 45 100% 20%;
+	--warning-700: 45 100% 35%;
+	--warning-500: 45 100% 50%; /* Main warning color */
+	--warning-300: 45 100% 65%;
+	--warning-100: 45 100% 90%;
+
+	/* FONT FEATURES */
+	font-feature-settings:
+		'liga' 1,
+		/* Standard Ligatures */ 'calt' 1,
+		/* Contextual Alternates */ 'dlig' 1,
+		/* Discretionary Ligatures */ 'ss01' 1,
+		/* Round punctuation */ 'cv02' 1,
+		/* Alternate capital J */ 'cv06' 1,
+		/* Alternate A */ 'cv10' 1,
+		/* Alternate j */ 'cv11' 1,
+		/* Alternate l */ 'zero' 1,
+		/* Slashed zero */ 'tnum' 1; /* Tabular numbers */
+}
+
+:root,
+.theme-dark {
+	/* Border radius for various elements */
+	--radius: utopia.clamp(6, 12);
+	/* Spacing */
+	--spacing: 0.25rem;
+	/* Font aliases (--font-sans and --font-mono are set by Astro's font system) */
+	--font-heading: var(--font-sans);
+	--font-steady: var(--font-sans);
+
+	/* COLORS */
+	--background: hsl(0 0% 6.2%); /* Main background color */
+	--foreground: hsl(0 0% 100%); /* Primary text color */
+
+	--card: hsl(0 0% 11%); /* Lighter backgrounds */
+	--card-foreground: hsl(0 0% 100%); /* Card text color */
+
+	--popover: hsl(0 0% 19%); /* Popovers/modals */
+	--popover-foreground: hsl(0 0% 82%); /* Popover text */
+
+	--primary: hsl(76 100% 57%); /* Keep existing green */
+	--primary-foreground: hsl(0 0% 0%); /* Black text on primary */
+	--primary-accent: hsl(76 100% 65%);
+
+	--secondary: hsl(0 0% 18%); /* Lighter bg and distinct from card */
+	--secondary-foreground: hsl(0 0% 100%);
+	--secondary-accent: hsl(0 0% 27.8%);
+
+	--muted: hsl(0 0% 23%); /* Subtle backgrounds */
+	--muted-foreground: hsl(0 0% 77%); /* Secondary text */
+
+	--accent: hsl(0 0% 27.8%); /* Accent/hover states */
+	--accent-foreground: hsl(0 0% 100%);
+
+	--info: hsl(var(--color-sky-300));
+	--info-foreground: hsl(var(--color-sky-950));
+
+	--success: hsl(112 50% 50%); /* Success color */
+	--success-foreground: hsl(0 0% 100%);
+
+	--warning: hsl(45 100% 50%);
+	--warning-foreground: hsl(45 100% 20%);
+
+	--error: hsl(0 65% 45%); /* Error/danger color */
+	--error-foreground: hsl(0 0% 100%);
+
+	--border: hsl(0 0% 30%);
+
+	--input: hsl(0 0% 30%);
+
+	--outline: hsl(76 100% 57%);
+
+	/* sidebars variables */
+	--sidebar-background: hsl(0 0% 6.2%);
+	--sidebar-foreground: hsl(0 0% 100%);
+	--sidebar-primary: hsl(76 100% 57%);
+	--sidebar-primary-foreground: hsl(0 0% 0%);
+	--sidebar-accent: hsl(0 0% 27.8%);
+	--sidebar-accent-foreground: hsl(0 0% 100%);
+	--sidebar-border: hsl(0 0% 30%);
+	--sidebar-outline: hsl(76 100% 57%);
+}
+
+.theme-light {
+	/* default color of <body> background and text */
+	--background: hsl(0 0% 93.8%);
+	--foreground: hsl(0 0% 0%);
+
+	/* Background and text color for <Card> */
+	--card: hsl(0 0% 89%);
+	--card-foreground: hsl(0 0% 6.2%);
+
+	/* Colors for popovers like <SelectContent> and <TooltipContent> */
+	--popover: hsl(0 0% 81%);
+	--popover-foreground: hsl(0 0% 18%);
+
+	/* Primary colors for <Button>, etc. when variant="primary" */
+	--primary: hsl(350, 100%, 50%);
+	--primary-foreground: hsl(0 0% 100%);
+	--primary-accent: hsl(359, 100%, 70%);
+
+	/* Secondary colors for <Button>, etc. when variant="secondary" */
+	--secondary: hsl(0 0% 82%);
+	--secondary-foreground: hsl(0 0% 0%);
+	--secondary-accent: hsl(0 0% 81%);
+
+	/* Muted colors use for <TabsList>, <Avatar>, etc. */
+	--muted: hsl(0 0% 77%);
+	--muted-foreground: hsl(0 0% 23%);
+
+	/* Accents like hover effects on <SelectItem> */
+	--accent: hsl(0 0% 72.2%);
+	--accent-foreground: hsl(0 0% 0%);
+
+	/* Various component colors for variant="info" */
+	--info: hsl(199, 100%, 73%);
+	--info-foreground: hsl(203, 87%, 15%);
+
+	/* Various component colors for variant="success" */
+	--success: hsl(112 50% 50%);
+	--success-foreground: hsl(0 0% 100%);
+
+	/* Various component colors for variant="warning" */
+	--warning: hsl(45 100% 65%);
+	--warning-foreground: hsl(45 100% 20%);
+
+	/* Various component colors for variant="error" */
+	--error: hsl(0 65% 45%); /* Error/danger color */
+	--error-foreground: hsl(0 0% 100%);
+
+	/* Default border color */
+	--border: hsl(0 0% 70%);
+
+	/* Border colors for inputs like <Input>, <Textarea>, <SelectTrigger>  */
+	--input: hsl(0 0% 70%);
+
+	/* Used for focus outline */
+	--outline: hsl(350, 100%, 50%);
+
+	/* sidebar variables */
+	--sidebar-background: hsl(0 0% 93.8%);
+	--sidebar-foreground: hsl(0 0% 0%);
+	--sidebar-primary: hsl(350, 100%, 50%);
+	--sidebar-primary-foreground: hsl(0 0% 100%);
+	--sidebar-accent: hsl(0 0% 72.2%);
+	--sidebar-accent-foreground: hsl(0 0% 0%);
+	--sidebar-border: hsl(0 0% 70%);
+	--sidebar-outline: hsl(350, 100%, 50%);
+}

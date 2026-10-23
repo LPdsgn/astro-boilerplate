@@ -20,6 +20,7 @@ const fallbackTitle = pathName.charAt(0).toUpperCase() + pathName.slice(1).toLow
 const {
 	seo = {},
 	class: className,
+	background = null,
 	noise = false,
 	header = true,
 	footer = true,
@@ -28,6 +29,8 @@ const {
 }: {
 	seo?: Partial<Seo>;
 	class?: string;
+	/** Decorative page background on <main> (see main.css) */
+	background?: 'dot' | 'lines' | 'grid' | null;
 	noise?: boolean;
 	header?: boolean;
 	footer?: boolean;
@@ -44,7 +47,7 @@ const FONTS: CssVariable[] = ['--font-sans', '--font-mono'];
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" class="theme-dark">
 	<Head>
 		<style is:inline>
 			@layer theme, base, components, utilities;
@@ -53,7 +56,12 @@ const FONTS: CssVariable[] = ['--font-sans', '--font-mono'];
 		<meta name="viewport" content="width=device-width,initial-scale=1" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta name="generator" content={Astro.generator} />
-		<ThemeProvider />
+		{/* Theme classes match the design tokens (theme.css); dark is the SSR default */}
+		<ThemeProvider
+			attribute="class"
+			value={{ dark: 'theme-dark', light: 'theme-light' }}
+			defaultTheme="dark"
+		/>
 
 		<SEO {...seoData} />
 
@@ -64,7 +72,7 @@ const FONTS: CssVariable[] = ['--font-sans', '--font-mono'];
 		<Clarity />
 		<Posthog />
 	</Head>
-	<body class:list={[noise && 'noise', className]}>
+	<body class:list={[background && `bg-${background}`, noise && 'noise', className]}>
 		<GoogleTagmanagerNoscript />
 
 		<script src="../lib/app.ts"></script>

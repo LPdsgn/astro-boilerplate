@@ -77,10 +77,8 @@ const hasImage = Boolean(optimizedBg);
 	style={style}
 	data-img={hasImage ? optimizedBg : undefined}
 	data-fx={hasImage ? fx : undefined}
-	{...rest}
->
-	<slot />
-</HTMLelement>
+	{...rest}><slot /></HTMLelement
+>{/* slot on one line: surrounding whitespace would render as a space in running text */}
 
 <script>
 	import { init } from '@/lib/classes';

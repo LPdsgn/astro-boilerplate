@@ -6,7 +6,7 @@
 
 		&--cta {
 			@apply text-foreground transition-colors hover:text-primary;
-			@apply relative inline-flex items-baseline justify-center gap-[.3em] pb-[.1em] text-base font-medium;
+			@apply text-body-lg relative inline-flex items-baseline justify-center gap-[.3em] pb-[.1em] font-medium;
 
 			&::after {
 				content: '';

@@ -22,6 +22,9 @@ pre-commit:
         glob: '*.{js,mjs,cjs,ts,tsx,jsx,astro,css,scss,json,html}'
         run: pnpm exec prettier --write --ignore-unknown {staged_files}
         stage_fixed: true
+    tokens:
+        priority: 3
+        run: pnpm tokens:check
 
 # Il build completo resta sul pre-push: e' troppo lento per un pre-commit.
 pre-push:

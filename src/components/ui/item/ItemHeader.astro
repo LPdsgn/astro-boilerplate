@@ -5,7 +5,7 @@ import { tv } from 'tailwind-variants';
 type Props = HTMLAttributes<'div'>;
 
 export const itemHeader = tv({
-	base: 'flex basis-full items-center justify-between gap-2',
+	base: ['c-itemHeader'],
 });
 
 const { class: className, ...rest } = Astro.props;
@@ -14,3 +14,12 @@ const { class: className, ...rest } = Astro.props;
 <div class={itemHeader({ class: className })} data-slot="item-header" {...rest}>
 	<slot />
 </div>
+
+<style is:global lang="postcss">
+	@reference "#styles";
+	@layer components {
+		.c-itemHeader {
+			@apply flex basis-full items-center justify-between gap-2;
+		}
+	}
+</style>

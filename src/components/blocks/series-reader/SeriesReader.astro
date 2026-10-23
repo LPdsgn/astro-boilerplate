@@ -1,0 +1,27 @@
+---
+/**
+ * Series as one continuous document (port of astro-erudite v2). Contract with the page:
+ * every `<article data-url="/blog/<id>" data-title="<title>" [data-embedded]>`;
+ * the current crumb is `.c-breadcrumb_page`. Behaviour only, no markup:
+ * 1. inline, pre-paint: on a full load of a subpost URL, jump to its article;
+ * 2. series-reader.ts: keep URL, title and crumb in sync while scrolling,
+ *    and turn links to chain members into in-page scrolls.
+ */
+---
+
+<script is:inline>
+	(() => {
+		const type = performance.getEntriesByType('navigation')[0]?.type;
+		if (type && type !== 'navigate') return;
+		if (location.hash) return;
+		let pathname = location.pathname.replace(/\/+$/, '');
+		try {
+			pathname = decodeURIComponent(pathname);
+		} catch {}
+		document
+			.querySelector(`article[data-embedded][data-url="${pathname}"]`)
+			?.scrollIntoView({ behavior: 'instant' });
+	})();
+</script>
+
+<script src="./series-reader.ts"></script>

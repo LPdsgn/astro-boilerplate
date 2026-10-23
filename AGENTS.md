@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Astro project boilerplate built with **Astro 7** as a static site, deployed on **Vercel**. Uses Locomotive's boilerplate as a foundation with GSAP animations, Swup page transitions, and LocomotiveScroll smooth scrolling.
+Astro project boilerplate built with **Astro 7** as a static site, deployed on **Vercel**. A fork of Locomotive's boilerplate with the luigipdt.dev design system (fluid tokens, Starwind components), GSAP animations through gsap-encore, Swup page transitions, LocomotiveScroll smooth scrolling and a markdown journal ported from astro-erudite.
 
 ## Commands
 
@@ -12,7 +12,10 @@ Astro project boilerplate built with **Astro 7** as a static site, deployed on *
 | ---------------------- | ---------------------------------- |
 | `pnpm dev`             | Start dev server at localhost:8888 |
 | `pnpm dev:stop`        | Stop a dev server running in background |
-| `pnpm build`           | Type check + Astro build           |
+| `pnpm build`           | Token check + type check + Astro build |
+| `pnpm test`            | Vitest (token pipeline, SEO)       |
+| `pnpm tokens:build`    | Regenerate `tokens.json` from `src/styles` |
+| `pnpm tokens:check`    | Verify `tokens.json` is in sync    |
 | `pnpm check`           | Astro type checking only           |
 | `pnpm lint`            | ESLint check                       |
 | `pnpm lint:fix`        | ESLint auto-fix                    |
@@ -23,7 +26,7 @@ Astro project boilerplate built with **Astro 7** as a static site, deployed on *
 
 **Package manager:** pnpm 12 (settings in `pnpm-workspace.yaml`, not in `package.json`). **Node:** 24 (see `.nvmrc`). One-off package binaries run with `pnpx <pkg>` (or `pnpm dlx <pkg>`), never `npx`.
 
-**Git hooks (lefthook, `lefthook.yml`):** pre-commit runs ESLint + Prettier on staged files. Pre-push runs the full build.
+**Git hooks (lefthook, `lefthook.yml`):** pre-commit runs ESLint + Prettier on staged files and `tokens:check`. Pre-push runs the full build.
 
 ## Architecture
 
@@ -40,15 +43,19 @@ Astro project boilerplate built with **Astro 7** as a static site, deployed on *
 
 ### Key Directories
 
-- `src/pages/` — File-based routing (`api/og.png.ts` is the only on-demand route)
+- `src/pages/` — File-based routing (`api/og.png.ts` is the only on-demand route); `blog/`, `tags/`, `legal/`, `rss.xml.ts` are the journal
+- `src/content/` — Content collections (`content.config.ts`): `blog` (series as folders: `index.md` parent + parts with `order`; code fence meta does not reach Expressive Code yet, see README) and `legal`
+- `src/components/blocks/` — PageTitle, SeriesReader, TableOfContents; `src/components/loop-item/` — BlogCard, PostNavigation
 - `src/components/ui/` — Starwind design system components (Button, Dialog, Toast, Tabs, etc.) and project UI components
 - `src/components/layout/` — Header, Footer, Breadcrumb, CookieConsent
 - `src/components/analytics/` — Analytics providers (GA, GTM, Clarity, PostHog, Matomo)
-- `src/lib/classes/` — Transitions (Swup), Scroll (LocomotiveScroll), Lightbox
+- `src/lib/classes/` — Transitions (Swup), Scroll (LocomotiveScroll)
 - `src/lib/animations.ts` — GSAP + plugins, global `mm`, and `encore` (`gsap-encore`, see `docs/encore.md`): import animation tools from here
 - `src/lib/stores/` — Nanostores: screen, mouse, scroll, deviceStatus, localStorage
-- `src/lib/utils/` — Helpers for UI, devices, data, maths, string, query, lightbox
-- `src/styles/` — CSS layer system: main.css imports tailwind.css, typography.css, utilities.css
+- `src/lib/utils/` — Helpers for UI, devices, data, maths, string, query; `utils/blog.ts` (server-only, not in the barrel) reads the collection
+- `src/lib/markdown/` — Sätteri plugins wired in `astro.config.ts`: callouts, Expressive Code (block + inline), Temml math, external links, heading anchors and per-part namespace
+- `scripts/tokens/` — `tokens.json` pipeline (CSS → Tokens Studio), tested with Vitest
+- `src/styles/` — CSS layer system: main.css imports tailwind.css (→ theme.css), utilities.css, typography.css
 - `src/site.config.ts` — Global config (SITE, NAV_LINKS, SOCIAL_LINKS)
 
 ### TypeScript Path Aliases
@@ -60,7 +67,7 @@ Astro project boilerplate built with **Astro 7** as a static site, deployed on *
 1. **`Transitions`** class initializes Swup with HeadPlugin, PreloadPlugin, ScriptsPlugin and dispatches three custom `document` events: `page:before-preparation` (visit starts), `page:before-swap` (before DOM swap), `page:load` (after DOM swap)
 2. **`encore`** (`gsap-encore`, initialized in `app.ts` with `swupAdapter`) reverts every non-persistent `gsap.context()` on `before('content:replace')`, refreshes ScrollTriggers on `content:replace`
 3. **`Scroll`** class wraps LocomotiveScroll — destroyed before content replace, re-initialized after
-4. **SwupScriptsPlugin is required** — Astro hoists and bundles `<script>` tags, so they only execute on initial browser load. On Swup navigations, the browser won't re-execute scripts inserted via innerHTML. ScriptsPlugin forces re-execution of scripts found in swapped HTML, which is essential for both page-specific and component scripts (e.g. sidebar, lightbox). Without it, scripts from pages never directly visited would never execute.
+4. **SwupScriptsPlugin is required** — Astro hoists and bundles `<script>` tags, so they only execute on initial browser load. On Swup navigations, the browser won't re-execute scripts inserted via innerHTML. ScriptsPlugin forces re-execution of scripts found in swapped HTML, which is essential for both page-specific and component scripts (e.g. sidebar, tabs). Without it, scripts from pages never directly visited would never execute.
 
 Page/component scripts use the `init(key, func)` helper from `@lib/classes/Transitions`, which handles first-load execution and `page:load` re-initialization with `AbortController`-based listener deduplication. **Do not use `init()` for persistent `encore.setup()` calls or scripts outside Swup containers** — see `.claude/rules/lifecycle.md` for caveats and the legacy manual pattern.
 
@@ -68,12 +75,15 @@ For the `encore` API, the four usage idioms (feature-level setup, persistent, `c
 
 ### Styling System
 
-- **Tailwind v4** with CSS variables for theming
-- **Dark mode** via the `.dark` class (`@custom-variant dark`), toggled by `@lpdsgn/astro-themes` (`ThemeProvider` in `Layout.astro`)
-- **Utopia fluid design** — responsive typography and spacing scaled between 360px–1536px viewports using `clamp()`
-- **Design tokens as CSS variables:** `--primary`, `--secondary`, `--accent`, `--background`, `--foreground`, `--unit-sm`, `--unit-md`, etc.
+- **Tailwind v4** with CSS variables for theming; tokens in `src/styles/theme.css` (HSL scales and semantic colors) and `tailwind.css` (`@theme`: fluid spacing, breakpoints, durations, z-index, radius)
+- **Themes:** `.theme-dark` (default, also on `<html>` at SSR) and `.theme-light`; the `dark:` variant maps to `.theme-dark`. Switched by `@lpdsgn/astro-themes` (`ThemeProvider attribute="class" value={{ dark: 'theme-dark', light: 'theme-light' }}` in `Layout.astro`); `ui/theme-toggle` uses its client API
+- **Utopia fluid design** — spacing and type scaled between 360px–1536px viewports with `utopia.clamp()` (postcss-utopia)
+- **Spacing scale:** `--spacing-3xs` … `--spacing-4xl` plus one-up pairs (`sm-md`, `md-lg`…), semantic `--spacing-gutter` / `--spacing-margin` / `--spacing-header`; fractional widths `--spacing-whole/half/third…`
+- **Type scale (`typography.css`):** `heading-display`, `heading-2xl` … `heading-sm` and `text-lead`, `text-body-lg`, `text-body`, `text-body-sm`, `text-caption`, `text-label`, `text-micro` (size + line-height + tracking); Tailwind's `text-sm`… stay the static sizes
+- **Semantic colors:** `--background`, `--foreground`, `--card`, `--popover`, `--primary`, `--secondary`, `--muted`, `--accent`, `--info/success/warning/error`, `--border`, `--input`, `--outline`
+- **`tokens.json`:** generated from those three files by `pnpm tokens:build` (Tokens Studio format); `tokens:check` fails the commit when it drifts
 - **Page layout:** side margin `--spacing-margin`, gutter `--spacing-gutter`, 12 columns. `.container` and the default `Container` use `px-well` (margin below `--container-grid` = 1920px, then centered content with full-width backgrounds). The dev grid helper (`Ctrl+G`, `src/lib/app.ts`) uses the same values: change them together
-- **Fonts:** Innovator Grotesk (`--font-sans`), JetBrains Mono (`--font-mono`), via the Astro Fonts API (`astro.config.ts`)
+- **Fonts:** Inter (`--font-sans`, variable, normal + italic), JetBrains Mono (`--font-mono`), via the Astro Fonts API (`astro.config.ts`); `--font-heading` and `--font-steady` alias `--font-sans`. The OG image uses the static `Inter-SemiBold.ttf`
 
 ## Coding Conventions
 

@@ -1,88 +1,84 @@
-<p align="center">
-    <a href="https://github.com/locomotivemtl/locomotive-boilerplate">
-        <img src="https://user-images.githubusercontent.com/4596862/54868065-c2aea200-4d5e-11e9-9ce3-e0013c15f48c.png" height="140">
-    </a>
-</p>
-<h1 align="center">Locomotive Astro Boilerplate</h1>
-<p align="center">Astro boilerplate for projects by <a href="https://locomotive.ca/">Locomotive</a>.</p>
+<h1 align="center">astro-boilerplate</h1>
+<p align="center">Astro starter with a fluid design system, Swup page transitions, GSAP and a markdown journal.</p>
 
-## Features
+A fork of [Locomotive's Astro boilerplate](https://github.com/locomotivemtl/astro-boilerplate), grown
+alongside [luigipdt.dev](https://luigipdt.dev). The blog comes from
+[astro-erudite](https://github.com/jktrn/astro-erudite) by jktrn; the UI components from
+[Starwind](https://starwind.dev) (legacy 2.0.1).
 
-- [PostCSS] for a feature rich superset of CSS.
-- [Tailwind CSS] for a sane and scalable CSS architecture.
-- [Locomotive Scroll] for smooth scrolling with parallax effects.
-- [Swup] for versatile and extensible page transitions.
-- [Prettier] for a formatted and easy to maintain codebase.
-- [Nanostores] as state manager.
+## What's inside
+
+- **Astro 7** (static, Vercel adapter) with **Tailwind CSS v4** through PostCSS: `postcss-nested`,
+  `postcss-utopia` for fluid values, cssnano in production
+- **Design system**: semantic colors with a dark and a light theme (`.theme-dark` / `.theme-light`,
+  switched by [`@lpdsgn/astro-themes`](https://github.com/LPdsgn/astro-themes)), a fluid spacing
+  scale (`--spacing-3xs` … `--spacing-4xl`, Utopia 360–1536px), a fluid type scale
+  (`heading-*` / `text-*` utilities), Inter and JetBrains Mono. `tokens.json` is generated from
+  the CSS in Tokens Studio format (`pnpm tokens:build`) and checked on every commit
+- **Components**: Starwind 2.0.1 set restyled on the tokens (BEM classes + `tv()` variants), plus
+  Container, Image, HoverImage, Breadcrumbs, PageTitle, ScrollToTop
+- **Journal**: content collections for blog and legal pages, series (a folder per series, parts
+  ordered by `order`), tags, RSS, sitemap. Markdown goes through
+  [Sätteri](https://github.com/withastro/astro/tree/main/packages/markdown/satteri): callouts as
+  native `<details>`, [Expressive Code](https://expressive-code.com) blocks with line numbers and
+  collapsible sections, inline code with a language, Temml math
+- **Motion**: [Swup 4](https://swup.js.org) transitions, [LocomotiveScroll 5](https://scroll.locomotive.ca),
+  GSAP 3 with [gsap-encore](https://github.com/LPdsgn/gsap-encore) reverting every animation on
+  page swaps (see `docs/encore.md`)
+- **Tooling**: TypeScript, ESLint, Prettier, lefthook (lint on commit, build on push), Vitest,
+  Renovate, Nanostores, astro-icon (Carbon and Simple Icons), dynamic OG images with Satori
+
+The home page is a showcase of the tokens and components; `/blog` holds a sample series.
 
 ## Getting started
 
-Make sure you have the following installed:
-
-- [Node] — at least 22.12 (Astro 7 minimum), the latest LTS is recommended.
-- [pnpm] — at least 11 (the version is pinned in `packageManager`).
-
-> 💡 You can use [NVM] to install and use different versions of Node via the command-line.
+- [Node](https://nodejs.org/) 24 (`.nvmrc`; Astro 7.4 needs at least 22.23.4)
+- [pnpm](https://pnpm.io/) 12 (pinned in `packageManager`)
 
 ```sh
-# Clone the repository.
-git clone https://github.com/locomotivemtl/astro-boilerplate.git my-new-project
-
-# Enter the newly-cloned directory.
+git clone https://github.com/LPdsgn/astro-boilerplate.git my-new-project
 cd my-new-project
-```
-
-## Installation
-
-```sh
-# Switch to recommended Node version from .nvmrc
 nvm use
-
-# Install dependencies (also installs the lefthook git hooks)
-pnpm install
+pnpm install   # also installs the lefthook git hooks
+pnpm dev       # https://localhost:8888
 ```
 
-## Development
-
-```sh
-# Start development server, watch for changes, and compile assets
-pnpm dev
-
-# Type check, compile and minify assets
-pnpm build
-```
+Then make it yours: `src/site.config.ts` (site, navigation, social links), `astro.config.ts`
+(`site`, fonts, icons), `src/styles/theme.css` (colors), `src/content/blog` (posts).
 
 ## Commands
 
-All commands are run from the root of the project, from a terminal:
+| Command              | Action                                                   |
+| :------------------- | :------------------------------------------------------- |
+| `pnpm dev`           | Start the dev server at `localhost:8888`                 |
+| `pnpm build`         | Token check, type check and production build             |
+| `pnpm preview`       | Preview the production build                             |
+| `pnpm check`         | Astro type checking only                                 |
+| `pnpm lint`          | ESLint                                                   |
+| `pnpm format`        | Prettier                                                 |
+| `pnpm test`          | Vitest (token pipeline, SEO helpers)                     |
+| `pnpm tokens:build`  | Regenerate `tokens.json` from `src/styles`               |
+| `pnpm tokens:check`  | Verify `tokens.json` is in sync (runs in the pre-commit) |
+| `ANALYZE=1 pnpm build` | Build with the Sonda bundle report                     |
 
-| Command             | Action                                           |
-| :------------------ | :----------------------------------------------- |
-| `pnpm install`      | Installs dependencies                            |
-| `pnpm dev`          | Starts local dev server at `localhost:8888`      |
-| `pnpm build`        | Type check and build the production site         |
-| `pnpm preview`      | Preview your build locally, before deploying     |
-| `pnpm astro ...`    | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro --help` | Get help using the Astro CLI                     |
-| `pnpm lint`         | Lint files using ESLint                          |
-| `pnpm format`       | Format files using Prettier                      |
+## Writing a post
 
-## Documentation
+Posts live in `src/content/blog`. A single post is `my-post.md` or `my-post/index.md` (with its
+images next to it); `.mdx` works too. A series is a folder:
+`index.md` is the parent, every other file is a part
+with an `order`; parts render inside the parent page and keep their own URL. Frontmatter:
+`title`, `description`, `date`, `cover`, `coverAlt`, `tags`, `draft`, `order`.
 
-- [Astro]
-- [Locomotive Scroll]
-- [Tailwind CSS]
-- [Swup]
-- [Prettier]
-- [Nanostores]
+Callouts: `:::note`, `:::tip[Label]{closed}`, `:::warning`, `:::caution`, `:::important`.
+Code fences get line numbers; inline code can carry a language: `` `code{:ts}` ``. Math uses
+`$…$` and `$$…$$`. Known limit: the fence meta (`title`, line ranges, `collapse`) does not reach
+Expressive Code yet, the Sätteri hast plugins see `data.lang` but not `data.meta`
+(`satteri-expressive-code` 0.1.24 with `@astrojs/markdown-satteri` 0.4.5).
 
-[Astro]: https://docs.astro.build/en/getting-started/
-[Tailwind CSS]: https://tailwindcss.com/docs/installation
-[Locomotive Scroll]: https://scroll.locomotive.ca/docs
-[Swup]: https://swup.js.org/getting-started/
-[Node]: https://nodejs.org/
-[pnpm]: https://pnpm.io/
-[NVM]: https://github.com/nvm-sh/nvm
-[Prettier]: https://prettier.io/
-[Nanostores]: https://github.com/nanostores/nanostores
-[PostCSS]: https://postcss.org/
+## Credits
+
+- [locomotivemtl/astro-boilerplate](https://github.com/locomotivemtl/astro-boilerplate), the origin
+- [jktrn/astro-erudite](https://github.com/jktrn/astro-erudite), the journal (series, table of contents, prose styles)
+- [Starwind](https://starwind.dev), the component set
+
+[MIT](./LICENSE)
