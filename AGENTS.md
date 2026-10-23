@@ -44,7 +44,7 @@ Astro project boilerplate built with **Astro 7** as a static site, deployed on *
 ### Key Directories
 
 - `src/pages/` — File-based routing (`api/og.png.ts` is the only on-demand route); `blog/`, `tags/`, `legal/`, `rss.xml.ts` are the journal
-- `src/content/` — Content collections (`content.config.ts`): `blog` (series as folders: `index.md` parent + parts with `order`; fence meta is lost in `.mdx`, prefer `.md`) and `legal`
+- `src/content/` — Content collections (`content.config.ts`): `blog` (series as folders: `index.md` parent + parts with `order`; code fence meta does not reach Expressive Code yet, see README) and `legal`
 - `src/components/blocks/` — PageTitle, SeriesReader, TableOfContents; `src/components/loop-item/` — BlogCard, PostNavigation
 - `src/components/ui/` — Starwind design system components (Button, Dialog, Toast, Tabs, etc.) and project UI components
 - `src/components/layout/` — Header, Footer, Breadcrumb, CookieConsent

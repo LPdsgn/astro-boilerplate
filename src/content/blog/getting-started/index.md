@@ -1,6 +1,6 @@
 ---
 title: 'Getting started with the journal'
-description: 'What a post can do here: callouts, code blocks with line numbers and collapsible sections, inline code, math, series and tags.'
+description: 'What a post can do here: callouts, code blocks with line numbers, inline code, math, series and tags.'
 date: '2026-10-23'
 cover: '../../../assets/images/printer.jpg'
 coverAlt: 'A printer, the sample cover of this post'
@@ -32,7 +32,8 @@ Something to double check before shipping.
 
 ## Code blocks
 
-Fenced blocks accept a `title`, line highlighting, line numbers and collapsible sections.
+Fenced blocks get line numbers. The `title`, line range and `collapse` meta below are ready for
+when the Sätteri pipeline passes them to Expressive Code (it doesn't yet).
 
 ```ts title="src/lib/encore.ts" {3-4} showLineNumbers collapse={7-11}
 import { encore } from 'gsap-encore';

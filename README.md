@@ -64,15 +64,16 @@ Then make it yours: `src/site.config.ts` (site, navigation, social links), `astr
 ## Writing a post
 
 Posts live in `src/content/blog`. A single post is `my-post.md` or `my-post/index.md` (with its
-images next to it); `.mdx` works too, but Sätteri currently drops the code fence meta (title, line
-marks, `collapse`) in MDX, so prefer `.md` unless you need components. A series is a folder:
+images next to it); `.mdx` works too. A series is a folder:
 `index.md` is the parent, every other file is a part
 with an `order`; parts render inside the parent page and keep their own URL. Frontmatter:
 `title`, `description`, `date`, `cover`, `coverAlt`, `tags`, `draft`, `order`.
 
 Callouts: `:::note`, `:::tip[Label]{closed}`, `:::warning`, `:::caution`, `:::important`.
-Code fences accept `title`, line ranges (`{2-3}`), `showLineNumbers` and `collapse={5-8}`;
-inline code can carry a language: `` `code{:ts}` ``. Math uses `$…$` and `$$…$$`.
+Code fences get line numbers; inline code can carry a language: `` `code{:ts}` ``. Math uses
+`$…$` and `$$…$$`. Known limit: the fence meta (`title`, line ranges, `collapse`) does not reach
+Expressive Code yet, the Sätteri hast plugins see `data.lang` but not `data.meta`
+(`satteri-expressive-code` 0.1.24 with `@astrojs/markdown-satteri` 0.4.5).
 
 ## Credits
 
