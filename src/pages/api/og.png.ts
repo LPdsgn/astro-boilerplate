@@ -10,9 +10,8 @@ import { SITE } from '@/site.config';
  *
  * Usage: /api/og.png?title=Title&description=Description
  *
- * NOTE: Satori doesn't support .woff2 and ignores variable-font axes (it renders the default
- * instance). Fonts must be in .ttf, .otf, or .woff format and listed in `includeFiles` of the
- * Vercel adapter (astro.config.ts) to reach the function.
+ * NOTE: Satori doesn't support .woff2 nor variable fonts: a static .ttf/.otf instance, listed in
+ * `includeFiles` of the Vercel adapter (astro.config.ts) so it reaches the function.
  */
 
 // Disable prerendering to have access to query params at runtime
@@ -27,9 +26,7 @@ async function loadFont() {
 	// process.cwd(): import.meta.url no longer points to src/ once the route is bundled.
 	// Full file path literal at the call site: a directory would make Vercel's file tracer
 	// bundle the whole folder into the function (.claude/rules/vercel.md).
-	const fontBuffer = await readFile(
-		join(process.cwd(), 'src/assets/fonts/Innovator-Grotesk-VF.woff')
-	);
+	const fontBuffer = await readFile(join(process.cwd(), 'src/assets/fonts/Inter-SemiBold.ttf'));
 	fontCache = fontBuffer.buffer.slice(
 		fontBuffer.byteOffset,
 		fontBuffer.byteOffset + fontBuffer.byteLength
@@ -42,11 +39,6 @@ export const GET: APIRoute = async ({ url }) => {
 	// Extract title and description from query params
 	const title = url.searchParams.get('title') || SITE.default.title;
 	const description = url.searchParams.get('description') || SITE.default.description;
-
-	// Debug log
-	console.log('[OG Image] URL:', url.toString());
-	console.log('[OG Image] Title:', title);
-	console.log('[OG Image] Description:', description);
 
 	const font = await loadFont();
 
@@ -64,9 +56,9 @@ export const GET: APIRoute = async ({ url }) => {
 					align-items: center;
 					justify-content: center;
 					letter-spacing: -.02em;
-					font-weight: 700;
+					font-weight: 600;
 					background: white;
-					font-family: 'Innovator Grotesk';
+					font-family: 'Inter';
 				"
 			>
 				<div
@@ -120,9 +112,9 @@ export const GET: APIRoute = async ({ url }) => {
 		satori: {
 			fonts: [
 				{
-					name: 'Innovator Grotesk',
+					name: 'Inter',
 					data: font,
-					weight: 400,
+					weight: 600,
 					style: 'normal',
 				},
 			],

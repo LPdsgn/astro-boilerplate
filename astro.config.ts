@@ -71,7 +71,7 @@ export default defineConfig({
 
 	adapter: vercel({
 		// Read at runtime by /api/og.png (Satori needs a static .ttf/.otf/.woff)
-		includeFiles: ['src/assets/fonts/Innovator-Grotesk-VF.woff'],
+		includeFiles: ['src/assets/fonts/Inter-SemiBold.ttf'],
 	}),
 	build: {
 		assets: assetsDir,
@@ -205,17 +205,32 @@ export default defineConfig({
 	fonts: [
 		{
 			provider: fontProviders.local(),
-			name: 'Innovator Grotesk',
+			name: 'Inter',
 			cssVariable: '--font-sans',
-			fallbacks: ['sans-serif'],
+			fallbacks: [
+				'ui-sans-serif',
+				'system-ui',
+				'sans-serif',
+				'Apple Color Emoji',
+				'Segoe UI Emoji',
+				'Segoe UI Symbol',
+				'Noto Color Emoji',
+			],
 			options: {
 				variants: [
 					{
 						weight: '100 900',
 						style: 'normal',
 						display: 'swap',
-						featureSettings: `"liga", "calt", "dlig", "ss01", "cv02", "cv06", "cv10", "cv11", "zero", "tnum";`,
-						src: ['./src/assets/fonts/Innovator-Grotesk-VF.woff2'],
+						featureSettings: `"liga", "calt", "dlig", "ss01", "cv02", "cv10", "cv11", "zero", "tnum";`,
+						src: ['./src/assets/fonts/InterVariable.woff2'],
+					},
+					{
+						weight: '100 900',
+						style: 'italic',
+						display: 'swap',
+						featureSettings: `"liga", "calt", "dlig", "ss01", "cv02", "cv10", "cv11", "zero", "tnum";`,
+						src: ['./src/assets/fonts/InterVariable-Italic.woff2'],
 					},
 				],
 			},
@@ -224,7 +239,7 @@ export default defineConfig({
 			provider: fontProviders.local(),
 			name: 'JetBrains Mono',
 			cssVariable: '--font-mono',
-			fallbacks: ['sans-serif'],
+			fallbacks: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Consolas', 'monospace'],
 			options: {
 				variants: [
 					{
