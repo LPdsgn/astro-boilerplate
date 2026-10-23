@@ -13,13 +13,8 @@ gsap.registerPlugin(ScrollTrigger, Flip);
 // Minimal matchMedia helper used across animations
 export const mm = gsap.matchMedia();
 
-/**
- * Exports the Animation Manager singleton for centralized animation control
- * (@lpdsgn/gsap-spa-manager, initialized with the Swup adapter in app.ts)
- * @module
- * @exports AM - Singleton instance for managing GSAP animations and ScrollTriggers
- */
-export { AM } from '@lpdsgn/gsap-spa-manager';
+/** Page-lifecycle GSAP contexts: setup/cleanup keyed by name, reverted on Swup swaps (gsap-encore, wired in app.ts) */
+export { encore } from 'gsap-encore';
 export { init } from '@lib/classes';
 
 /**

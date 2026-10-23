@@ -1,4 +1,4 @@
-import { AM, Flip, gsap } from '@lib/animations';
+import { encore, Flip, gsap } from '@lib/animations';
 import { Scroll } from '@lib/classes/Scroll';
 import '@styles/components/lightbox.css';
 
@@ -42,7 +42,7 @@ export class Lightbox {
 	static bind(container: HTMLElement, selector: string, _options?: LightboxOptions): Lightbox {
 		const lb = new Lightbox();
 
-		AM.setup(lb.amKey, (ctx) => {
+		const { contextSafe } = encore.setup(lb.amKey, (ctx) => {
 			const triggers = container.querySelectorAll<HTMLElement>(selector);
 
 			triggers.forEach((trigger, index) => {
@@ -57,12 +57,17 @@ export class Lightbox {
 					lb.open(index);
 				};
 
-				ctx?.add(() => {
+				ctx.add(() => {
 					trigger.addEventListener('click', handler);
 					return () => trigger.removeEventListener('click', handler);
 				});
 			});
 		});
+
+		// Open/close/navigate animate at click time: contextSafe keeps those tweens in the context
+		lb.open = contextSafe(lb.open.bind(lb));
+		lb.close = contextSafe(lb.close.bind(lb));
+		lb.goTo = contextSafe(lb.goTo.bind(lb));
 
 		instances.add(lb);
 		return lb;
@@ -78,6 +83,7 @@ export class Lightbox {
 	// =========================================================================
 
 	destroy(): void {
+		encore.cleanup(this.amKey);
 		this.forceClose();
 		this.items = [];
 		if (this.overlay) {

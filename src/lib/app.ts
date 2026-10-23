@@ -1,17 +1,17 @@
 import { Scroll, Transitions, init } from '@lib/classes';
-import { AM, mm } from '@lib/animations';
-import { swupAdapter } from '@lpdsgn/gsap-spa-manager';
+import { encore, mm } from '@lib/animations';
+import { swupAdapter } from 'gsap-encore';
 
 // Initialize the Transitions class
 export const transitions = new Transitions();
 transitions.init();
 
-// Initialize AnimationManager with the Swup adapter (standalone mode without Swup).
-// Must happen after Transitions.init() so Swup is available
-AM.init({
-	debug: import.meta.env.DEV,
-	adapter: transitions.swup ? swupAdapter(transitions.swup) : undefined,
-});
+// Connect encore to Swup: cleanup before content:replace, ScrollTrigger refresh after
+// (standalone mode without Swup). Must happen after Transitions.init() so Swup is available
+encore.init({ adapter: transitions.swup ? swupAdapter(transitions.swup) : undefined });
+if (import.meta.env.DEV) {
+	import('gsap-encore/debug').then((m) => m.attach(encore));
+}
 
 // Initialize the Scroll class
 Scroll.init();
@@ -29,7 +29,7 @@ if (transitions.swup) {
 		if (el) {
 			requestAnimationFrame(() => {
 				requestAnimationFrame(() => {
-					AM.isDebug && console.log('🔍 Cross-page anchor scroll:', { hash, id });
+					import.meta.env.DEV && console.log('🔍 Cross-page anchor scroll:', { hash, id });
 					Scroll.scrollTo(el, {
 						duration: 0.5,
 						easing: scrollEasing,
@@ -64,7 +64,7 @@ if (transitions.swup) {
 		if (el) {
 			requestAnimationFrame(() => {
 				const lenis = Scroll.locomotiveScroll?.lenisInstance;
-				AM.isDebug &&
+				import.meta.env.DEV &&
 					console.log('🔍 Anchor scroll debug:', {
 						el: el.id,
 						locomotiveExists: !!Scroll.locomotiveScroll,
