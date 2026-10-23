@@ -52,7 +52,7 @@ init('my-feature', () => {
 
 **Caveats:**
 - **`key` is required** — it must be a unique string identifier. Without it there is no way to deduplicate listeners across script re-executions.
-- **Not compatible with `AM.setup()` persistent animations** — `AM.setup()` is idempotent: it skips execution if the key already exists. On Swup navigation, `init` re-invokes the callback, but `AM.setup` sees the key is still registered and does nothing. Meanwhile, if a global `mm.revert()` destroyed the matchMedia contexts inside the persistent setup, they are never recreated. **Do not use `init()` to wrap persistent `AM.setup()` calls.** For elements that persist in the DOM across navigations (e.g. the header, outside Swup containers), execute the script directly without `init()` and use a local `gsap.matchMedia()` instead of the global `mm`.
+- **Not compatible with persistent `encore.setup()`** — `encore.setup()` is idempotent: it skips the callback if the key already exists. On Swup navigation, `init` re-invokes the callback, but a persistent key is still registered, so nothing runs (closure variables stay as the first run left them). Meanwhile, if a global `mm.revert()` destroyed the matchMedia contexts inside the persistent setup, they are never recreated. **Do not use `init()` to wrap persistent `encore.setup()` calls.** For elements that persist in the DOM across navigations (e.g. the header, outside Swup containers), execute the script directly without `init()` and use a local `gsap.matchMedia()` instead of the global `mm`. Non-persistent setups rely on the opposite: `cleanupAll()` deletes their key before the swap, so the next `page:load` runs them again.
 - **Only for scripts inside Swup containers** — scripts for elements outside Swup containers (e.g. the header, not in `containers`) are not re-executed by SwupScriptsPlugin, so `init()` adds no value. Execute them directly at module level.
 - **Make `func` idempotent** — it can run more than once on the same page (first load, `page:load`, a re-executed script). Guard each element with a `WeakMap<HTMLElement, Handler>` or a `data-initialized` flag so it never gets a second instance.
 
@@ -103,5 +103,5 @@ Starwind components in `src/components/ui/` use `init('<Component>', setup)` wit
 | Script inside Swup container, no persistence  | `init('key', func)`                         |
 | Script inside Swup container, needs cleanup   | `init()` + per-instance `page:before-swap` `{ once: true }` |
 | Script outside Swup container (e.g. header)   | Direct execution at module level             |
-| Persistent `AM.setup()` outside Swup container| Direct execution + local `gsap.matchMedia()` |
+| Persistent `encore.setup()` outside Swup container| Direct execution + local `gsap.matchMedia()` |
 | Starwind interactive component                | `init('key', setup)` + `WeakMap` guard (`starwind.md`) |

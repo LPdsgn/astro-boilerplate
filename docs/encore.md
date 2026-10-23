@@ -1,80 +1,69 @@
-# AnimationManager (AM)
+# encore (gsap-encore)
 
-Singleton that manages all GSAP animations, coordinated with Swup page transitions.
-Provided by [`@lpdsgn/gsap-spa-manager`](https://www.npmjs.com/package/@lpdsgn/gsap-spa-manager), re-exported from `@lib/animations` (import it from there).
-Initialized in `src/lib/app.ts` after Swup via `AM.init({ debug, adapter: swupAdapter(swup) })`.
+GSAP contexts keyed by name, reverted on Swup page swaps. The package `gsap-encore` (repo `LPdsgn/gsap-encore`, npm `gsap-encore`) replaces the old `AnimationManager` class. Full API and SPA gotchas: `node_modules/gsap-encore/README.md`.
 
-## API
+Wired in `src/lib/app.ts`: `encore.init({ adapter: swupAdapter(swup) })` after `Transitions.init()`, and in dev `import('gsap-encore/debug')` for the console badge and `window.encore.orphans()`. Consumers import it from the barrel: `import { encore, gsap } from '@lib/animations'`.
 
-| Method                                  | Purpose                                                 |
-| --------------------------------------- | ------------------------------------------------------- |
-| `register(key, animation, opts?)`       | Register an existing GSAP tween/timeline                |
-| `animate(key, animationFactory, opts?)` | Create and register a single animation                  |
-| `timeline(key, vars?, opts?)`           | Create and register a timeline                          |
-| `scroll(key, vars, opts?)`              | Create a ScrollTrigger instance                         |
-| `setup(key, fn, opts?)`                 | Create a `gsap.context()` block with automatic teardown |
-| `cleanup(key, force?)`                  | Clean up a specific animation by key                    |
-| `cleanupAll()`                          | Clean up all non-persistent animations                  |
-| `forceCleanupAll()`                     | Destroy everything including persistent                 |
-| `refresh(keys?)`                        | Refresh ScrollTriggers globally or by key(s)            |
-| `isActive(key)`                         | Check if key has active animations/triggers/contexts    |
-| `getStatus()`                           | Return counts, registered keys, persistent keys         |
+## Lifecycle
 
-All methods accept `opts?: { persist: true }` to survive page transitions. `setup()` also accepts `scope` (element or selector) to scope the GSAP selectors of its context.
+1. `page:before-swap` (Transitions) → global `mm.revert()` in `app.ts`
+2. `before('content:replace')` → `encore.cleanupAll()`: every non-persistent context is reverted (tweens, ScrollTriggers with their pin spacers, inline styles of `from()`), while the old DOM is still live
+3. `page:load` → the `init()` callbacks run again and call `encore.setup()` again; the keys were deleted at step 2, so the setups run
+4. `on('content:replace')` → `ScrollTrigger.refresh()`
 
-## Lifecycle (Swup integration)
+## API used here
 
-1. `before('content:replace')` → `cleanupAll()` (kills non-persistent)
-2. `on('content:replace')` → `ScrollTrigger.refresh()`
+| Call | Purpose |
+| --- | --- |
+| `encore.setup(key, (ctx, contextSafe) => …, { scope?, persist? })` | Run once per key inside a `gsap.context()`; returns `{ context, contextSafe }` |
+| `encore.cleanup(key)` | Revert one key (used by instances with their own lifecycle: `HoverImage`, `Lightbox`) |
+| `encore.refresh()` | `ScrollTrigger.refresh(true)` after a layout change |
 
-This replaces the old `page:before-swap` / `page:load` pattern. The hooks are registered by the package's `swupAdapter`.
+Removed from the old manager: `animate`, `timeline`, `scroll`, `register*`, `getStatus`, `debug`, `forceCleanupAll`, `refresh(keys)` and the global `ScrollTrigger.getAll()` sweep. Anything GSAP created inside a setup (or a `contextSafe` wrapper) is tracked; nothing created outside is.
 
-## setup() — Context-based pattern
+## Four idioms
 
-The `setup()` method wraps `gsap.context()` for multi-effect blocks with event listener teardown:
+**A. Feature-level setup, loop inside.** One key per feature, never per element: `setup` is idempotent, so `setup('card', …)` in a loop runs only the first.
 
-```typescript
-AM.setup(
-	'Footer Follow Cursor',
-	(ctx) => {
-		ctx?.add(() => {
-			el.addEventListener('mousemove', onMove);
-			return () => el.removeEventListener('mousemove', onMove);
-		}, el);
-	},
-	{ persist: true }
-);
+```ts
+init('Mask title', () => {
+	encore.setup('Mask title', () => {
+		mm.add('(prefers-reduced-motion: no-preference)', () => {
+			words.forEach((word) => gsap.to(word.children, { scrollTrigger: { … } }));
+		});
+	});
+});
 ```
 
-Use `setup()` when your animation block includes event listeners, observers, or multiple effects that need coordinated teardown.
+Timelines and ScrollTriggers are plain `gsap.timeline()` / `ScrollTrigger.create()` inside the callback (`image.ts`, `marquee.ts`).
 
-## Usage patterns (by reference)
+**B. Persistent, outside the Swup containers** (a header menu, a custom cursor): `{ persist: true }` at module level, never inside `init()`. A persistent setup runs once, so closure variables it assigns are set on that first run only. Short-lived hover tweens on page elements stay out of `contextSafe` there: a persistent context keeps every tween it owns until `destroy()`, which would pin old pages' DOM in memory.
 
-- **Simple scroll animation:** `src/components/ui/mask-title/mask-title.ts`
-- **Timelines with explicit cleanup:** `src/components/ui/hover-image/hover-image.ts`
-- **Setup with multiple listeners:** `src/components/ui/hyper-text/scramble.ts`
-- **Marquee animation:** `src/components/ui/marquee/marquee.ts`
+**C. Animations created in handlers** (hover, click, scroll callbacks): wrap the handler in `contextSafe`, otherwise its tweens are not in the context and survive the swap.
 
-## Scroll system
+```ts
+const { contextSafe } = encore.setup(key, (ctx) => {
+	ctx.add(() => {
+		el.addEventListener('pointerenter', onEnter);
+		return () => el.removeEventListener('pointerenter', onEnter);
+	});
+});
+const onEnter = contextSafe(() => gsap.to(el, { … }));
+```
 
-Smooth scrolling uses **LocomotiveScroll 5** (built on Lenis; use its API, not Lenis directly). Managed by `src/lib/classes/Scroll.ts`, which:
+Reference: `hover-image.ts` (per-instance key, `encore.cleanup(key)` in `destroy()`), `hyper-text/scramble.ts`, `Lightbox.ts`. A `gsap.quickTo` created inside the setup is callable from any handler without wrapping. Callbacks that need `this` (Draggable) cannot be wrapped: `contextSafe` rebinds `this` to the context.
 
-- Initializes with a callback that updates the `$scroll` nanostore
-- Runs Lenis on `gsap.ticker` and calls `ScrollTrigger.update` on scroll (one RAF loop)
-- Refreshes ScrollTriggers (debounced) when the page height changes
-- Destroys on `beforeContentReplace`, re-initializes on `contentReplace`
+**D. `gsap.matchMedia()`.** The global `mm` is reverted on `page:before-swap` in `app.ts`; a setup may call `mm.add()` inside its callback (`mask-title.ts`, `marquee.ts`). Elements outside the Swup containers use a local `gsap.matchMedia()` reverted in the setup's teardown.
 
-## Debugging
+## Debugging (dev only)
 
-In dev mode (`AM.isDebug = true`):
-
-- `AM.debug()` — full status dump to console
-- `AM.getStatus()` — programmatic state check
-- `window.AM` is available in browser console
+- Console badge on every setup, cleanup and swap
+- `window.encore.orphans()` → tweens and ScrollTriggers alive that no setup owns: they will survive the next swap, so after a navigation this should be empty
+- `window.encore.entries()` → the tracked keys
 
 ## Rules
 
-- Always register animations through AM — raw `gsap.to()` or `ScrollTrigger.create()` will not be cleaned up on page transitions
-- Use unique, descriptive keys (e.g. `'(MaskTitle) Hero Heading'`)
-- Use `persist: true` only for site-wide effects outside Swup containers (header, global cursors); the footer is inside `#swup-footer` and gets replaced on every visit
-- Prefer `setup()` over `animate()` when you have event listeners to clean up
+- Create GSAP animations and ScrollTriggers only inside `encore.setup()` or a `contextSafe` wrapper
+- One key per feature, descriptive (`'Mask title'`, `'Marquees'`)
+- `persist: true` only for elements outside the Swup containers (header, cursor), at module level
+- Don't call `encore.cleanup()` from a teardown registered in the same setup

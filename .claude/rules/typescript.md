@@ -15,7 +15,7 @@ paths:
     X.init(/* ... */);
   </script>
   ```
-- **GSAP animations must always use the AnimationManager** (`AM` from `@lib/animations`, provided by `@lpdsgn/gsap-spa-manager`) so their lifecycle is properly coordinated with Swup page transitions. See `docs/animation-manager.md` for the full API.
+- **GSAP animations and ScrollTriggers are created only inside `encore.setup()` or a `contextSafe` wrapper** (`encore` from `@lib/animations`, provided by `gsap-encore`), so they are reverted on Swup page swaps. See `docs/encore.md` for the API and the four idioms.
 
 ## Script initialization & lifecycle
 
