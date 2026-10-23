@@ -2,12 +2,17 @@
 
 .c-breadcrumb {
 	&_list {
-		@apply flex items-center wrap-break-word text-muted-foreground;
-		/* gap: utopia.clamp(6, 10); */
+		@apply flex h-10 items-center wrap-break-word text-muted-foreground;
+		max-width: calc(100% - (var(--spacing, 0.25rem) * 20) - var(--spacing-gutter));
 	}
 	&_page,
 	&_link {
 		@apply inline-flex items-center gap-1.5;
+		overflow: hidden;
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 1;
+		line-clamp: 1;
 	}
 	&_link {
 		@apply transition-colors hover:text-foreground;
@@ -15,7 +20,10 @@
 	&_page,
 	&_link,
 	&_ellipsis {
-		padding: utopia.clamp(6, 10);
+		border: utopia.clamp(6, 10) solid transparent;
+	}
+	&_link.-index {
+		margin-left: calc(-1 * utopia.clamp(6, 10));
 	}
 	&_ellipsis {
 		@apply flex aspect-square items-center justify-center;
