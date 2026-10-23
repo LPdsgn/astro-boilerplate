@@ -33,7 +33,8 @@
 				color: inherit;
 			}
 			svg {
-				@apply size-5 shrink-0;
+				/* m-0: the prose gives media a block margin, which would inflate the summary */
+				@apply m-0 size-5 shrink-0;
 			}
 			svg:first-child {
 				@apply mr-2;
@@ -55,6 +56,10 @@
 			svg:last-child {
 				rotate: 180deg;
 			}
+		}
+		/* The summary's own mb-3 is the gap: no prose sibling spacing on the first block */
+		> summary + * {
+			margin-top: 0;
 		}
 		> :last-child {
 			margin-block-end: 0;
