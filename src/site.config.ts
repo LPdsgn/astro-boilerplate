@@ -41,14 +41,8 @@ export const NAV_LINKS: Links[] = [
 		HREF: '/',
 	},
 	{
-		LABEL: 'Item 2',
-		HREF: '/path',
-		CHILDREN: [
-			{
-				LABEL: 'Sub-item',
-				HREF: '/path/sub-path',
-			},
-		],
+		LABEL: 'Journal',
+		HREF: '/blog',
 	},
 ];
 

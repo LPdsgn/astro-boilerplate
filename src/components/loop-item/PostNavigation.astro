@@ -1,0 +1,85 @@
+---
+import { HoverImage } from '@/components/ui/hover-image';
+import { Icon } from 'astro-icon/components';
+
+const { prevPost, nextPost, collectionPath } = Astro.props;
+---
+
+<div class="post-nav">
+	<HoverImage
+		tag="a"
+		href={prevPost ? `/${collectionPath}/${prevPost.id}` : '#'}
+		class:list={['post-nav__link prev group', !prevPost && 'disabled']}
+		aria-disabled={!prevPost}
+		imageSrc={prevPost?.thumbnail}
+		fx="Mirror"
+	>
+		<Icon name="carbon:arrow-left" class="post-nav__icon group-hover:-translate-x-1" />
+		<div class="post-nav__label">
+			<span class="subhead">Previous Post</span>
+			<span class="title">{prevPost?.title || 'Latest post!'}</span>
+		</div>
+	</HoverImage>
+
+	<HoverImage
+		tag="a"
+		href={nextPost ? `/${collectionPath}/${nextPost.id}` : '#'}
+		class:list={['post-nav__link next group', !nextPost && 'disabled']}
+		aria-disabled={!nextPost}
+		imageSrc={nextPost?.thumbnail}
+		fx="Mirror"
+	>
+		<div class="post-nav__label">
+			<span class="subhead">Next Post</span>
+			<span class="title">{nextPost?.title || 'Last post!'}</span>
+		</div>
+		<Icon name="carbon:arrow-right" class="post-nav__icon group-hover:translate-x-1" />
+	</HoverImage>
+</div>
+
+<style is:global>
+	@reference "#styles";
+
+	.post-nav {
+		@apply flex divide-x divide-border border-y;
+
+		.prev {
+			@apply justify-start;
+
+			.post-nav__label {
+				@apply items-start;
+			}
+		}
+		.next {
+			@apply justify-end;
+
+			.post-nav__label {
+				@apply items-end;
+			}
+		}
+	}
+
+	.post-nav__link {
+		@apply relative flex h-fit w-1/2 items-center gap-2 px-sm-md py-8 transition-all hover:cursor-pointer hover:bg-secondary;
+
+		&.disabled {
+			@apply pointer-events-none cursor-not-allowed opacity-50;
+		}
+	}
+
+	.post-nav__icon {
+		@apply size-sm shrink-0 transition-transform;
+	}
+
+	.post-nav__label {
+		@apply flex shrink flex-col overflow-hidden;
+
+		.subhead {
+			@apply text-label text-left font-mono text-muted-foreground uppercase;
+		}
+
+		.title {
+			@apply text-body-lg w-full truncate text-left font-semibold;
+		}
+	}
+</style>

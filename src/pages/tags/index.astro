@@ -1,0 +1,28 @@
+---
+import { Badge } from '@/components';
+import { PageTitle } from '@/components/blocks';
+import { Layout } from '@/layouts';
+import { getTags } from '@/lib/utils/blog';
+
+const tags = await getTags();
+---
+
+<Layout seo={{ title: 'Tags', description: 'Journal posts by tag', noindex: true }}>
+	<PageTitle
+		title="Tags"
+		breadcrumbs={[{ label: 'Journal', href: '/blog' }, { label: 'Tags' }]}
+		spacing="middle"
+	/>
+
+	<ul class="c-tagList u-container px-well mb-3xl flex flex-wrap gap-2xs">
+		{
+			[...tags].map(([tag, posts]) => (
+				<li>
+					<Badge variant="secondary" href={`/tags/${tag}`}>
+						#{tag} <span class="ml-1 opacity-60">{posts.length}</span>
+					</Badge>
+				</li>
+			))
+		}
+	</ul>
+</Layout>

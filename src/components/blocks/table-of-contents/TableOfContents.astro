@@ -1,0 +1,70 @@
+---
+/**
+ * Table of contents for a post or a whole series (port of astro-erudite v2).
+ * One markup for both: a collapsible bar below `lg` (CSS-only via :has(input:checked))
+ * and a sticky list from `lg`. Scrollspy in table-of-contents.ts.
+ */
+import { Icon } from 'astro-icon/components';
+import type { MarkdownHeading } from 'astro';
+
+import './table-of-contents.css';
+
+export interface TocSection {
+	/** Subpost slug (anchor of its article); undefined for the parent */
+	id?: string;
+	label: string;
+	open?: boolean;
+	headings: MarkdownHeading[];
+}
+
+interface Props {
+	title: string;
+	sections: TocSection[];
+	class?: string;
+}
+
+const { title, sections, class: className } = Astro.props;
+---
+
+<nav class:list={['c-toc', className]} data-slot="toc" aria-label="Table of contents">
+	<label class="c-toc_bar">
+		<input type="checkbox" class="sr-only" aria-label="Toggle table of contents" />
+		<span class="c-toc_current">{title}</span>
+		<Icon name="carbon:chevron-down" class="c-toc_chevron" />
+	</label>
+	<ul class="c-toc_list">
+		{
+			sections.map(({ id, label, open, headings }) =>
+				id ? (
+					<li class="c-toc_group">
+						{headings.length > 0 ? (
+							<details open={open || undefined}>
+								<summary class="c-toc_summary">
+									<a href={`#${id}`}>{label}</a>
+									<Icon name="carbon:chevron-down" class="c-toc_chevron" />
+								</summary>
+								<ul class="c-toc_sublist">
+									{headings.map(({ depth, slug, text }) => (
+										<li class="c-toc_item" data-depth={depth}>
+											<a href={`#${slug}`}>{text}</a>
+										</li>
+									))}
+								</ul>
+							</details>
+						) : (
+							<a href={`#${id}`}>{label}</a>
+						)}
+					</li>
+				) : (
+					headings.map(({ depth, slug, text }) => (
+						<li class="c-toc_item" data-depth={depth}>
+							<a href={`#${slug}`}>{text}</a>
+						</li>
+					))
+				)
+			)
+		}
+	</ul>
+</nav>
+
+<script src="./table-of-contents.ts"></script>

@@ -1,0 +1,91 @@
+@reference "#styles";
+
+.c-toc {
+	@apply text-body-sm flex flex-col;
+
+	a {
+		@apply text-muted-foreground/75 transition-colors hover:text-foreground;
+
+		&[data-state='active'] {
+			@apply text-foreground;
+		}
+	}
+}
+
+/* Bar (mobile): current heading + chevron, toggles the list */
+.c-toc_bar {
+	@apply flex cursor-pointer items-center gap-2xs border-b py-2xs lg:hidden;
+}
+.c-toc_current {
+	@apply min-w-0 flex-1 truncate text-foreground;
+}
+.c-toc_chevron {
+	@apply size-[1em] shrink-0 text-muted-foreground transition-transform;
+}
+.c-toc:has(input:checked) .c-toc_bar .c-toc_chevron {
+	@apply rotate-180;
+}
+.c-toc:has(input:focus-visible) .c-toc_bar {
+	@apply ring-1 ring-outline;
+}
+
+/* List: dropdown below lg, sticky column from lg (positioning is the page's job) */
+.c-toc_list {
+	@apply flex flex-col gap-3xs max-lg:hidden max-lg:py-2xs lg:max-h-[calc(100svh-var(--spacing-xl)*2)] lg:overflow-y-auto;
+	overscroll-behavior: contain;
+	scrollbar-width: none;
+
+	&::-webkit-scrollbar {
+		display: none;
+	}
+}
+.c-toc:has(input:checked) .c-toc_list {
+	@apply max-lg:flex;
+}
+
+/* Series: one collapsible group per subpost */
+.c-toc_group {
+	@apply font-medium;
+
+	&:not(:first-child) {
+		@apply mt-2xs;
+	}
+	details:not([open]):has(a[data-state='active']) .c-toc_summary a {
+		@apply text-foreground;
+	}
+	details[open] > .c-toc_summary .c-toc_chevron {
+		@apply rotate-180;
+	}
+}
+.c-toc_summary {
+	@apply flex cursor-pointer list-none items-center gap-1.5;
+
+	&::-webkit-details-marker {
+		display: none;
+	}
+	a {
+		@apply min-w-0;
+	}
+	.c-toc_chevron {
+		@apply ml-auto;
+	}
+	&:hover .c-toc_chevron {
+		@apply text-foreground;
+	}
+}
+.c-toc_sublist {
+	--shift: 1;
+	@apply mt-3xs flex flex-col gap-3xs font-normal;
+}
+
+/* Indentation by heading depth */
+.c-toc_item {
+	padding-inline-start: calc((var(--shift, 0) + var(--indent, 0)) * var(--spacing-xs));
+
+	&[data-depth='3'] {
+		--indent: 1;
+	}
+	&[data-depth='4'] {
+		--indent: 2;
+	}
+}

@@ -1,0 +1,40 @@
+---
+import { PageTitle } from '@/components/blocks';
+import { BlogCard } from '@/components/loop-item';
+import { Layout } from '@/layouts';
+import { getTags, type Post } from '@/lib/utils/blog';
+
+export async function getStaticPaths() {
+	const tags = await getTags();
+	return [...tags].map(([tag, posts]) => ({ params: { id: tag }, props: { tag, posts } }));
+}
+
+interface Props {
+	tag: string;
+	posts: Post[];
+}
+
+const { tag, posts } = Astro.props;
+---
+
+<Layout
+	seo={{
+		title: `Posts tagged "${tag}"`,
+		description: `Journal posts tagged with ${tag}.`,
+		noindex: true,
+	}}
+>
+	<PageTitle
+		title={`#${tag}`}
+		breadcrumbs={[
+			{ label: 'Journal', href: '/blog' },
+			{ label: 'Tags', href: '/tags' },
+			{ label: `#${tag}` },
+		]}
+		spacing="middle"
+	/>
+
+	<ul class="c-blogList mb-3xl divide-y border-y">
+		{posts.map((post) => <BlogCard post={post} />)}
+	</ul>
+</Layout>
