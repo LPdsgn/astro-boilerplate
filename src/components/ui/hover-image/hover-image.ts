@@ -1,4 +1,4 @@
-import { AM, gsap } from '@lib/animations';
+import { encore, gsap } from '@lib/animations';
 import { getMousePos } from '@lib/utils/ui';
 
 /**
@@ -90,9 +90,21 @@ abstract class BaseHoverEffect {
 		this.mousemoveFn = this.mousemoveFn.bind(this);
 		this.mouseleaveFn = this.mouseleaveFn.bind(this);
 
-		this.DOM.el.addEventListener('mouseenter', this.mouseenterFn);
-		this.DOM.el.addEventListener('mousemove', this.mousemoveFn);
-		this.DOM.el.addEventListener('mouseleave', this.mouseleaveFn);
+		const { contextSafe } = encore.setup(this.animationKey, (ctx) => {
+			ctx.add(() => {
+				this.DOM.el.addEventListener('mouseenter', this.mouseenterFn);
+				this.DOM.el.addEventListener('mousemove', this.mousemoveFn);
+				this.DOM.el.addEventListener('mouseleave', this.mouseleaveFn);
+				return () => {
+					this.DOM.el.removeEventListener('mouseenter', this.mouseenterFn);
+					this.DOM.el.removeEventListener('mousemove', this.mousemoveFn);
+					this.DOM.el.removeEventListener('mouseleave', this.mouseleaveFn);
+				};
+			});
+		});
+		// The timelines are built on hover, after the setup ran: contextSafe keeps them in the context
+		this.showImage = contextSafe(this.showImage.bind(this));
+		this.hideImage = contextSafe(this.hideImage.bind(this));
 	}
 
 	protected mouseenterFn(ev: MouseEvent): void {
@@ -159,14 +171,16 @@ abstract class BaseHoverEffect {
 			this.DOM.revealImg.style.backgroundImage = `url("${bg}")`;
 		}
 
-		this.tl = AM.timeline(`${this.animationKey}-show`, {
-			onStart: () => {
-				if (this.DOM.reveal) {
-					this.DOM.reveal.style.opacity = '1';
-					gsap.set(this.DOM.el, { zIndex: 1000 });
-				}
-			},
-		})
+		this.tl?.kill();
+		this.tl = gsap
+			.timeline({
+				onStart: () => {
+					if (this.DOM.reveal) {
+						this.DOM.reveal.style.opacity = '1';
+						gsap.set(this.DOM.el, { zIndex: 1000 });
+					}
+				},
+			})
 			.add('begin')
 			.add(
 				gsap.to(this.DOM.revealInner, {
@@ -196,17 +210,19 @@ abstract class BaseHoverEffect {
 		gsap.killTweensOf(this.DOM.revealInner);
 		gsap.killTweensOf(this.DOM.revealImg);
 
-		this.tl = AM.timeline(`${this.animationKey}-hide`, {
-			onStart: () => {
-				gsap.set(this.DOM.el, { zIndex: 999 });
-			},
-			onComplete: () => {
-				gsap.set(this.DOM.el, { zIndex: '' });
-				if (this.DOM.reveal) {
-					gsap.set(this.DOM.reveal, { opacity: 0 });
-				}
-			},
-		})
+		this.tl?.kill();
+		this.tl = gsap
+			.timeline({
+				onStart: () => {
+					gsap.set(this.DOM.el, { zIndex: 999 });
+				},
+				onComplete: () => {
+					gsap.set(this.DOM.el, { zIndex: '' });
+					if (this.DOM.reveal) {
+						gsap.set(this.DOM.reveal, { opacity: 0 });
+					}
+				},
+			})
 			.add('begin')
 			.add(
 				gsap.to(this.DOM.revealInner, {
@@ -229,14 +245,8 @@ abstract class BaseHoverEffect {
 	}
 
 	public destroy(): void {
-		// Cleanup delle animazioni tramite AM
-		AM.cleanup(`${this.animationKey}-show`);
-		AM.cleanup(`${this.animationKey}-hide`);
-		AM.cleanup(this.animationKey);
-
-		this.DOM.el.removeEventListener('mouseenter', this.mouseenterFn);
-		this.DOM.el.removeEventListener('mousemove', this.mousemoveFn);
-		this.DOM.el.removeEventListener('mouseleave', this.mouseleaveFn);
+		// Reverts the hover timelines and removes the listeners (teardown registered in the setup)
+		encore.cleanup(this.animationKey);
 	}
 }
 

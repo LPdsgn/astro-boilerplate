@@ -1,4 +1,4 @@
-import { AM, gsap } from '@lib/animations';
+import { encore, gsap } from '@lib/animations';
 import { ScrambleTextPlugin } from 'gsap/ScrambleTextPlugin';
 
 gsap.registerPlugin(ScrambleTextPlugin);
@@ -24,9 +24,10 @@ export function scramble() {
 	const elements = document.querySelectorAll<HTMLElement>('.c-hyperText');
 
 	// Registra listeners sotto un setup, con teardown automatico
-	AM.setup('scramble-events', (ctx) => {
+	encore.setup('scramble-events', (ctx, contextSafe) => {
 		elements.forEach((el) => {
-			const handleEvent = (event: Event) => {
+			// Tweens on hover/focus, after the setup ran: contextSafe keeps them in the context
+			const handleEvent = contextSafe((event: Event) => {
 				const targetEl = event.target as HTMLElement;
 				const duration = parseFloat(targetEl.dataset.duration || '') || 0.8;
 				const limited = targetEl.dataset.chars === 'limit';
@@ -51,34 +52,30 @@ export function scramble() {
 				if (
 					targets.length > 0 &&
 					!targets.some((t) => gsap.isTweening(t)) &&
-					gsap.matchMedia('(prefers-reduced-motion: no-preference)')
+					matchMedia('(prefers-reduced-motion: no-preference)').matches
 				) {
-					// Applica l'animazione a ciascun target usando AnimationManager
-					targets.forEach((t, index) => {
-						AM.animate(
-							`scramble-${t.textContent?.trim() || index}`,
-							gsap.to(t, {
-								duration,
-								ease: 'sine.in',
-								scrambleText: {
-									text: t.innerText,
-									speed: 2,
-									chars: limited
-										? CHARSET
-										: targetEl.dataset.chars &&
-											  targetEl.dataset.chars !== 'default' &&
-											  targetEl.dataset.chars !== 'limit'
-											? targetEl.dataset.chars // Valore personalizzato
-											: CHARSET_EXT,
-									revealDelay: 0.1,
-								},
-							})
-						);
+					targets.forEach((t) => {
+						gsap.to(t, {
+							duration,
+							ease: 'sine.in',
+							scrambleText: {
+								text: t.innerText,
+								speed: 2,
+								chars: limited
+									? CHARSET
+									: targetEl.dataset.chars &&
+										  targetEl.dataset.chars !== 'default' &&
+										  targetEl.dataset.chars !== 'limit'
+										? targetEl.dataset.chars // Valore personalizzato
+										: CHARSET_EXT,
+								revealDelay: 0.1,
+							},
+						});
 					});
 				}
-			};
+			});
 
-			ctx?.add(() => {
+			ctx.add(() => {
 				el.addEventListener('pointerenter', handleEvent);
 				el.addEventListener('focus', handleEvent);
 				return () => {

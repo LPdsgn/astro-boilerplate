@@ -1,4 +1,4 @@
-import { AM, gsap } from '@lib/animations';
+import { encore, gsap } from '@lib/animations';
 import { ScrambleTextPlugin } from 'gsap/ScrambleTextPlugin';
 
 gsap.registerPlugin(ScrambleTextPlugin);
@@ -41,13 +41,14 @@ export function scramble() {
 	const elements = document.querySelectorAll<HTMLElement>('.c-hyperText');
 
 	// Registra listeners sotto un setup, con teardown automatico
-	AM.setup('scramble-events', (ctx) => {
+	encore.setup('scramble-events', (ctx, contextSafe) => {
 		elements.forEach((el) => {
 			const duration = parseFloat(el.dataset.duration || '') || 0.8;
 			const hover = el.dataset.scramble?.includes('hover');
 			const scroll = el.dataset.scramble?.includes('scroll');
 
-			const handleEvent = (event: Event) => {
+			// Tweens on hover/focus, after the setup ran: contextSafe keeps them in the context
+			const handleEvent = contextSafe((event: Event) => {
 				const targetEl = event.target as HTMLElement;
 
 				// Seleziona tutti i figli che contengono testo
@@ -56,26 +57,22 @@ export function scramble() {
 				if (
 					targets.length > 0 &&
 					!targets.some((t) => gsap.isTweening(t)) &&
-					gsap.matchMedia('(prefers-reduced-motion: no-preference)')
+					matchMedia('(prefers-reduced-motion: no-preference)').matches
 				) {
-					// Applica l'animazione a ciascun target usando AnimationManager
-					targets.forEach((t, index) => {
-						AM.animate(
-							`scramble-${t.textContent?.trim() || index}`,
-							gsap.to(t, {
-								duration,
-								ease: 'sine.in',
-								scrambleText: scrambleText(t),
-								...(scroll && {
-									scrollTrigger: scrambleTrigger(t),
-								}),
-							})
-						);
+					targets.forEach((t) => {
+						gsap.to(t, {
+							duration,
+							ease: 'sine.in',
+							scrambleText: scrambleText(t),
+							...(scroll && {
+								scrollTrigger: scrambleTrigger(t),
+							}),
+						});
 					});
 				}
-			};
+			});
 
-			ctx?.add(() => {
+			ctx.add(() => {
 				if (hover) {
 					el.addEventListener('pointerenter', handleEvent);
 					el.addEventListener('focus', handleEvent);

@@ -21,7 +21,7 @@ export class Transitions {
 	private onAnimationInEndBind: any;
 	private onAnimationOutStartBind: any;
 
-	public swup: Swup | undefined; // Public for external access (AnimationManager, etc.)
+	public swup: Swup | undefined; // Public for external access (encore adapter, etc.)
 
 	constructor() {
 		this.onVisitStartBind = this.onVisitStart.bind(this);
