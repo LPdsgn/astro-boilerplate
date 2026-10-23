@@ -1,4 +1,16 @@
 import { defineConfig, fontProviders, svgoOptimizer } from 'astro/config';
+import sitemap from '@astrojs/sitemap';
+import { satteri } from '@astrojs/markdown-satteri';
+// Markdown pipeline (Sätteri plugins; relative import: astro.config does not resolve tsconfig aliases)
+import {
+	blockExpressiveCode,
+	calloutDirective,
+	externalLinks,
+	headingAnchors,
+	headingNamespace,
+	inlineExpressiveCode,
+	temmlMath,
+} from './src/lib/markdown';
 import vercel from '@astrojs/vercel';
 import icon from 'astro-icon';
 import mdx from '@astrojs/mdx';
@@ -59,7 +71,18 @@ const rolldownOutput = {
 
 // https://astro.build/config
 export default defineConfig({
-	// site: '',
+	// Absolute URLs for RSS, sitemap and canonicals
+	site: 'https://example.xyz',
+	markdown: {
+		syntaxHighlight: false,
+		processor: satteri({
+			// rawHtml: the callout plugin emits <details> as raw HTML, which MDX 8.1 must parse into elements
+			features: { directive: true, math: true, rawHtml: true },
+			mdastPlugins: [calloutDirective, inlineExpressiveCode, temmlMath],
+			// factories are passed uninvoked: Sätteri re-creates them per document
+			hastPlugins: [externalLinks, blockExpressiveCode, headingNamespace, headingAnchors],
+		}),
+	},
 	output: 'static',
 	/**
 	 * Astro 7 changed the default to 'jsx', which strips whitespace between elements using JSX rules.
@@ -161,15 +184,22 @@ export default defineConfig({
 					'moon',
 					'open-panel-left',
 					'overflow-menu-horizontal',
+					'save',
 					'search',
+					'settings-check',
 					'subtract',
 					'sun',
+					'update-now',
 					'warning-alt',
 				],
 				'simple-icons': ['behance', 'discord', 'github', 'instagram', 'linkedin', 'rss'],
 			},
 		}),
 		mdx(),
+		sitemap({
+			// series parts render inside their parent (canonical), tag pages are noindex
+			filter: (page) => !/\/blog\/[^/]+\/[^/]+\/?$/.test(page) && !page.includes('/tags/'),
+		}),
 		favicons({
 			name: 'Astro Boilerplate',
 			short_name: 'Astro Boilerplate',
@@ -197,7 +227,6 @@ export default defineConfig({
 		enabled: true,
 	},
 	image: {
-		domains: ['locomotive.ca'],
 		responsiveStyles: true,
 		layout: 'constrained',
 		breakpoints: [640, 768, 900, 1024, 1280, 1440, 1920],
