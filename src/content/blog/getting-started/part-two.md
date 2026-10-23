@@ -6,7 +6,7 @@ order: 1
 tags: ['astro']
 ---
 
-This part lives in `getting-started/part-two.mdx` with `order: 1`. It renders inside the parent
+This part lives in `getting-started/part-two.md` with `order: 1`. It renders inside the parent
 post and has its own address, `/blog/getting-started/part-two`.
 
 ## Ordering parts
@@ -26,6 +26,6 @@ Keep each part self-contained: readers can land on it directly from search or th
 
 ## Summary
 
-- One folder per series, `index.mdx` as parent
+- One folder per series, `index.md` as parent
 - `order` on the parts
 - Tags on every file: the tag pages count them all

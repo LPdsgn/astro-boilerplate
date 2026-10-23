@@ -7,7 +7,7 @@ coverAlt: 'A printer, the sample cover of this post'
 tags: ['astro', 'design-system']
 ---
 
-This is the parent post of a short series. Everything below is Markdown and MDX rendered through
+This is the parent post of a short series. Everything below is Markdown rendered through
 the Sätteri pipeline configured in `astro.config.ts`: directives for callouts, Expressive Code for
 code blocks, Temml for math. The second part of the series renders right after this one on the
 same page, and has its own URL.
@@ -61,7 +61,7 @@ $$
 
 ## Series and tags
 
-A series is a folder: this file is `index.mdx`, the parts are siblings ordered by `order`. The
+A series is a folder: this file is `index.md`, the parts are siblings ordered by `order`. The
 tags in the frontmatter feed the `/tags` pages, and the parent post is the only entry in the RSS feed.
 
 ### What comes next

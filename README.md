@@ -63,8 +63,10 @@ Then make it yours: `src/site.config.ts` (site, navigation, social links), `astr
 
 ## Writing a post
 
-Posts live in `src/content/blog`. A single post is `my-post.mdx` or `my-post/index.mdx` (with its
-images next to it). A series is a folder: `index.mdx` is the parent, every other file is a part
+Posts live in `src/content/blog`. A single post is `my-post.md` or `my-post/index.md` (with its
+images next to it); `.mdx` works too, but Sätteri currently drops the code fence meta (title, line
+marks, `collapse`) in MDX, so prefer `.md` unless you need components. A series is a folder:
+`index.md` is the parent, every other file is a part
 with an `order`; parts render inside the parent page and keep their own URL. Frontmatter:
 `title`, `description`, `date`, `cover`, `coverAlt`, `tags`, `draft`, `order`.
 
